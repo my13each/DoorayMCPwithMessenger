@@ -1,0 +1,128 @@
+package com.bifos.dooray.mcp.types
+
+import kotlinx.serialization.Serializable
+
+// ============ 멤버 검색 관련 타입들 ============
+
+/** 멤버 검색 요청 */
+@Serializable
+data class SearchMemberRequest(
+    val name: String? = null,
+    val externalEmailAddresses: List<String>? = null,
+    val userCode: String? = null,
+    val idProviderUserId: String? = null,
+    val page: Int? = null,
+    val size: Int? = null
+)
+
+/** 조직 멤버 정보 */
+@Serializable
+data class OrganizationMember(
+    val id: String,
+    val userCode: String,
+    val name: String,
+    val externalEmailAddress: String
+)
+
+/** 멤버 검색 응답 */
+@Serializable
+data class MemberSearchResponse(
+    val header: DoorayApiHeader,
+    val result: List<OrganizationMember>,
+    val totalCount: Int
+)
+
+// ============ 다이렉트 메시지 관련 타입들 ============
+
+/** 다이렉트 메시지 전송 요청 */
+@Serializable
+data class DirectMessageRequest(
+    val text: String,
+    val organizationMemberId: String
+)
+
+/** 다이렉트 메시지 전송 응답 */
+typealias DirectMessageResponse = DoorayApiUnitResponse
+
+// ============ 채널 관련 타입들 ============
+
+/** 채널 정보 */
+@Serializable
+data class Channel(
+    val id: String,
+    val name: String? = null,
+    val type: String? = null,
+    val description: String? = null,
+    val memberCount: Int? = null
+)
+
+/** 채널 목록 응답 */
+@Serializable
+data class ChannelListResponse(
+    val header: DoorayApiHeader,
+    val result: List<Channel>,
+    val totalCount: Int? = null
+)
+
+/** 채널 생성 요청 */
+@Serializable
+data class CreateChannelRequest(
+    val name: String,
+    val description: String? = null,
+    val memberIds: List<String>? = null
+)
+
+/** 채널 생성 응답 */
+@Serializable
+data class CreateChannelResponse(
+    val header: DoorayApiHeader,
+    val result: Channel?
+)
+
+/** 채널 가입 요청 */
+@Serializable
+data class JoinChannelRequest(
+    val memberIds: List<String>
+)
+
+/** 채널 가입 응답 */
+typealias JoinChannelResponse = DoorayApiUnitResponse
+
+/** 채널 탈퇴 응답 */
+typealias LeaveChannelResponse = DoorayApiUnitResponse
+
+// ============ 채널 로그(메시지) 관련 타입들 ============
+
+/** 채널 메시지 */
+@Serializable
+data class ChannelMessage(
+    val id: String,
+    val text: String? = null,
+    val createdAt: String? = null,
+    val updatedAt: String? = null,
+    val senderId: String? = null,
+    val senderName: String? = null,
+    val messageType: String? = null
+)
+
+/** 채널 로그 조회 응답 */
+@Serializable
+data class ChannelLogsResponse(
+    val header: DoorayApiHeader,
+    val result: List<ChannelMessage>,
+    val totalCount: Int? = null
+)
+
+/** 채널 메시지 전송 요청 */
+@Serializable
+data class SendChannelMessageRequest(
+    val text: String,
+    val messageType: String? = "text"
+)
+
+/** 채널 메시지 전송 응답 */
+@Serializable
+data class SendChannelMessageResponse(
+    val header: DoorayApiHeader,
+    val result: ChannelMessage?
+)
