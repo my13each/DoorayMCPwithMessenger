@@ -40,8 +40,8 @@ RUN addgroup -g 1000 dooray && \
 # 작업 디렉토리 설정
 WORKDIR /app
 
-# 빌드된 JAR 파일 복사 (버전 변수 사용)
-COPY --from=builder /app/build/libs/dooray-mcp-server-${VERSION}-all.jar app.jar
+# 빌드된 JAR 파일 복사 (와일드카드 사용으로 버전 무관하게 처리)
+COPY --from=builder /app/build/libs/*-all.jar app.jar
 
 # 파일 소유권 변경
 RUN chown -R dooray:dooray /app
