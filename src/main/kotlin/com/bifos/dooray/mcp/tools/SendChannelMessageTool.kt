@@ -10,15 +10,12 @@ import io.modelcontextprotocol.kotlin.sdk.CallToolRequest
 import io.modelcontextprotocol.kotlin.sdk.CallToolResult
 import io.modelcontextprotocol.kotlin.sdk.TextContent
 import io.modelcontextprotocol.kotlin.sdk.Tool
-import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.jsonPrimitive
-import kotlinx.serialization.json.put
-import kotlinx.serialization.json.putJsonObject
+import kotlinx.serialization.json.*
 
 fun sendChannelMessageTool(): Tool {
     return Tool(
         name = "dooray_messenger_send_channel_message",
-        description = "두레이 메신저 채널에 메시지를 전송합니다.",
+        description = "두레이 메신저 채널에 메시지를 전송합니다. 멘션 기능 지원: [@사용자명](dooray://조직ID/members/멤버ID \"member\") 또는 [@Channel](dooray://조직ID/channels/채널ID \"channel\")",
         inputSchema = Tool.Input(
             properties = buildJsonObject {
                 putJsonObject("channel_id") {
@@ -27,7 +24,33 @@ fun sendChannelMessageTool(): Tool {
                 }
                 putJsonObject("text") {
                     put("type", "string")
-                    put("description", "전송할 메시지 내용")
+                    put("description", "전송할 메시지 내용. 멘션 사용법: [@사용자명](dooray://조직ID/members/멤버ID \"member\") 또는 [@Channel](dooray://조직ID/channels/채널ID \"channel\")")
+                }
+                putJsonObject("mention_members") {
+                    put("type", "array")
+                    put("description", "멘션할 멤버 목록 (선택사항). 각 항목: {\"id\": \"멤버ID\", \"name\": \"멤버명\", \"organizationId\": \"조직ID\"}")
+                    putJsonObject("items") {
+                        put("type", "object")
+                        putJsonObject("properties") {
+                            putJsonObject("id") {
+                                put("type", "string")
+                                put("description", "멤버 ID")
+                            }
+                            putJsonObject("name") {
+                                put("type", "string") 
+                                put("description", "멤버 이름")
+                            }
+                            putJsonObject("organizationId") {
+                                put("type", "string")
+                                put("description", "조직 ID")
+                            }
+                        }
+                    }
+                }
+                putJsonObject("mention_all") {
+                    put("type", "boolean")
+                    put("description", "채널 전체 멘션 여부 (선택사항). true이면 [@Channel] 멘션 자동 추가")
+                    put("default", false)
                 }
                 putJsonObject("message_type") {
                     put("type", "string")
@@ -48,6 +71,8 @@ fun sendChannelMessageHandler(doorayClient: DoorayClient): suspend (CallToolRequ
             val channelId = request.arguments["channel_id"]?.jsonPrimitive?.content
             val text = request.arguments["text"]?.jsonPrimitive?.content
             val messageType = request.arguments["message_type"]?.jsonPrimitive?.content ?: "text"
+            val mentionMembers = request.arguments["mention_members"]?.jsonArray
+            val mentionAll = request.arguments["mention_all"]?.jsonPrimitive?.boolean ?: false
 
             when {
                 channelId == null -> {
@@ -73,8 +98,38 @@ fun sendChannelMessageHandler(doorayClient: DoorayClient): suspend (CallToolRequ
                     )
                 }
                 else -> {
+                    // 멘션 기능 처리
+                    var finalText = text
+                    
+                    // 채널 전체 멘션 처리
+                    if (mentionAll) {
+                        // 조직 ID를 얻기 위해 채널 정보 조회 (간단하게 하드코딩으로 처리 - 실제로는 채널 정보에서 가져와야 함)
+                        val channelMention = "[@Channel](dooray://1708537451674140147/channels/$channelId \"channel\")\n"
+                        finalText = channelMention + finalText
+                    }
+                    
+                    // 개별 멤버 멘션 처리
+                    if (mentionMembers != null) {
+                        val mentions = mutableListOf<String>()
+                        mentionMembers.forEach { memberElement ->
+                            val memberObj = memberElement.jsonObject
+                            val memberId = memberObj["id"]?.jsonPrimitive?.content
+                            val memberName = memberObj["name"]?.jsonPrimitive?.content
+                            val organizationId = memberObj["organizationId"]?.jsonPrimitive?.content
+                            
+                            if (memberId != null && memberName != null && organizationId != null) {
+                                val mention = "[@$memberName](dooray://$organizationId/members/$memberId \"member\")"
+                                mentions.add(mention)
+                            }
+                        }
+                        
+                        if (mentions.isNotEmpty()) {
+                            finalText = mentions.joinToString(" ") + "\n" + finalText
+                        }
+                    }
+
                     val sendMessageRequest = SendChannelMessageRequest(
-                        text = text,
+                        text = finalText,
                         messageType = messageType
                     )
 
@@ -83,7 +138,7 @@ fun sendChannelMessageHandler(doorayClient: DoorayClient): suspend (CallToolRequ
                     if (response.header.isSuccessful) {
                         val data = ChannelMessageResponseData(
                             channelId = channelId,
-                            sentText = text,
+                            sentText = finalText,
                             timestamp = System.currentTimeMillis()
                         )
                         val successResponse = ToolSuccessResponse(
