@@ -7,7 +7,7 @@ NHN Dooray 서비스의 MCP(Model Context Protocol) 서버입니다.
 - **위키 관리**: 위키 조회, 생성, 수정, 참조자 관리
 - **업무 관리**: 업무 조회, 생성, 수정, 상태 변경
 - **댓글 관리**: 업무 댓글 생성, 조회, 수정, 삭제
-- **메신저 관리**: 멤버 검색, 다이렉트 메시지, 채널 메시지, 채널 로그 조회
+- **메신저 관리**: 멤버 검색, 다이렉트 메시지, 채널 관리, 채널 메시지 전송
 - **JSON 응답**: 규격화된 JSON 형태의 응답
 - **예외 처리**: 일관된 에러 응답 제공
 - **Docker 지원**: 멀티 플랫폼 Docker 이미지 제공
@@ -68,7 +68,7 @@ docker run -e DOORAY_API_KEY="your_api_key" \
            bifos/dooray-mcp:latest
 ```
 
-## 사용 가능한 도구 (총 24개)
+## 사용 가능한 도구 (총 23개)
 
 ### 위키 관련 도구 (8개)
 
@@ -154,7 +154,7 @@ docker run -e DOORAY_API_KEY="your_api_key" \
 
 업무 댓글을 삭제합니다.
 
-### 메신저 관련 도구 (5개)
+### 메신저 관련 도구 (6개)
 
 #### 20. dooray_messenger_search_members
 
@@ -166,15 +166,25 @@ docker run -e DOORAY_API_KEY="your_api_key" \
 
 #### 22. dooray_messenger_get_channels
 
-접근 가능한 메신저 채널 목록을 조회합니다.
+접근 가능한 메신저 채널 목록을 조회합니다. 최근 N개월 내 업데이트된 채널만 필터링할 수 있어 대용량 결과를 방지합니다.
 
-#### 23. dooray_messenger_get_channel_logs
+#### 23. dooray_messenger_get_simple_channels
 
-메신저 채널의 메시지 로그를 조회합니다.
+간단한 채널 목록을 조회합니다. 채널 검색 및 대용량 데이터 방지용으로 ID, 제목, 타입, 상태, 업데이트 날짜, 참가자 수만 포함합니다.
 
-#### 24. dooray_messenger_send_channel_message
+#### 24. dooray_messenger_get_channel
+
+특정 채널의 상세 정보를 조회합니다. 채널 ID를 통해 해당 채널의 모든 멤버, 설정 등 상세 정보를 확인할 수 있습니다.
+
+#### 25. dooray_messenger_create_channel
+
+새로운 메신저 채널을 생성합니다. (private 또는 direct 타입 지원)
+
+#### 26. dooray_messenger_send_channel_message
 
 메신저 채널에 메시지를 전송합니다.
+
+> ⚠️ **참고**: 채널 메시지 조회는 Dooray API에서 보안상 이유로 지원하지 않습니다.
 
 ## 사용 예시
 
@@ -239,6 +249,43 @@ docker run -e DOORAY_API_KEY="your_api_key" \
   "arguments": {
     "organization_member_id": "member_id_from_search",
     "text": "안녕하세요! 메시지 전송 테스트입니다."
+  }
+}
+```
+
+### 간단한 채널 목록 조회
+
+```json
+{
+  "name": "dooray_messenger_get_simple_channels",
+  "arguments": {
+    "recentMonths": 3,
+    "size": 50
+  }
+}
+```
+
+### 특정 채널 상세 조회
+
+```json
+{
+  "name": "dooray_messenger_get_channel",
+  "arguments": {
+    "channelId": "2692783199335294539"
+  }
+}
+```
+
+### 채널 생성
+
+```json
+{
+  "name": "dooray_messenger_create_channel",
+  "arguments": {
+    "type": "private",
+    "title": "새 프로젝트 채널",
+    "member_ids": ["member_id_1", "member_id_2"],
+    "capacity": "50"
   }
 }
 ```
