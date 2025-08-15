@@ -68,6 +68,79 @@ docker run -e DOORAY_API_KEY="your_api_key" \
            bifos/dooray-mcp:latest
 ```
 
+## Claude Desktop에서 사용하기
+
+Claude Desktop (Claude Code)에서 MCP 서버를 사용하려면 설정 파일에 다음과 같이 추가하세요.
+
+### 설정 파일 위치
+
+**macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`  
+**Windows**: `%APPDATA%\Claude\claude_desktop_config.json`  
+**Linux**: `~/.config/Claude/claude_desktop_config.json`
+
+### 기본 설정 (권장)
+
+```json
+{
+  "mcpServers": {
+    "dooray-mcp": {
+      "command": "docker",
+      "args": [
+        "run",
+        "--platform", "linux/amd64",
+        "-i",
+        "--rm",
+        "-e", "DOORAY_API_KEY",
+        "-e", "DOORAY_BASE_URL",
+        "my13each/dooray-mcp:latest"
+      ],
+      "env": {
+        "DOORAY_API_KEY": "{Your Dooray API Key}",
+        "DOORAY_BASE_URL": "https://api.dooray.com"
+      }
+    }
+  }
+}
+```
+
+### 항상 최신 버전 사용 (선택사항)
+
+최신 업데이트를 즉시 반영하고 싶다면 `--pull=always` 옵션을 추가하세요:
+
+```json
+{
+  "mcpServers": {
+    "dooray-mcp": {
+      "command": "docker",
+      "args": [
+        "run",
+        "--platform", "linux/amd64",
+        "--pull=always",
+        "-i",
+        "--rm",
+        "-e", "DOORAY_API_KEY",
+        "-e", "DOORAY_BASE_URL",
+        "my13each/dooray-mcp:latest"
+      ],
+      "env": {
+        "DOORAY_API_KEY": "{Your Dooray API Key}",
+        "DOORAY_BASE_URL": "https://api.dooray.com"
+      }
+    }
+  }
+}
+```
+
+> ⚠️ **참고**: `--pull=always` 옵션은 Claude 시작할 때마다 최신 이미지를 다운로드하므로 시작 시간이 길어질 수 있습니다.
+
+### Dooray API Key 발급 방법
+
+1. [Dooray 관리자 페이지](https://dooray.com) 로그인
+2. **관리 > API 관리** 메뉴 이동
+3. **새 API Key 생성** 클릭
+4. 필요한 권한 설정 후 생성
+5. 생성된 API Key를 설정 파일의 `{Your Dooray API Key}` 부분에 입력
+
 ## 사용 가능한 도구 (총 23개)
 
 ### 위키 관련 도구 (8개)
