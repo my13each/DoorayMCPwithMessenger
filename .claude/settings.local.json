@@ -9,10 +9,16 @@
       "WebFetch(domain:github.com)",
       "Bash(curl:*)",
       "Bash(./gradlew:*)",
-      "Bash(CI=true ./gradlew test --console=plain)"
+      "Bash(CI=true ./gradlew test --console=plain)",
+      "Bash(DOORAY_API_KEY=\"ajjt1imxmtj4:F1h8NZUlRLCAQO0k75TZWg\" DOORAY_BASE_URL=\"https://api.dooray.com\" timeout 10 ./gradlew runLocal)",
+      "Bash(java:*)",
+      "Bash(rm:*)"
     ],
     "deny": [],
     "ask": [],
-    "defaultMode": "acceptEdits"
+    "defaultMode": "acceptEdits",
+    "additionalDirectories": [
+      "/opt/homebrew/Cellar/openjdk@21"
+    ]
   }
 }

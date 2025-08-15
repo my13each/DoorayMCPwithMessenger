@@ -85,26 +85,21 @@ data class ChannelOrganization(
     val id: String
 )
 
-/** 채널 정보 - 실제 API 응답 구조 */
+/** 채널 정보 - API 스펙에 맞게 정확히 복원 */
 @Serializable
 data class Channel(
     val id: String,
-    val name: String? = null,         // 실제 API 응답 필드
-    val type: String? = null,         // "direct", "private", "me", "bot"
-    val description: String? = null,  // 실제 API 응답 필드
-    val memberCount: Int? = null,     // 실제 API 응답 필드
-    
-    // API 스펙에 있는 필드들 (실제 응답에서 제공될 경우를 위해 유지)
-    val title: String? = null,        // API 스펙 필드
+    val title: String? = null,        // 채널 제목/이름 (API 스펙 및 실제 응답)
     val organization: ChannelOrganization? = null,
+    val type: String? = null,         // "direct", "private", "me", "bot"
     val users: ChannelUsers? = null,
     val me: ChannelMe? = null,
-    val capacity: Int? = null,
-    val status: String? = null,
+    val capacity: Int? = null,        // 채널 참가 가능 인원수
+    val status: String? = null,       // "system", "normal", "archived", "deleted"
     val createdAt: String? = null,
     val updatedAt: String? = null,
-    val displayed: Boolean? = null,
-    val role: String? = null,
+    val displayed: Boolean? = null,   // 표시 여부
+    val role: String? = null,         // "member", "creator", "admin"
     val archivedAt: String? = null
 )
 
