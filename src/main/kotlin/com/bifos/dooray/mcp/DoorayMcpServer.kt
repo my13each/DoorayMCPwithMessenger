@@ -168,13 +168,16 @@ class DoorayMcpServer {
         // 20. 간단한 채널 목록 조회 (검색용)
         addTool(getSimpleChannelsTool(), getSimpleChannelsHandler(doorayHttpClient))
 
-        // 21. 채널 로그 조회
+        // 21. 특정 채널 상세 조회
+        addTool(getChannelTool(), getChannelHandler(doorayHttpClient))
+
+        // 22. 채널 로그 조회
         addTool(getChannelLogsTool(), getChannelLogsHandler(doorayHttpClient))
 
-        // 22. 채널 메시지 전송
+        // 23. 채널 메시지 전송
         addTool(sendChannelMessageTool(), sendChannelMessageHandler(doorayHttpClient))
 
-        // 23. 채널 생성
+        // 24. 채널 생성
         addTool(createChannelTool(), createChannelHandler(doorayHttpClient))
 
         log.info("Successfully added $toolCount tools to MCP server")

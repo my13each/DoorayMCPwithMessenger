@@ -168,6 +168,9 @@ interface DoorayClient {
         recentMonths: Int? = null
     ): SimpleChannelListResponse
 
+    /** 특정 채널의 상세 정보를 조회합니다. */
+    suspend fun getChannel(channelId: String): Channel?
+
     /** 새 채널을 생성합니다. */
     suspend fun createChannel(request: CreateChannelRequest, idType: String? = null): CreateChannelResponse
 

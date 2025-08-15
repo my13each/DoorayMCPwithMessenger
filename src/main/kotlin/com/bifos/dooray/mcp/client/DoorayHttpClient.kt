@@ -561,6 +561,28 @@ class DoorayHttpClient(private val baseUrl: String, private val doorayApiKey: St
         )
     }
 
+    override suspend fun getChannel(channelId: String): Channel? {
+        return try {
+            // 전체 채널 목록에서 특정 채널을 찾아서 반환
+            val response = getChannels()
+            if (response.header.isSuccessful) {
+                val channel = response.result.find { it.id == channelId }
+                if (channel != null) {
+                    log.info("✅ 채널 정보 조회 성공: ${channel.title} (ID: $channelId)")
+                } else {
+                    log.warn("⚠️ 채널을 찾을 수 없습니다: ID=$channelId")
+                }
+                channel
+            } else {
+                log.error("❌ 채널 목록 조회 실패: ${response.header.resultMessage}")
+                null
+            }
+        } catch (e: Exception) {
+            log.error("❌ 채널 조회 중 오류 발생: ${e.message}")
+            null
+        }
+    }
+
     override suspend fun createChannel(request: CreateChannelRequest, idType: String?): CreateChannelResponse {
         return executeApiCall(
                 operation = "POST /messenger/v1/channels",
