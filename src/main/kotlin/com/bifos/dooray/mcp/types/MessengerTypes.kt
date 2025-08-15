@@ -142,6 +142,12 @@ data class JoinChannelRequest(
 /** 채널 가입 응답 */
 typealias JoinChannelResponse = DoorayApiUnitResponse
 
+/** 채널 탈퇴 요청 */
+@Serializable
+data class LeaveChannelRequest(
+    val memberIds: List<String>
+)
+
 /** 채널 탈퇴 응답 */
 typealias LeaveChannelResponse = DoorayApiUnitResponse
 

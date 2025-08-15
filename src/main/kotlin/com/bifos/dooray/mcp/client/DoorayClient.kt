@@ -163,8 +163,8 @@ interface DoorayClient {
     /** 채널에 멤버를 가입시킵니다. */
     suspend fun joinChannel(channelId: String, request: JoinChannelRequest): JoinChannelResponse
 
-    /** 채널에서 나갑니다. */
-    suspend fun leaveChannel(channelId: String): LeaveChannelResponse
+    /** 채널에서 멤버를 제거합니다. */
+    suspend fun leaveChannel(channelId: String, request: LeaveChannelRequest): LeaveChannelResponse
 
     /** 채널의 메시지 로그를 조회합니다. */
     suspend fun getChannelLogs(

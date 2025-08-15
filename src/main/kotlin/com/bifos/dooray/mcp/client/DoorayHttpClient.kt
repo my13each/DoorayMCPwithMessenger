@@ -528,11 +528,15 @@ class DoorayHttpClient(private val baseUrl: String, private val doorayApiKey: St
         }
     }
 
-    override suspend fun leaveChannel(channelId: String): LeaveChannelResponse {
+    override suspend fun leaveChannel(channelId: String, request: LeaveChannelRequest): LeaveChannelResponse {
         return executeApiCallForNullableResult(
                 operation = "POST /messenger/v1/channels/$channelId/members/leave",
-                successMessage = "✅ 채널 탈퇴 성공"
-        ) { httpClient.post("/messenger/v1/channels/$channelId/members/leave") }
+                successMessage = "✅ 채널에서 멤버 제거 성공"
+        ) { 
+            httpClient.post("/messenger/v1/channels/$channelId/members/leave") {
+                setBody(request)
+            }
+        }
     }
 
     override suspend fun getChannelLogs(
