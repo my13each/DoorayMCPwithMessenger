@@ -171,6 +171,9 @@ class DoorayMcpServer {
         // 21. 채널 메시지 전송
         addTool(sendChannelMessageTool(), sendChannelMessageHandler(doorayHttpClient))
 
+        // 22. 채널 생성
+        addTool(createChannelTool(), createChannelHandler(doorayHttpClient))
+
         log.info("Successfully added $toolCount tools to MCP server")
     }
 }

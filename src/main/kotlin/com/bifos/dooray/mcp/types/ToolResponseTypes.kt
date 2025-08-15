@@ -57,7 +57,17 @@ data class DirectMessageResponseData(
 @Serializable
 data class ChannelMessageResponseData(
         val channelId: String,
-        val sentMessage: ChannelMessage?,
+        val sentText: String,
+        val timestamp: Long
+)
+
+/** 채널 생성 응답 데이터 */
+@Serializable
+data class CreateChannelResponseData(
+        val channelId: String,
+        val channelTitle: String,
+        val channelType: String,
+        val memberCount: Int,
         val timestamp: Long
 )
 

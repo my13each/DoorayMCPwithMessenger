@@ -561,10 +561,10 @@ class DoorayHttpClient(private val baseUrl: String, private val doorayApiKey: St
             channelId: String,
             request: SendChannelMessageRequest
     ): SendChannelMessageResponse {
-        return executeApiCall(
+        return executeApiCallForNullableResult(
                 operation = "POST /messenger/v1/channels/$channelId/logs",
-                successMessage = "✅ 채널 메시지 전송 성공",
-                expectedStatusCode = HttpStatusCode.Created
+                expectedStatusCode = HttpStatusCode.OK, // API 스펙에 따르면 200 응답
+                successMessage = "✅ 채널 메시지 전송 성공"
         ) {
             httpClient.post("/messenger/v1/channels/$channelId/logs") {
                 setBody(request)

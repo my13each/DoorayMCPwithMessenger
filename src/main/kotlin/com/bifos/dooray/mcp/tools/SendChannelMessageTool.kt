@@ -83,7 +83,7 @@ fun sendChannelMessageHandler(doorayClient: DoorayClient): suspend (CallToolRequ
                     if (response.header.isSuccessful) {
                         val data = ChannelMessageResponseData(
                             channelId = channelId,
-                            sentMessage = response.result,
+                            sentText = text,
                             timestamp = System.currentTimeMillis()
                         )
                         val successResponse = ToolSuccessResponse(

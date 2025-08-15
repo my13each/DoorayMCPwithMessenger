@@ -181,8 +181,4 @@ data class SendChannelMessageRequest(
 )
 
 /** 채널 메시지 전송 응답 */
-@Serializable
-data class SendChannelMessageResponse(
-    val header: DoorayApiHeader,
-    val result: ChannelMessage?
-)
+typealias SendChannelMessageResponse = DoorayApiUnitResponse
