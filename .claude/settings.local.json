@@ -7,7 +7,9 @@
       "Bash(git push:*)",
       "Bash(git remote set-url:*)",
       "WebFetch(domain:github.com)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(./gradlew:*)",
+      "Bash(CI=true ./gradlew test --console=plain)"
     ],
     "deny": [],
     "ask": [],

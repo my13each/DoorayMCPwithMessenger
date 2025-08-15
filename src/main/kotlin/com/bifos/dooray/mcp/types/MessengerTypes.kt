@@ -46,14 +46,61 @@ typealias DirectMessageResponse = DoorayApiUnitResponse
 
 // ============ 채널 관련 타입들 ============
 
+/** 채널 참가자 멤버 정보 */
+@Serializable
+data class ChannelParticipantMember(
+    val organizationMemberId: String
+)
+
+/** 채널 참가자 정보 */
+@Serializable
+data class ChannelParticipant(
+    val type: String, // "member"
+    val member: ChannelParticipantMember
+)
+
+/** 채널 사용자 정보 */
+@Serializable
+data class ChannelUsers(
+    val participants: List<ChannelParticipant>
+)
+
+/** 채널에서의 본인 멤버 정보 */
+@Serializable
+data class ChannelMeMember(
+    val organizationMemberId: String
+)
+
+/** 채널에서의 본인 정보 */
+@Serializable
+data class ChannelMe(
+    val type: String, // "member"
+    val member: ChannelMeMember,
+    val role: String // "member", "creator", "admin"
+)
+
+/** 채널 조직 정보 */
+@Serializable
+data class ChannelOrganization(
+    val id: String
+)
+
 /** 채널 정보 */
 @Serializable
 data class Channel(
     val id: String,
-    val name: String? = null,
-    val type: String? = null,
-    val description: String? = null,
-    val memberCount: Int? = null
+    val title: String? = null,
+    val organization: ChannelOrganization? = null,
+    val type: String? = null, // "direct", "private", "me", "bot"
+    val users: ChannelUsers? = null,
+    val me: ChannelMe? = null,
+    val capacity: Int? = null, // 채널 참가 가능 인원수
+    val status: String? = null, // "system", "normal", "archived", "deleted"
+    val createdAt: String? = null,
+    val updatedAt: String? = null,
+    val displayed: Boolean? = null, // 표시 여부
+    val role: String? = null, // "member", "creator", "admin"
+    val archivedAt: String? = null
 )
 
 /** 채널 목록 응답 */
