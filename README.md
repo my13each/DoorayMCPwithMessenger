@@ -344,7 +344,7 @@ Dooray組織のメンバーを検索します。名前、メール、ユーザ�
 {
   "name": "dooray_messenger_get_channel",
   "arguments": {
-    "channelId": "2692783199335294539"
+    "channelId": "Channel ID"
   }
 }
 ```
@@ -381,13 +381,13 @@ Dooray組織のメンバーを検索します。名前、メール、ユーザ�
 {
   "name": "dooray_messenger_send_channel_message",
   "arguments": {
-    "channel_id": "4129162705001539634",
-    "text": "午後に資料として整理して共有する予定です。",
+    "channel_id": "Channel ID",
+    "text": "午後に共有する予定です。",
     "mention_members": [
       {
-        "id": "1653898942478787781",
-        "name": "菅野志穂",
-        "organizationId": "1708537451674140147"
+        "id": "User ID",
+        "name": "User Name",
+        "organizationId": "Organization Id"
       }
     ]
   }
@@ -399,8 +399,8 @@ Dooray組織のメンバーを検索します。名前、メール、ユーザ�
 {
   "name": "dooray_messenger_send_channel_message",
   "arguments": {
-    "channel_id": "4129162705001539634", 
-    "text": "중요한 공지사항입니다.",
+    "channel_id": "Channel ID", 
+    "text": "大事なお知らせです",
     "mention_all": true
   }
 }
