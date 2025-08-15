@@ -500,16 +500,16 @@ class DoorayHttpClient(private val baseUrl: String, private val doorayApiKey: St
         ) { httpClient.get("/messenger/v1/channels") }
     }
 
-    override suspend fun createChannel(request: CreateChannelRequest): CreateChannelResponse {
+    override suspend fun createChannel(request: CreateChannelRequest, idType: String?): CreateChannelResponse {
         return executeApiCall(
                 operation = "POST /messenger/v1/channels",
                 successMessage = "✅ 채널 생성 성공",
-                expectedStatusCode = HttpStatusCode.Created
+                expectedStatusCode = HttpStatusCode.OK // API 스펙에 따르면 200 응답
         ) {
             httpClient.post("/messenger/v1/channels") {
                 setBody(request)
-                // 이메일로 멤버 지정 시 쿼리 파라미터 사용
-                parameter("idType", "email")
+                // idType 파라미터가 제공된 경우에만 추가 (email 또는 memberId)
+                idType?.let { parameter("idType", it) }
             }
         }
     }

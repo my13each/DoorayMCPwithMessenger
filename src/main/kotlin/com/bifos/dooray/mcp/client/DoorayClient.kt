@@ -158,7 +158,7 @@ interface DoorayClient {
     suspend fun getChannels(): ChannelListResponse
 
     /** 새 채널을 생성합니다. */
-    suspend fun createChannel(request: CreateChannelRequest): CreateChannelResponse
+    suspend fun createChannel(request: CreateChannelRequest, idType: String? = null): CreateChannelResponse
 
     /** 채널에 멤버를 가입시킵니다. */
     suspend fun joinChannel(channelId: String, request: JoinChannelRequest): JoinChannelResponse

@@ -114,16 +114,23 @@ data class ChannelListResponse(
 /** 채널 생성 요청 */
 @Serializable
 data class CreateChannelRequest(
-    val name: String,
-    val description: String? = null,
-    val memberIds: List<String>? = null
+    val type: String, // "private" 또는 "direct"
+    val capacity: String? = null, // 참가 가능 인원수 (문자열)
+    val memberIds: List<String>? = null,
+    val title: String? = null // 채널 제목
+)
+
+/** 채널 생성 결과 */
+@Serializable
+data class CreateChannelResult(
+    val id: String
 )
 
 /** 채널 생성 응답 */
 @Serializable
 data class CreateChannelResponse(
     val header: DoorayApiHeader,
-    val result: Channel?
+    val result: CreateChannelResult?
 )
 
 /** 채널 가입 요청 */
