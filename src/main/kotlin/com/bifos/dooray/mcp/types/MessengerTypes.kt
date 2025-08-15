@@ -89,7 +89,8 @@ data class ChannelOrganization(
 @Serializable
 data class Channel(
     val id: String,
-    val title: String? = null,
+    val title: String? = null,    // 채널 생성 시 사용
+    val name: String? = null,     // API 응답에서 사용
     val organization: ChannelOrganization? = null,
     val type: String? = null, // "direct", "private", "me", "bot"
     val users: ChannelUsers? = null,
