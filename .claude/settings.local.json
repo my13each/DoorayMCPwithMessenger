@@ -18,7 +18,8 @@
       "Bash(export PATH=$JAVA_HOME/bin:$PATH)",
       "Bash(git tag:*)",
       "Bash(gh run list:*)",
-      "Bash(docker pull:*)"
+      "Bash(docker pull:*)",
+      "Bash(rg:*)"
     ],
     "deny": [],
     "ask": [],

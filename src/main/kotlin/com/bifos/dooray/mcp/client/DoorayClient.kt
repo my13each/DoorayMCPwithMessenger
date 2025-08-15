@@ -180,13 +180,8 @@ interface DoorayClient {
     /** 채널에서 멤버를 제거합니다. */
     suspend fun leaveChannel(channelId: String, request: LeaveChannelRequest): LeaveChannelResponse
 
-    /** 채널의 메시지 로그를 조회합니다. */
-    suspend fun getChannelLogs(
-        channelId: String,
-        page: Int? = null,
-        size: Int? = null,
-        order: String? = null
-    ): ChannelLogsResponse
+    // ⚠️ 채널 로그 조회는 Dooray API에서 지원하지 않음 (보안상 제한)
+    // suspend fun getChannelLogs(...): ChannelLogsResponse
 
     /** 채널에 메시지를 전송합니다. */
     suspend fun sendChannelMessage(

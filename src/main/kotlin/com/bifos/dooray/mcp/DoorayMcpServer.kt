@@ -171,13 +171,11 @@ class DoorayMcpServer {
         // 21. 특정 채널 상세 조회
         addTool(getChannelTool(), getChannelHandler(doorayHttpClient))
 
-        // 22. 채널 로그 조회
-        addTool(getChannelLogsTool(), getChannelLogsHandler(doorayHttpClient))
-
-        // 23. 채널 메시지 전송
+        // ⚠️ 채널 로그 조회는 Dooray API에서 지원하지 않음 (보안상 제한)
+        // 22. 채널 메시지 전송
         addTool(sendChannelMessageTool(), sendChannelMessageHandler(doorayHttpClient))
 
-        // 24. 채널 생성
+        // 23. 채널 생성
         addTool(createChannelTool(), createChannelHandler(doorayHttpClient))
 
         log.info("Successfully added $toolCount tools to MCP server")

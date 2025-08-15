@@ -622,23 +622,8 @@ class DoorayHttpClient(private val baseUrl: String, private val doorayApiKey: St
         }
     }
 
-    override suspend fun getChannelLogs(
-            channelId: String,
-            page: Int?,
-            size: Int?,
-            order: String?
-    ): ChannelLogsResponse {
-        return executeApiCall(
-                operation = "GET /messenger/v1/channels/$channelId/logs",
-                successMessage = "✅ 채널 로그 조회 성공"
-        ) {
-            httpClient.get("/messenger/v1/channels/$channelId/logs") {
-                page?.let { parameter("page", it) }
-                size?.let { parameter("size", it) }
-                order?.let { parameter("order", it) }
-            }
-        }
-    }
+    // ⚠️ 채널 로그 조회는 Dooray API에서 지원하지 않음 (보안상 제한)
+    // override suspend fun getChannelLogs(...): ChannelLogsResponse {...}
 
     override suspend fun sendChannelMessage(
             channelId: String,
