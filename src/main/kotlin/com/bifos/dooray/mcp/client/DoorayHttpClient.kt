@@ -493,11 +493,44 @@ class DoorayHttpClient(private val baseUrl: String, private val doorayApiKey: St
         }
     }
 
-    override suspend fun getChannels(): ChannelListResponse {
-        return executeApiCall(
+    override suspend fun getChannels(
+        page: Int?,
+        size: Int?,
+        recentMonths: Int?
+    ): ChannelListResponse {
+        val response = executeApiCall<ChannelListResponse>(
                 operation = "GET /messenger/v1/channels",
                 successMessage = "✅ 채널 목록 조회 성공"
-        ) { httpClient.get("/messenger/v1/channels") }
+        ) { 
+            httpClient.get("/messenger/v1/channels") {
+                page?.let { parameter("page", it) }
+                size?.let { parameter("size", it) }
+            }
+        }
+        
+        // recentMonths가 지정된 경우 클라이언트 사이드에서 필터링
+        return if (recentMonths != null && recentMonths > 0) {
+            val cutoffDate = java.time.LocalDateTime.now().minusMonths(recentMonths.toLong())
+            val filteredChannels = response.result.filter { channel ->
+                try {
+                    val updatedAt = java.time.LocalDateTime.parse(
+                        channel.updatedAt?.replace(Regex("\\+09:00$"), "")?.split(".")?.get(0) ?: return@filter false
+                    )
+                    updatedAt.isAfter(cutoffDate)
+                } catch (e: Exception) {
+                    log.warn("날짜 파싱 실패 for channel ${channel.id}: ${channel.updatedAt}")
+                    false
+                }
+            }
+            log.info("🔍 최근 ${recentMonths}개월 필터링: ${response.result.size}개 → ${filteredChannels.size}개 채널")
+            ChannelListResponse(
+                header = response.header,
+                result = filteredChannels,
+                totalCount = filteredChannels.size
+            )
+        } else {
+            response
+        }
     }
 
     override suspend fun createChannel(request: CreateChannelRequest, idType: String?): CreateChannelResponse {

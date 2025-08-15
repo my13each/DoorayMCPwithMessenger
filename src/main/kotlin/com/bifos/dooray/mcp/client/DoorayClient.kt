@@ -155,7 +155,11 @@ interface DoorayClient {
     suspend fun sendDirectMessage(request: DirectMessageRequest): DirectMessageResponse
 
     /** 접근 가능한 채널 목록을 조회합니다. */
-    suspend fun getChannels(): ChannelListResponse
+    suspend fun getChannels(
+        page: Int? = null,
+        size: Int? = null,
+        recentMonths: Int? = null
+    ): ChannelListResponse
 
     /** 새 채널을 생성합니다. */
     suspend fun createChannel(request: CreateChannelRequest, idType: String? = null): CreateChannelResponse
