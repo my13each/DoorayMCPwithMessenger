@@ -533,6 +533,34 @@ class DoorayHttpClient(private val baseUrl: String, private val doorayApiKey: St
         }
     }
 
+    override suspend fun getSimpleChannels(
+        page: Int?,
+        size: Int?,
+        recentMonths: Int?
+    ): SimpleChannelListResponse {
+        // 기존 getChannels를 재사용하여 데이터를 가져온 후, SimpleChannel로 변환
+        val response = getChannels(page, size, recentMonths)
+        
+        val simpleChannels = response.result.map { channel ->
+            SimpleChannel(
+                id = channel.id,
+                title = channel.title,
+                type = channel.type,
+                status = channel.status,
+                updatedAt = channel.updatedAt,
+                participantCount = channel.users?.participants?.size
+            )
+        }
+        
+        log.info("✂️ 채널 정보 간소화: 상세 정보 제거, ${response.result.size}개 채널 → 간단 정보만")
+        
+        return SimpleChannelListResponse(
+            header = response.header,
+            result = simpleChannels,
+            totalCount = response.totalCount
+        )
+    }
+
     override suspend fun createChannel(request: CreateChannelRequest, idType: String?): CreateChannelResponse {
         return executeApiCall(
                 operation = "POST /messenger/v1/channels",

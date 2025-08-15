@@ -103,6 +103,25 @@ data class Channel(
     val archivedAt: String? = null
 )
 
+/** 간단한 채널 정보 (검색용) */
+@Serializable
+data class SimpleChannel(
+    val id: String,
+    val title: String? = null,
+    val type: String? = null,         // "direct", "private", "me", "bot"
+    val status: String? = null,       // "system", "normal", "archived", "deleted"
+    val updatedAt: String? = null,
+    val participantCount: Int? = null // participants 수만 표시
+)
+
+/** 간단한 채널 목록 응답 */
+@Serializable
+data class SimpleChannelListResponse(
+    val header: DoorayApiHeader,
+    val result: List<SimpleChannel>,
+    val totalCount: Int? = null
+)
+
 /** 채널 목록 응답 */
 @Serializable
 data class ChannelListResponse(
@@ -182,3 +201,12 @@ data class SendChannelMessageRequest(
 
 /** 채널 메시지 전송 응답 */
 typealias SendChannelMessageResponse = DoorayApiUnitResponse
+
+// ============ 도구 응답용 데이터 타입들 ============
+
+/** 간단한 채널 목록 응답 데이터 (도구용) */
+@Serializable
+data class SimpleChannelListResponseData(
+    val channels: List<SimpleChannel>,
+    val totalCount: Int
+)
