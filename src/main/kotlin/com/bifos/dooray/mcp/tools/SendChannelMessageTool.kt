@@ -101,15 +101,18 @@ fun sendChannelMessageHandler(doorayClient: DoorayClient): suspend (CallToolRequ
                     // 멘션 기능 처리
                     var finalText = text
                     
-                    // 채널 전체 멘션 처리
-                    if (mentionAll) {
+                    // 텍스트에 이미 Dooray 멘션 형식이 포함되어 있는지 확인
+                    val hasDoorayMention = finalText.contains("[@") && finalText.contains("](dooray://")
+                    
+                    // 채널 전체 멘션 처리 (이미 멘션이 있지 않을 때만)
+                    if (mentionAll && !hasDoorayMention) {
                         // 조직 ID를 얻기 위해 채널 정보 조회 (간단하게 하드코딩으로 처리 - 실제로는 채널 정보에서 가져와야 함)
                         val channelMention = "[@Channel](dooray://1708537451674140147/channels/$channelId \"channel\")\n"
                         finalText = channelMention + finalText
                     }
                     
-                    // 개별 멤버 멘션 처리
-                    if (mentionMembers != null) {
+                    // 개별 멤버 멘션 처리 (이미 멘션이 있지 않을 때만)
+                    if (mentionMembers != null && !hasDoorayMention) {
                         val mentions = mutableListOf<String>()
                         mentionMembers.forEach { memberElement ->
                             val memberObj = memberElement.jsonObject
