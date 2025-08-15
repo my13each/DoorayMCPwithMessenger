@@ -16,7 +16,9 @@
       "Bash(./scripts/docker-build.sh:*)",
       "Bash(export:*)",
       "Bash(export PATH=$JAVA_HOME/bin:$PATH)",
-      "Bash(git tag:*)"
+      "Bash(git tag:*)",
+      "Bash(gh run list:*)",
+      "Bash(docker pull:*)"
     ],
     "deny": [],
     "ask": [],
