@@ -1,84 +1,84 @@
 # Dooray MCP Server
 
-NHN Dooray 서비스의 MCP(Model Context Protocol) 서버입니다.
+NHN Doorayサービス用のMCP（Model Context Protocol）サーバーです。
 
-## 주요 기능
+## 主要機能
 
-- **위키 관리**: 위키 조회, 생성, 수정, 참조자 관리
-- **업무 관리**: 업무 조회, 생성, 수정, 상태 변경
-- **댓글 관리**: 업무 댓글 생성, 조회, 수정, 삭제
-- **메신저 관리**: 멤버 검색, 다이렉트 메시지, 채널 관리, 채널 메시지 전송
-- **JSON 응답**: 규격화된 JSON 형태의 응답
-- **예외 처리**: 일관된 에러 응답 제공
-- **Docker 지원**: 멀티 플랫폼 Docker 이미지 제공
+- **Wikiの管理**: Wiki閲覧、作成、編集、参照者管理
+- **タスク管理**: タスク閲覧、作成、編集、ステータス変更
+- **コメント管理**: タスクコメントの作成、閲覧、編集、削除
+- **メッセンジャー管理**: メンバー検索、ダイレクトメッセージ、チャンネル管理、チャンネルメッセージ送信
+- **JSON応答**: 規格化されたJSON形式の応答
+- **例外処理**: 一貫したエラー応答の提供
+- **Docker対応**: マルチプラットフォームDockerイメージの提供
 
-## 빠른 시작
+## クイックスタート
 
-### 환경변수 설정
+### 環境変数の設定
 
-다음 환경변수를 설정해야 합니다:
+以下の環境変数を設定する必要があります：
 
 ```bash
 export DOORAY_API_KEY="your_api_key"
 export DOORAY_BASE_URL="https://api.dooray.com"
 
-# 선택사항: 로깅 레벨 제어
-export DOORAY_LOG_LEVEL="WARN"         # DEBUG, INFO, WARN, ERROR (기본값: WARN)
-export DOORAY_HTTP_LOG_LEVEL="WARN"    # HTTP 클라이언트 로깅 (기본값: WARN)
+# オプション: ログレベル制御
+export DOORAY_LOG_LEVEL="WARN"         # DEBUG, INFO, WARN, ERROR (デフォルト: WARN)
+export DOORAY_HTTP_LOG_LEVEL="WARN"    # HTTPクライアントログ (デフォルト: WARN)
 ```
 
-#### 로깅 설정
+#### ログ設定
 
-**일반 로깅 (`DOORAY_LOG_LEVEL`)**
+**一般ログ (`DOORAY_LOG_LEVEL`)**
 
-- `WARN` (기본값): 경고 및 에러만 로깅 - **MCP 통신 안정성을 위해 권장**
-- `INFO`: 일반 정보 포함 로깅
-- `DEBUG`: 상세한 디버그 정보 포함
+- `WARN` (デフォルト): 警告とエラーのみログ出力 - **MCP通信の安定性のため推奨**
+- `INFO`: 一般情報を含むログ出力
+- `DEBUG`: 詳細なデバッグ情報を含む
 
-**HTTP 로깅 (`DOORAY_HTTP_LOG_LEVEL`)**
+**HTTPログ (`DOORAY_HTTP_LOG_LEVEL`)**
 
-- `WARN` (기본값): HTTP 에러만 로깅 - **MCP 통신 안정성을 위해 권장**
-- `INFO`: 기본 요청/응답 정보만 로깅
-- `DEBUG`: 상세한 HTTP 정보 로깅
+- `WARN` (デフォルト): HTTPエラーのみログ出力 - **MCP通信の安定性のため推奨**
+- `INFO`: 基本的なリクエスト/レスポンス情報のみログ出力
+- `DEBUG`: 詳細なHTTP情報をログ出力
 
-> ⚠️ **중요**: MCP 서버는 stdin/stdout을 통해 통신하므로, 모든 로그는 **stderr**로 출력됩니다. 로깅 레벨을 높이면 프로토콜 통신에는 영향을 주지 않지만, 성능에 영향을 줄 수 있습니다.
+> ⚠️ **重要**: MCPサーバーはstdin/stdoutを通じて通信するため、すべてのログは**stderr**に出力されます。ログレベルを上げてもプロトコル通信に影響はありませんが、パフォーマンスに影響する可能性があります。
 
-### 로컬 실행
+### ローカル実行
 
 ```bash
-# 의존성 설치 및 빌드
+# 依存関係のインストールとビルド
 ./gradlew clean shadowJar
 
-# 로컬 실행 (.env 파일 사용)
+# ローカル実行 (.envファイルを使用)
 ./gradlew runLocal
 
-# 또는 직접 실행
+# または直接実行
 java -jar build/libs/dooray-mcp-server-0.2.1-all.jar
 ```
 
-### Docker 실행
+### Docker実行
 
 ```bash
-# Docker Hub에서 이미지 가져오기
+# Docker Hubからイメージを取得
 docker pull bifos/dooray-mcp:latest
 
-# 환경변수와 함께 실행
+# 環境変数と一緒に実行
 docker run -e DOORAY_API_KEY="your_api_key" \
            -e DOORAY_BASE_URL="https://api.dooray.com" \
            bifos/dooray-mcp:latest
 ```
 
-## Claude Desktop에서 사용하기
+## Claude Desktopでの使用方法
 
-Claude Desktop (Claude Code)에서 MCP 서버를 사용하려면 설정 파일에 다음과 같이 추가하세요.
+Claude Desktop（Claude Code）でMCPサーバーを使用するには、設定ファイルに以下のように追加してください。
 
-### 설정 파일 위치
+### 設定ファイルの場所
 
 **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`  
 **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`  
 **Linux**: `~/.config/Claude/claude_desktop_config.json`
 
-### 기본 설정 (권장)
+### 基本設定（推奨）
 
 ```json
 {
@@ -103,9 +103,9 @@ Claude Desktop (Claude Code)에서 MCP 서버를 사용하려면 설정 파일�
 }
 ```
 
-### 항상 최신 버전 사용 (선택사항)
+### 常に最新版を使用（オプション）
 
-최신 업데이트를 즉시 반영하고 싶다면 `--pull=always` 옵션을 추가하세요:
+最新アップデートをすぐに反映したい場合は、`--pull=always`オプションを追加してください：
 
 ```json
 {
@@ -131,137 +131,137 @@ Claude Desktop (Claude Code)에서 MCP 서버를 사용하려면 설정 파일�
 }
 ```
 
-> ⚠️ **참고**: `--pull=always` 옵션은 Claude 시작할 때마다 최신 이미지를 다운로드하므로 시작 시간이 길어질 수 있습니다.
+> ⚠️ **注意**: `--pull=always`オプションは、Claude起動時に毎回最新イメージをダウンロードするため、起動時間が長くなる可能性があります。
 
-### Dooray API Key 발급 방법
+### Dooray API Key発行方法
 
-1. [Dooray 관리자 페이지](https://dooray.com) 로그인
-2. **관리 > API 관리** 메뉴 이동
-3. **새 API Key 생성** 클릭
-4. 필요한 권한 설정 후 생성
-5. 생성된 API Key를 설정 파일의 `{Your Dooray API Key}` 부분에 입력
+1. [Dooray管理者ページ](https://dooray.com)にログイン
+2. **管理 > API管理**メニューに移動
+3. **新しいAPI Key作成**をクリック
+4. 必要な権限を設定後、作成
+5. 生成されたAPI Keyを設定ファイルの`{Your Dooray API Key}`部分に入力
 
-## 사용 가능한 도구 (총 23개)
+## 使用可能なツール（合計23個）
 
-### 위키 관련 도구 (8개)
+### Wiki関連ツール（8個）
 
 #### 1. dooray_wiki_list_projects
 
-두레이에서 접근 가능한 위키 프로젝트 목록을 조회합니다.
+Doorayでアクセス可能なWikiプロジェクト一覧を取得します。
 
 #### 2. dooray_wiki_list_pages
 
-특정 두레이 위키 프로젝트의 페이지 목록을 조회합니다.
+特定のDooray Wikiプロジェクトのページ一覧を取得します。
 
 #### 3. dooray_wiki_get_page
 
-특정 두레이 위키 페이지의 상세 정보를 조회합니다.
+特定のDooray Wikiページの詳細情報を取得します。
 
 #### 4. dooray_wiki_create_page
 
-새로운 위키 페이지를 생성합니다.
+新しいWikiページを作成します。
 
 #### 5. dooray_wiki_update_page
 
-기존 위키 페이지를 수정합니다.
+既存のWikiページを編集します。
 
 #### 6. dooray_wiki_update_page_title
 
-위키 페이지의 제목만 수정합니다.
+Wikiページのタイトルのみを編集します。
 
 #### 7. dooray_wiki_update_page_content
 
-위키 페이지의 내용만 수정합니다.
+Wikiページの内容のみを編集します。
 
 #### 8. dooray_wiki_update_page_referrers
 
-위키 페이지의 참조자를 수정합니다.
+Wikiページの参照者を編集します。
 
-### 프로젝트 관련 도구 (1개)
+### プロジェクト関連ツール（1個）
 
 #### 9. dooray_project_list_projects
 
-접근 가능한 프로젝트 목록을 조회합니다.
+アクセス可能なプロジェクト一覧を取得します。
 
-### 업무 관련 도구 (6개)
+### タスク関連ツール（6個）
 
 #### 10. dooray_project_list_posts
 
-프로젝트의 업무 목록을 조회합니다.
+プロジェクトのタスク一覧を取得します。
 
 #### 11. dooray_project_get_post
 
-특정 업무의 상세 정보를 조회합니다.
+特定タスクの詳細情報を取得します。
 
 #### 12. dooray_project_create_post
 
-새로운 업무를 생성합니다.
+新しいタスクを作成します。
 
 #### 13. dooray_project_update_post
 
-기존 업무를 수정합니다.
+既存のタスクを編集します。
 
 #### 14. dooray_project_set_post_workflow
 
-업무의 상태(워크플로우)를 변경합니다.
+タスクのステータス（ワークフロー）を変更します。
 
 #### 15. dooray_project_set_post_done
 
-업무를 완료 상태로 변경합니다.
+タスクを完了状態に変更します。
 
-### 업무 댓글 관련 도구 (4개)
+### タスクコメント関連ツール（4個）
 
 #### 16. dooray_project_create_post_comment
 
-업무에 댓글을 생성합니다.
+タスクにコメントを作成します。
 
 #### 17. dooray_project_get_post_comments
 
-업무의 댓글 목록을 조회합니다.
+タスクのコメント一覧を取得します。
 
 #### 18. dooray_project_update_post_comment
 
-업무 댓글을 수정합니다.
+タスクコメントを編集します。
 
 #### 19. dooray_project_delete_post_comment
 
-업무 댓글을 삭제합니다.
+タスクコメントを削除します。
 
-### 메신저 관련 도구 (6개)
+### メッセンジャー関連ツール（6個）
 
 #### 20. dooray_messenger_search_members
 
-두레이 조직의 멤버를 검색합니다. 이름, 이메일, 사용자 코드 등으로 검색할 수 있습니다.
+Dooray組織のメンバーを検索します。名前、メール、ユーザーコードなどで検索できます。
 
 #### 21. dooray_messenger_send_direct_message
 
-특정 멤버에게 1:1 다이렉트 메시지를 전송합니다.
+特定メンバーに1対1ダイレクトメッセージを送信します。
 
 #### 22. dooray_messenger_get_channels
 
-접근 가능한 메신저 채널 목록을 조회합니다. 최근 N개월 내 업데이트된 채널만 필터링할 수 있어 대용량 결과를 방지합니다.
+アクセス可能なメッセンジャーチャンネル一覧を取得します。最近N ヶ月以内に更新されたチャンネルのみフィルタリングして大容量結果を防ぐことができます。
 
 #### 23. dooray_messenger_get_simple_channels
 
-간단한 채널 목록을 조회합니다. 채널 검색 및 대용량 데이터 방지용으로 ID, 제목, 타입, 상태, 업데이트 날짜, 참가자 수만 포함합니다.
+簡易チャンネル一覧を取得します。チャンネル検索用でID、タイトル、タイプ、ステータス、更新日時、参加者数のみ含み、すべてのチャンネルを安全に取得できます。
 
 #### 24. dooray_messenger_get_channel
 
-특정 채널의 상세 정보를 조회합니다. 채널 ID를 통해 해당 채널의 모든 멤버, 설정 등 상세 정보를 확인할 수 있습니다.
+特定チャンネルの詳細情報を取得します。チャンネルIDを通じて該当チャンネルのすべてのメンバー、設定などの詳細情報を確認できます。
 
 #### 25. dooray_messenger_create_channel
 
-새로운 메신저 채널을 생성합니다. (private 또는 direct 타입 지원)
+新しいメッセンジャーチャンネルを作成します。（privateまたはdirectタイプ対応）
 
 #### 26. dooray_messenger_send_channel_message
 
-메신저 채널에 메시지를 전송합니다.
+メッセンジャーチャンネルにメッセージを送信します。
 
-> ⚠️ **참고**: 채널 메시지 조회는 Dooray API에서 보안상 이유로 지원하지 않습니다.
+> ⚠️ **注意**: チャンネルメッセージの取得は、Dooray APIでセキュリティ上の理由により対応していません。
 
-## 사용 예시
+## 使用例
 
-### 위키 페이지 조회
+### Wikiページ取得
 
 ```json
 {
@@ -273,22 +273,22 @@ Claude Desktop (Claude Code)에서 MCP 서버를 사용하려면 설정 파일�
 }
 ```
 
-### 업무 생성
+### タスク作成
 
 ```json
 {
   "name": "dooray_project_create_post",
   "arguments": {
     "project_id": "your_project_id",
-    "subject": "새로운 업무",
-    "body": "업무 내용",
+    "subject": "新しいタスク",
+    "body": "タスク内容",
     "to_member_ids": ["member_id_1", "member_id_2"],
     "priority": "high"
   }
 }
 ```
 
-### 댓글 생성
+### コメント作成
 
 ```json
 {
@@ -296,37 +296,37 @@ Claude Desktop (Claude Code)에서 MCP 서버를 사용하려면 설정 파일�
   "arguments": {
     "project_id": "your_project_id",
     "post_id": "your_post_id",
-    "content": "댓글 내용",
+    "content": "コメント内容",
     "mime_type": "text/x-markdown"
   }
 }
 ```
 
-### 멤버 검색
+### メンバー検索
 
 ```json
 {
   "name": "dooray_messenger_search_members",
   "arguments": {
-    "name": "홍길동",
+    "name": "田中太郎",
     "size": 10
   }
 }
 ```
 
-### 다이렉트 메시지 전송
+### ダイレクトメッセージ送信
 
 ```json
 {
   "name": "dooray_messenger_send_direct_message",
   "arguments": {
     "organization_member_id": "member_id_from_search",
-    "text": "안녕하세요! 메시지 전송 테스트입니다."
+    "text": "こんにちは！メッセージ送信テストです。"
   }
 }
 ```
 
-### 간단한 채널 목록 조회
+### 簡易チャンネル一覧取得
 
 ```json
 {
@@ -338,7 +338,7 @@ Claude Desktop (Claude Code)에서 MCP 서버를 사용하려면 설정 파일�
 }
 ```
 
-### 특정 채널 상세 조회
+### 特定チャンネル詳細取得
 
 ```json
 {
@@ -349,95 +349,95 @@ Claude Desktop (Claude Code)에서 MCP 서버를 사용하려면 설정 파일�
 }
 ```
 
-### 채널 생성
+### チャンネル作成
 
 ```json
 {
   "name": "dooray_messenger_create_channel",
   "arguments": {
     "type": "private",
-    "title": "새 프로젝트 채널",
+    "title": "新プロジェクトチャンネル",
     "member_ids": ["member_id_1", "member_id_2"],
     "capacity": "50"
   }
 }
 ```
 
-### 채널 메시지 전송
+### チャンネルメッセージ送信
 
 ```json
 {
   "name": "dooray_messenger_send_channel_message",
   "arguments": {
     "channel_id": "channel_id_from_list",
-    "text": "채널에 메시지를 보냅니다."
+    "text": "チャンネルにメッセージを送信します。"
   }
 }
 ```
 
-## 개발
+## 開発
 
-### 테스트 실행
+### テスト実行
 
 ```bash
-# 모든 테스트 실행 (환경변수 있을 때)
+# すべてのテストを実行（環境変数がある場合）
 ./gradlew test
 
-# CI 환경에서는 통합 테스트 자동 제외
+# CI環境では統合テストを自動除外
 CI=true ./gradlew test
 ```
 
-### 빌드
+### ビルド
 
 ```bash
-# JAR 빌드
+# JARビルド
 ./gradlew clean shadowJar
 
-# Docker 이미지 빌드
+# Dockerイメージビルド
 docker build -t dooray-mcp:local --build-arg VERSION=0.2.1 .
 ```
 
-## Docker 멀티 플랫폼 빌드
+## Dockerマルチプラットフォームビルド
 
-### 현재 상태
+### 現在の状況
 
-현재 Docker 이미지는 **AMD64만 지원**합니다. ARM64 빌드는 QEMU 에뮬레이션에서 Gradle 의존성 다운로드 단계에서 멈추는 문제가 있어 일시적으로 비활성화되었습니다.
+現在のDockerイメージは**AMD64のみ対応**しています。ARM64ビルドはQEMUエミュレーションでGradle依存関係ダウンロード段階で停止する問題があり、一時的に無効化されています。
 
-### ARM64 빌드 활성화
+### ARM64ビルド有効化
 
-ARM64 빌드를 다시 활성화하려면 `.github/workflows/docker-publish.yml`에서 다음 설정을 변경하세요:
+ARM64ビルドを再度有効化するには、`.github/workflows/docker-publish.yml`で以下の設定を変更してください：
 
 ```yaml
 env:
-  ENABLE_ARM64: true # false에서 true로 변경
+  ENABLE_ARM64: true # falseからtrueに変更
 ```
 
-### ARM64 빌드 문제 해결 방법
+### ARM64ビルド問題解決方法
 
-1. **네이티브 ARM64 러너 사용** (권장)
-2. **QEMU 타임아웃 증가**
-3. **Gradle 캐시 최적화**
-4. **의존성 사전 다운로드**
+1. **ネイティブARM64ランナー使用**（推奨）
+2. **QEMUタイムアウト増加**
+3. **Gradleキャッシュ最適化**
+4. **依存関係事前ダウンロード**
 
-현재는 안정성을 위해 AMD64만 빌드하고 있으며, ARM64 지원은 향후 업데이트에서 제공될 예정입니다.
+現在は安定性のためAMD64のみビルドしており、ARM64対応は今後のアップデートで提供予定です。
 
-## 환경변수
+## 環境変数
 
-| 변수명          | 설명                | 필수 여부 |
-| --------------- | ------------------- | --------- |
-| DOORAY_API_KEY  | Dooray API 키       | 필수      |
-| DOORAY_BASE_URL | Dooray API Base URL | 필수      |
+| 変数名          | 説明                | 必須 |
+| --------------- | ------------------- | ---- |
+| DOORAY_API_KEY  | Dooray API キー     | 必須 |
+| DOORAY_BASE_URL | Dooray API Base URL | 必須 |
 
-## 라이선스
+## ライセンス
 
-이 프로젝트는 오픈 소스이며, 자유롭게 사용하실 수 있습니다.
+このプロジェクトはオープンソースであり、自由にご利用いただけます。
 
-## 기여
+## 貢献
 
-프로젝트에 기여하고 싶으시다면 이슈를 등록하거나 풀 리퀘스트를 보내주세요.
+プロジェクトに貢献したい場合は、issueを登録するかpull requestを送ってください。
 
-## 📚 참고자료
+## 📚 参考資料
 
-- [두레이 API](https://helpdesk.dooray.com/share/pages/9wWo-xwiR66BO5LGshgVTg/2939987647631384419)
-- [Kotlin MCP Server 예제](https://github.com/modelcontextprotocol/kotlin-sdk/blob/main/samples/weather-stdio-server/src/main/kotlin/io/modelcontextprotocol/sample/server/McpWeatherServer.kt)
+- [Dooray API](https://helpdesk.dooray.com/share/pages/9wWo-xwiR66BO5LGshgVTg/2939987647631384419)
+- [Kotlin MCP Server サンプル](https://github.com/modelcontextprotocol/kotlin-sdk/blob/main/samples/weather-stdio-server/src/main/kotlin/io/modelcontextprotocol/sample/server/McpWeatherServer.kt)
 - [Model Context Protocol](https://modelcontextprotocol.io/introduction)
