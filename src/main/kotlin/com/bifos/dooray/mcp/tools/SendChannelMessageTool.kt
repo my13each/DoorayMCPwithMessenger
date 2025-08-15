@@ -124,7 +124,8 @@ fun sendChannelMessageHandler(doorayClient: DoorayClient): suspend (CallToolRequ
                         }
                         
                         if (mentions.isNotEmpty()) {
-                            finalText = mentions.joinToString(" ") + "\n" + finalText
+                            // 멘션과 메시지를 줄바꿈으로 분리하여 더 자연스러운 형식으로 만듦
+                            finalText = mentions.joinToString("\n") + "\n" + finalText
                         }
                     }
 
