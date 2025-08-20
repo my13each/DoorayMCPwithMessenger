@@ -533,7 +533,7 @@ Doorayでアクセス可能なカレンダー一覧を取得します。カレ�
 {
   "name": "dooray_calendar_detail",
   "arguments": {
-    "calendarId": "3926605181351647315"
+    "calendarId": "calendar_id_here"
   }
 }
 ```
@@ -559,8 +559,8 @@ Doorayでアクセス可能なカレンダー一覧を取得します。カレ�
 {
   "name": "dooray_calendar_event_detail",
   "arguments": {
-    "calendarId": "3926605181351647315",
-    "eventId": "4138697940390131980"
+    "calendarId": "calendar_id_here",
+    "eventId": "event_id_here"
   }
 }
 ```
