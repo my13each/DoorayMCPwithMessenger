@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.bifos.dooray.mcp.client.dooray.ProjectPostDoorayIntegrationTest" tests="1" skipped="0" failures="1" errors="0" timestamp="2025-08-20T08:55:49.766Z" hostname="MN01609710.local" time="0.0">
+<testsuite name="com.bifos.dooray.mcp.client.dooray.ProjectPostDoorayIntegrationTest" tests="1" skipped="0" failures="1" errors="0" timestamp="2025-08-20T09:05:02.183Z" hostname="MN01609710.local" time="0.0">
   <properties/>
   <testcase name="initializationError" classname="com.bifos.dooray.mcp.client.dooray.ProjectPostDoorayIntegrationTest" time="0.0">
     <failure message="java.lang.IllegalStateException: DOORAY_BASE_URL 환경변수가 설정되지 않았습니다." type="java.lang.IllegalStateException">java.lang.IllegalStateException: DOORAY_BASE_URL 환경변수가 설정되지 않았습니다.

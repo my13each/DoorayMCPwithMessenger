@@ -91,9 +91,9 @@ data class EventConferencing(
 @Serializable
 data class EventMe(
     val type: String, // member
-    val member: EventMemberInfo,
-    val status: String, // accepted, declined, tentative, not_confirmed
-    val userType: String // from, to, cc
+    val member: EventMemberInfo? = null,
+    val status: String? = null, // accepted, declined, tentative, not_confirmed
+    val userType: String? = null // from, to, cc
 )
 
 @Serializable
@@ -180,5 +180,20 @@ data class CalendarEventCreateResponse(
 
 @Serializable
 data class CreatedEvent(
-    val id: String
+    val id: String,
+    val tenant: EventTenant? = null,
+    val calendar: EventCalendar? = null,
+    val uid: String? = null,
+    val masterScheduleId: String? = null,
+    val recurrenceId: String? = null,
+    val recurrenceType: String? = null,
+    val wholeDayFlag: Boolean? = null,
+    val category: String? = null,
+    val startedAt: String? = null,
+    val endedAt: String? = null,
+    val subject: String? = null,
+    val location: String? = null,
+    val createdAt: String? = null,
+    val updatedAt: String? = null,
+    val files: String? = null
 )
