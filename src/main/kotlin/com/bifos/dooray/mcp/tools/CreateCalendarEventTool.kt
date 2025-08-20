@@ -28,6 +28,14 @@ fun createCalendarEventTool(): Tool {
                     put("type", "string")
                     put("description", "일정 내용/설명")
                 }
+                putJsonObject("toMemberIds") {
+                    put("type", "string")
+                    put("description", "참석자 멤버 ID들 (쉼표로 구분, 예: member1,member2)")
+                }
+                putJsonObject("ccMemberIds") {
+                    put("type", "string")
+                    put("description", "참조자 멤버 ID들 (쉼표로 구분, 선택사항)")
+                }
                 putJsonObject("startedAt") {
                     put("type", "string")
                     put("description", "일정 시작 시간 (ISO 8601 형식, 예: 2025-04-11T09:00:00+09:00)")
@@ -46,7 +54,7 @@ fun createCalendarEventTool(): Tool {
                     put("description", "일정 장소 (선택사항)")
                 }
             },
-            required = listOf("calendarId", "subject", "content", "startedAt", "endedAt")
+            required = listOf("calendarId", "subject", "content", "startedAt", "endedAt", "toMemberIds")
         ),
         outputSchema = null,
         annotations = null
@@ -66,10 +74,36 @@ fun createCalendarEventHandler(doorayClient: DoorayClient): suspend (CallToolReq
                 ?: throw IllegalArgumentException("startedAt is required")
             val endedAt = request.arguments["endedAt"]?.jsonPrimitive?.content
                 ?: throw IllegalArgumentException("endedAt is required")
+            val toMemberIds = request.arguments["toMemberIds"]?.jsonPrimitive?.content
+                ?: throw IllegalArgumentException("toMemberIds is required")
+            val ccMemberIds = request.arguments["ccMemberIds"]?.jsonPrimitive?.content
             val wholeDayFlag = request.arguments["wholeDayFlag"]?.jsonPrimitive?.boolean ?: false
             val location = request.arguments["location"]?.jsonPrimitive?.content
+            
+            // 참석자 목록 구성
+            val toUsers = toMemberIds.split(",").map { memberId ->
+                EventUser(
+                    type = "member",
+                    member = EventUserMember(organizationMemberId = memberId.trim())
+                )
+            }
+            
+            val ccUsers = if (ccMemberIds.isNullOrBlank()) {
+                emptyList()
+            } else {
+                ccMemberIds.split(",").map { memberId ->
+                    EventUser(
+                        type = "member", 
+                        member = EventUserMember(organizationMemberId = memberId.trim())
+                    )
+                }
+            }
                 
             val requestBody = CreateCalendarEventRequest(
+                users = EventUsers(
+                    to = toUsers,
+                    cc = ccUsers
+                ),
                 subject = subject,
                 body = EventBody(
                     mimeType = "text/html",
@@ -86,7 +120,7 @@ fun createCalendarEventHandler(doorayClient: DoorayClient): suspend (CallToolReq
             if (response.header.isSuccessful) {
                 val successData = mapOf(
                     "eventId" to response.result.id,
-                    "calendarId" to response.result.calendarId,
+                    "calendarId" to calendarId,
                     "subject" to subject,
                     "startedAt" to startedAt,
                     "endedAt" to endedAt

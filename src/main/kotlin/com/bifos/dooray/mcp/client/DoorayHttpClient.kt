@@ -657,10 +657,10 @@ class DoorayHttpClient(private val baseUrl: String, private val doorayApiKey: St
             timeMax: String
     ): CalendarEventsResponse {
         return executeApiCall(
-                operation = "GET /calendar/v1/events",
+                operation = "GET /calendar/v1/calendars/*/events",
                 successMessage = "✅ 캘린더 일정 조회 성공"
         ) {
-            httpClient.get("/calendar/v1/events") {
+            httpClient.get("/calendar/v1/calendars/*/events") {
                 parameter("timeMin", timeMin)
                 parameter("timeMax", timeMax)
                 calendars?.let { parameter("calendars", it) }
