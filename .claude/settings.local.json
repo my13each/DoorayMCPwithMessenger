@@ -20,7 +20,10 @@
       "Bash(gh run list:*)",
       "Bash(docker pull:*)",
       "Bash(rg:*)",
-      "Bash(docker build:*)"
+      "Bash(docker build:*)",
+      "WebFetch(domain:helpdesk.dooray.com)",
+      "WebSearch",
+      "WebFetch(domain:pydooray.readthedocs.io)"
     ],
     "deny": [],
     "ask": [],

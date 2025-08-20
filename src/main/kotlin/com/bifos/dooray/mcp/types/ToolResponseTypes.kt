@@ -84,3 +84,28 @@ data class ToolErrorResponse(
 /** Tool 에러 정보 */
 @Serializable
 data class ToolError(val type: String, val code: String? = null, val details: String? = null)
+
+/** 캘린더 목록 조회 응답 */
+@Serializable
+data class GetCalendarsResponse(
+    val success: Boolean,
+    val message: String,
+    val calendars: List<Calendar>
+)
+
+/** 캘린더 일정 조회 응답 */
+@Serializable  
+data class GetCalendarEventsResponse(
+    val success: Boolean,
+    val message: String,
+    val events: List<CalendarEvent>
+)
+
+/** 캘린더 일정 등록 응답 */
+@Serializable
+data class CreateCalendarEventResponse(
+    val success: Boolean,
+    val message: String,
+    val eventId: String?,
+    val calendarId: String?
+)

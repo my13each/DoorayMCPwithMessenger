@@ -178,6 +178,17 @@ class DoorayMcpServer {
         // 23. 채널 생성
         addTool(createChannelTool(), createChannelHandler(doorayHttpClient))
 
+        // ============ 캘린더 관련 도구들 ============
+
+        // 24. 캘린더 목록 조회
+        addTool(getCalendarsTool(), getCalendarsHandler(doorayHttpClient))
+
+        // 25. 캘린더 일정 조회 (기간별)
+        addTool(getCalendarEventsTool(), getCalendarEventsHandler(doorayHttpClient))
+
+        // 26. 캘린더 일정 등록
+        addTool(createCalendarEventTool(), createCalendarEventHandler(doorayHttpClient))
+
         log.info("Successfully added $toolCount tools to MCP server")
     }
 }

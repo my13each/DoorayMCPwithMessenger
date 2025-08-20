@@ -639,4 +639,47 @@ class DoorayHttpClient(private val baseUrl: String, private val doorayApiKey: St
             }
         }
     }
+
+    // ============ 캘린더 관련 API ============
+
+    override suspend fun getCalendars(): CalendarListResponse {
+        return executeApiCall(
+                operation = "GET /calendar/v1/calendars",
+                successMessage = "✅ 캘린더 목록 조회 성공"
+        ) {
+            httpClient.get("/calendar/v1/calendars")
+        }
+    }
+
+    override suspend fun getCalendarEvents(
+            calendars: String?,
+            timeMin: String,
+            timeMax: String
+    ): CalendarEventsResponse {
+        return executeApiCall(
+                operation = "GET /calendar/v1/events",
+                successMessage = "✅ 캘린더 일정 조회 성공"
+        ) {
+            httpClient.get("/calendar/v1/events") {
+                parameter("timeMin", timeMin)
+                parameter("timeMax", timeMax)
+                calendars?.let { parameter("calendars", it) }
+            }
+        }
+    }
+
+    override suspend fun createCalendarEvent(
+            calendarId: String,
+            request: CreateCalendarEventRequest
+    ): CalendarEventCreateResponse {
+        return executeApiCall(
+                operation = "POST /calendar/v1/calendars/$calendarId/events",
+                expectedStatusCode = HttpStatusCode.Created,
+                successMessage = "✅ 캘린더 일정 등록 성공"
+        ) {
+            httpClient.post("/calendar/v1/calendars/$calendarId/events") {
+                setBody(request)
+            }
+        }
+    }
 }

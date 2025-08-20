@@ -188,4 +188,22 @@ interface DoorayClient {
         channelId: String,
         request: SendChannelMessageRequest
     ): SendChannelMessageResponse
+
+    // ============ 캘린더 관련 API ============
+
+    /** 접근 가능한 캘린더 목록을 조회합니다. */
+    suspend fun getCalendars(): CalendarListResponse
+
+    /** 특정 기간의 캘린더 일정을 조회합니다. */
+    suspend fun getCalendarEvents(
+        calendars: String? = null,
+        timeMin: String,
+        timeMax: String
+    ): CalendarEventsResponse
+
+    /** 캘린더에 새로운 일정을 등록합니다. */
+    suspend fun createCalendarEvent(
+        calendarId: String,
+        request: CreateCalendarEventRequest
+    ): CalendarEventCreateResponse
 }
