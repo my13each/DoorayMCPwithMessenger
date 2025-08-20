@@ -8,7 +8,7 @@ NHN Doorayサービス用のMCP（Model Context Protocol）サーバーです。
 - **タスク管理**: タスク閲覧、作成、編集、ステータス変更
 - **コメント管理**: タスクコメントの作成、閲覧、編集、削除
 - **メッセンジャー管理**: メンバー検索、ダイレクトメッセージ、チャンネル管理、チャンネルメッセージ送信
-- **📅 カレンダー管理**: カレンダー閲覧、イベント照会、新しいイベント作成
+- **📅 カレンダー管理**: カレンダー閲覧、カレンダー詳細、イベント照会、イベント詳細、新しいイベント作成
 - **JSON応答**: 規格化されたJSON形式の応答
 - **例外処理**: 一貫したエラー応答の提供
 - **Docker対応**: マルチプラットフォームDockerイメージの提供
@@ -134,6 +134,83 @@ Claude Desktop（Claude Code）でMCPサーバーを使用するには、設定�
 
 > ⚠️ **注意**: `--pull=always`オプションは、Claude起動時に毎回最新イメージをダウンロードするため、起動時間が長くなる可能性があります。
 
+### ローカル実行設定（Dockerを使わない方法）
+
+Dockerを使用せずに直接ローカルでMCPサーバーを実行したい場合の設定方法です。
+
+#### 前提条件
+
+- **Java 21以上**: OpenJDK 21またはOracle JDK 21以上が必要
+- **Git**: ソースコードのクローンに必要
+
+#### セットアップ手順
+
+```bash
+# 1. リポジトリのクローン
+git clone https://github.com/my13each/DoorayMCPwithMessenger.git
+cd DoorayMCPwithMessenger
+
+# 2. 環境変数ファイルの作成
+cat > .env << EOF
+DOORAY_API_KEY=your_api_key_here
+DOORAY_BASE_URL=https://api.dooray.com
+EOF
+
+# 3. アプリケーションのビルド
+./gradlew clean shadowJar
+
+# 4. テスト実行（オプション）
+./gradlew runLocal
+```
+
+#### Claude Desktop設定（ローカル版）
+
+```json
+{
+  "mcpServers": {
+    "dooray-mcp-local": {
+      "command": "java",
+      "args": [
+        "-jar",
+        "/path/to/DoorayMCPwithMessenger/build/libs/dooray-mcp-server-0.2.1-all.jar"
+      ],
+      "env": {
+        "DOORAY_API_KEY": "{Your Dooray API Key}",
+        "DOORAY_BASE_URL": "https://api.dooray.com"
+      }
+    }
+  }
+}
+```
+
+> 💡 **ヒント**: `/path/to/DoorayMCPwithMessenger/`部分は実際のプロジェクトパスに置き換えてください。
+
+#### ローカル実行のメリット
+
+- **高速起動**: Dockerイメージのプルが不要
+- **開発効率**: ソースコードの修正と即座のテストが可能
+- **デバッグ**: より詳細なログとデバッグ情報の取得
+- **カスタマイズ**: 必要に応じてソースコードの修正が可能
+
+#### トラブルシューティング
+
+**Java のバージョン確認**
+```bash
+java -version
+# java version "21.0.x" 以上が表示される必要があります
+```
+
+**JAVA_HOME の設定（必要に応じて）**
+```bash
+# macOS (Homebrew)
+export JAVA_HOME=/opt/homebrew/opt/openjdk@21
+export PATH=$JAVA_HOME/bin:$PATH
+
+# Linux
+export JAVA_HOME=/usr/lib/jvm/java-21-openjdk
+export PATH=$JAVA_HOME/bin:$PATH
+```
+
 ### Dooray API Key発行方法
 
 1. [Dooray管理者ページ](https://dooray.com)にログイン
@@ -142,7 +219,7 @@ Claude Desktop（Claude Code）でMCPサーバーを使用するには、設定�
 4. 必要な権限を設定後、作成
 5. 生成されたAPI Keyを設定ファイルの`{Your Dooray API Key}`部分に入力
 
-## 使用可能なツール（合計26個）
+## 使用可能なツール（合計28個）
 
 ### Wiki関連ツール（8個）
 
@@ -260,19 +337,31 @@ Dooray組織のメンバーを検索します。名前、メール、ユーザ�
 
 > ⚠️ **注意**: チャンネルメッセージの取得は、Dooray APIでセキュリティ上の理由により対応していません。
 
-### 📅 カレンダー関連ツール（3個）
+### 📅 カレンダー関連ツール（5個）
 
-#### 27. dooray_calendar_list
+#### 25. dooray_calendar_list
 
 Doorayでアクセス可能なカレンダー一覧を取得します。カレンダーIDを確認したり、使用可能なカレンダーを確認する際に使用します。
 
-#### 28. dooray_calendar_events
+#### 26. dooray_calendar_detail
+
+特定のカレンダーの詳細情報を取得します。カレンダーメンバー一覧、権限情報（👑所有者、🤝委任者、✏️編集者など）、委任情報を確認できます。
+
+#### 27. dooray_calendar_events
 
 指定された期間のカレンダーイベント（予定）一覧を取得します。特定の日付や期間の予定を確認する際に使用します。timeMin、timeMaxパラメータでISO 8601形式の日時を指定し、特定のカレンダーのみをフィルタリングすることも可能です。
 
+**新機能**: postType（参加者フィルタ）とcategory（カテゴリフィルタ）パラメータで詳細フィルタリングが可能
+- postType: `toMe`（自分宛て）、`toCcMe`（自分宛て+参照）、`fromToCcMe`（すべて関連）
+- category: `general`（一般予定）、`post`（タスク）、`milestone`（マイルストーン）
+
+#### 28. dooray_calendar_event_detail
+
+特定のカレンダーイベント（予定）の詳細情報を取得します。👑主催者、✅参加者、📋参照者の詳細情報と参加状況（参加/不参加/未定/未確認）を確認できます。会議の参加者を詳しく確認する際に役立ちます。
+
 #### 29. dooray_calendar_create_event
 
-新しいカレンダーイベント（予定）を作成します。会議、約束などの予定を登録する際に使用します。タイトル、内容、開始時間、終了時間、場所などを設定でき、終日予定オプションにも対応しています。
+新しいカレンダーイベント（予定）を作成します。会議、約束などの予定を登録する際に使用します。タイトル、内容、開始時間、終了時間、場所、参加者、参照者などを設定でき、終日予定オプションにも対応しています。
 
 ## 使用例
 
@@ -438,7 +527,18 @@ Doorayでアクセス可能なカレンダー一覧を取得します。カレ�
 }
 ```
 
-### 📅 カレンダーイベント取得
+### 📅 カレンダー詳細取得
+
+```json
+{
+  "name": "dooray_calendar_detail",
+  "arguments": {
+    "calendarId": "3926605181351647315"
+  }
+}
+```
+
+### 📅 カレンダーイベント取得（フィルタリング対応）
 
 ```json
 {
@@ -446,7 +546,21 @@ Doorayでアクセス可能なカレンダー一覧を取得します。カレ�
   "arguments": {
     "timeMin": "2025-04-11T00:00:00+09:00",
     "timeMax": "2025-04-12T00:00:00+09:00",
-    "calendars": "calendar_id_1,calendar_id_2"
+    "calendars": "calendar_id_1,calendar_id_2",
+    "postType": "toMe",
+    "category": "general"
+  }
+}
+```
+
+### 📅 イベント詳細取得（参加者情報込み）
+
+```json
+{
+  "name": "dooray_calendar_event_detail",
+  "arguments": {
+    "calendarId": "3926605181351647315",
+    "eventId": "4138697940390131980"
   }
 }
 ```
