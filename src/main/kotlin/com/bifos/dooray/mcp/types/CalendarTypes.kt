@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 data class CalendarListResponse(
     val header: DoorayApiHeader,
     val result: List<Calendar>,
-    val totalCount: String
+    val totalCount: Int
 )
 
 @Serializable

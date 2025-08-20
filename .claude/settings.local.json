@@ -23,7 +23,8 @@
       "Bash(docker build:*)",
       "WebFetch(domain:helpdesk.dooray.com)",
       "WebSearch",
-      "WebFetch(domain:pydooray.readthedocs.io)"
+      "WebFetch(domain:pydooray.readthedocs.io)",
+      "Bash(timeout:*)"
     ],
     "deny": [],
     "ask": [],
