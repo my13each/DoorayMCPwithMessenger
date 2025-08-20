@@ -674,7 +674,7 @@ class DoorayHttpClient(private val baseUrl: String, private val doorayApiKey: St
     ): CalendarEventCreateResponse {
         return executeApiCall(
                 operation = "POST /calendar/v1/calendars/$calendarId/events",
-                expectedStatusCode = HttpStatusCode.Created,
+                expectedStatusCode = HttpStatusCode.OK,
                 successMessage = "✅ 캘린더 일정 등록 성공"
         ) {
             httpClient.post("/calendar/v1/calendars/$calendarId/events") {
