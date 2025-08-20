@@ -124,21 +124,21 @@ fun getCalendarEventDetailHandler(doorayClient: DoorayClient): suspend (CallTool
                     } ?: appendLine("참석자 정보가 없습니다.")
                 }
                 
-                val successData = mapOf(
-                    "id" to event.id,
-                    "subject" to event.subject,
-                    "calendar" to event.calendar.name,
-                    "startedAt" to (event.startedAt ?: "시간 정보 없음"),
-                    "endedAt" to (event.endedAt ?: "시간 정보 없음"),
-                    "location" to (event.location ?: "장소 정보 없음"),
-                    "category" to event.category,
-                    "wholeDayFlag" to event.wholeDayFlag,
-                    "organizer" to (event.users?.from?.member?.name ?: event.users?.from?.emailUser?.name ?: "정보 없음"),
-                    "participantCount" to (event.users?.to?.size ?: 0),
-                    "ccCount" to (event.users?.cc?.size ?: 0),
-                    "body" to (event.body?.content?.take(200) ?: "내용 없음"),
-                    "fileCount" to (event.files?.size ?: 0),
-                    "recurrenceType" to event.recurrenceType
+                val successData = CalendarEventDetailResponseData(
+                    id = event.id,
+                    subject = event.subject,
+                    calendar = event.calendar.name,
+                    startedAt = (event.startedAt ?: "시간 정보 없음"),
+                    endedAt = (event.endedAt ?: "시간 정보 없음"),
+                    location = (event.location ?: "장소 정보 없음"),
+                    category = event.category,
+                    wholeDayFlag = event.wholeDayFlag,
+                    organizer = (event.users?.from?.member?.name ?: event.users?.from?.emailUser?.name ?: "정보 없음"),
+                    participantCount = (event.users?.to?.size ?: 0),
+                    ccCount = (event.users?.cc?.size ?: 0),
+                    body = (event.body?.content?.take(200) ?: "내용 없음"),
+                    fileCount = (event.files?.size ?: 0),
+                    recurrenceType = event.recurrenceType
                 )
                 
                 val successResponse = ToolSuccessResponse(

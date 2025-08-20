@@ -109,3 +109,22 @@ data class CreateCalendarEventResponse(
     val eventId: String?,
     val calendarId: String?
 )
+
+/** 캘린더 이벤트 상세 조회 응답 데이터 */
+@Serializable  
+data class CalendarEventDetailResponseData(
+        val id: String,
+        val subject: String,
+        val calendar: String,
+        val startedAt: String,
+        val endedAt: String,
+        val location: String,
+        val category: String,
+        val wholeDayFlag: Boolean,
+        val organizer: String,
+        val participantCount: Int,
+        val ccCount: Int,
+        val body: String,
+        val fileCount: Int,
+        val recurrenceType: String
+)
