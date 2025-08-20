@@ -40,6 +40,64 @@ data class CalendarEventsResponse(
     val result: List<CalendarEvent>
 )
 
+// ============ 캘린더 이벤트 상세 조회 ============
+
+@Serializable
+data class CalendarEventDetailResponse(
+    val header: DoorayApiHeader,
+    val result: CalendarEventDetail
+)
+
+@Serializable
+data class CalendarEventDetail(
+    val id: String,
+    val masterScheduleId: String,
+    val calendar: EventCalendar,
+    val project: EventProject? = null,
+    val recurrenceId: String? = null,
+    val startedAt: String? = null,
+    val endedAt: String? = null,
+    val dueDate: String? = null,
+    val dueDateClass: String? = null,
+    val location: String? = null,
+    val subject: String,
+    val body: EventBody? = null,
+    val createdAt: String,
+    val updatedAt: String,
+    val category: String,
+    val wholeDayFlag: Boolean = false,
+    val users: EventDetailUsers? = null, // 전체 참석자 정보
+    val me: EventMe,
+    val files: List<EventFile>? = null,
+    val tenant: EventTenant,
+    val uid: String,
+    val recurrenceType: String,
+    val recurrenceRule: RecurrenceRule? = null,
+    val conferencing: EventConferencing? = null
+)
+
+@Serializable
+data class EventDetailUsers(
+    val from: EventDetailUser? = null, // 주최자
+    val to: List<EventDetailUser> = emptyList(), // 참석자
+    val cc: List<EventDetailUser> = emptyList() // 참조자
+)
+
+@Serializable
+data class EventDetailUser(
+    val type: String, // member, emailUser
+    val member: EventMemberInfo? = null,
+    val emailUser: EventUserEmail? = null,
+    val status: String? = null // accepted, declined, tentative, not_confirmed
+)
+
+@Serializable
+data class EventFile(
+    val id: String,
+    val name: String,
+    val size: Long? = null
+)
+
 @Serializable
 data class CalendarEvent(
     val id: String,

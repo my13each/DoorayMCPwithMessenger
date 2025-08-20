@@ -201,6 +201,12 @@ interface DoorayClient {
         timeMax: String
     ): CalendarEventsResponse
 
+    /** 특정 캘린더 일정의 상세 정보를 조회합니다. */
+    suspend fun getCalendarEventDetail(
+        calendarId: String,
+        eventId: String
+    ): CalendarEventDetailResponse
+
     /** 캘린더에 새로운 일정을 등록합니다. */
     suspend fun createCalendarEvent(
         calendarId: String,

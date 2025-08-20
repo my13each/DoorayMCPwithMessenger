@@ -186,7 +186,10 @@ class DoorayMcpServer {
         // 25. 캘린더 일정 조회 (기간별)
         addTool(getCalendarEventsTool(), getCalendarEventsHandler(doorayHttpClient))
 
-        // 26. 캘린더 일정 등록
+        // 26. 캘린더 일정 상세 조회
+        addTool(getCalendarEventDetailTool(), getCalendarEventDetailHandler(doorayHttpClient))
+
+        // 27. 캘린더 일정 등록
         addTool(createCalendarEventTool(), createCalendarEventHandler(doorayHttpClient))
 
         log.info("Successfully added $toolCount tools to MCP server")

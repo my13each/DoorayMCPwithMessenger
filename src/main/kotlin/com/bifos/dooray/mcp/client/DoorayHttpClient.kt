@@ -668,6 +668,18 @@ class DoorayHttpClient(private val baseUrl: String, private val doorayApiKey: St
         }
     }
 
+    override suspend fun getCalendarEventDetail(
+            calendarId: String,
+            eventId: String
+    ): CalendarEventDetailResponse {
+        return executeApiCall(
+                operation = "GET /calendar/v1/calendars/$calendarId/events/$eventId",
+                successMessage = "✅ 캘린더 일정 상세 조회 성공"
+        ) {
+            httpClient.get("/calendar/v1/calendars/$calendarId/events/$eventId")
+        }
+    }
+
     override suspend fun createCalendarEvent(
             calendarId: String,
             request: CreateCalendarEventRequest
