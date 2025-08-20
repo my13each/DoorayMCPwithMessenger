@@ -651,10 +651,21 @@ class DoorayHttpClient(private val baseUrl: String, private val doorayApiKey: St
         }
     }
 
+    override suspend fun getCalendarDetail(calendarId: String): CalendarDetailResponse {
+        return executeApiCall(
+                operation = "GET /calendar/v1/calendars/$calendarId",
+                successMessage = "✅ 캘린더 상세 조회 성공"
+        ) {
+            httpClient.get("/calendar/v1/calendars/$calendarId")
+        }
+    }
+
     override suspend fun getCalendarEvents(
             calendars: String?,
             timeMin: String,
-            timeMax: String
+            timeMax: String,
+            postType: String?,
+            category: String?
     ): CalendarEventsResponse {
         return executeApiCall(
                 operation = "GET /calendar/v1/calendars/*/events",
@@ -664,6 +675,8 @@ class DoorayHttpClient(private val baseUrl: String, private val doorayApiKey: St
                 parameter("timeMin", timeMin)
                 parameter("timeMax", timeMax)
                 calendars?.let { parameter("calendars", it) }
+                postType?.let { parameter("postType", it) }
+                category?.let { parameter("category", it) }
             }
         }
     }

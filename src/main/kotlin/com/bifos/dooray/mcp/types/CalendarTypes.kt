@@ -32,6 +32,38 @@ data class CalendarMe(
     val order: Int
 )
 
+// ============ 캘린더 상세 조회 ============
+
+@Serializable
+data class CalendarDetailResponse(
+    val header: DoorayApiHeader,
+    val result: CalendarDetail
+)
+
+@Serializable
+data class CalendarDetail(
+    val id: String,
+    val name: String,
+    val type: String, // private, project, subscription
+    val createdAt: String? = null,
+    val ownerOrganizationMemberId: String? = null,
+    val projectId: String? = null, // project type인 경우
+    val calendarMemberList: List<CalendarMember> = emptyList(),
+    val me: CalendarMe
+)
+
+@Serializable
+data class CalendarMember(
+    val type: String, // member
+    val member: CalendarMemberInfo,
+    val role: String // owner, delegatee, all, read_write, view, opaque_view
+)
+
+@Serializable
+data class CalendarMemberInfo(
+    val organizationMemberId: String
+)
+
 // ============ 캘린더 이벤트 목록 조회 ============
 
 @Serializable

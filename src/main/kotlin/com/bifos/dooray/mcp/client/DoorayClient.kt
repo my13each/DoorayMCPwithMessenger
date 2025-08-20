@@ -194,11 +194,16 @@ interface DoorayClient {
     /** 접근 가능한 캘린더 목록을 조회합니다. */
     suspend fun getCalendars(): CalendarListResponse
 
+    /** 특정 캘린더의 상세 정보를 조회합니다. */
+    suspend fun getCalendarDetail(calendarId: String): CalendarDetailResponse
+
     /** 특정 기간의 캘린더 일정을 조회합니다. */
     suspend fun getCalendarEvents(
         calendars: String? = null,
         timeMin: String,
-        timeMax: String
+        timeMax: String,
+        postType: String? = null,
+        category: String? = null
     ): CalendarEventsResponse
 
     /** 특정 캘린더 일정의 상세 정보를 조회합니다. */

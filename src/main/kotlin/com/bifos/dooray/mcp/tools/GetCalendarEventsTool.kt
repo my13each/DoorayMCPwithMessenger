@@ -34,6 +34,14 @@ fun getCalendarEventsTool(): Tool {
                     put("type", "string") 
                     put("description", "조회 종료 시간 (ISO 8601 형식, 예: 2025-04-12T00:00:00+09:00)")
                 }
+                putJsonObject("postType") {
+                    put("type", "string")
+                    put("description", "참석자 필터 (toMe: 나에게 온 일정, toCcMe: 나에게 온 일정+참조, fromToCcMe: 모든 관련 일정, 선택사항)")
+                }
+                putJsonObject("category") {
+                    put("type", "string")
+                    put("description", "카테고리 필터 (general: 일반 일정, post: 업무, milestone: 마일스톤, 선택사항)")
+                }
             },
             required = listOf("timeMin", "timeMax")
         ),
@@ -50,8 +58,10 @@ fun getCalendarEventsHandler(doorayClient: DoorayClient): suspend (CallToolReque
                 ?: throw IllegalArgumentException("timeMin is required")
             val timeMax = request.arguments["timeMax"]?.jsonPrimitive?.content
                 ?: throw IllegalArgumentException("timeMax is required")
+            val postType = request.arguments["postType"]?.jsonPrimitive?.content
+            val category = request.arguments["category"]?.jsonPrimitive?.content
             
-            val response = doorayClient.getCalendarEvents(calendars, timeMin, timeMax)
+            val response = doorayClient.getCalendarEvents(calendars, timeMin, timeMax, postType, category)
             
             if (response.header.isSuccessful) {
                 val successResponse = ToolSuccessResponse(
