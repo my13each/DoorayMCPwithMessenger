@@ -149,8 +149,8 @@ Dockerを使用せずに直接ローカルでMCPサーバーを実行したい�
 
 ```bash
 # 1. リポジトリのクローン
-git clone https://github.com/my13each/DoorayMCPwithMessenger.git
-cd DoorayMCPwithMessenger
+git clone https://github.com/sungmin-koo-ai/DoorayMCP.git
+cd DoorayMCP
 
 # 2. 環境変数ファイルの作成
 cat > .env << EOF
@@ -174,7 +174,7 @@ EOF
       "command": "java",
       "args": [
         "-jar",
-        "/path/to/DoorayMCPwithMessenger/build/libs/dooray-mcp-server-0.2.1-all.jar"
+        "/path/to/DoorayMCP/build/libs/dooray-mcp-server-0.2.1-all.jar"
       ],
       "env": {
         "DOORAY_API_KEY": "{Your Dooray API Key}",
@@ -185,7 +185,7 @@ EOF
 }
 ```
 
-> 💡 **ヒント**: `/path/to/DoorayMCPwithMessenger/`部分は実際のプロジェクトパスに置き換えてください。
+> 💡 **ヒント**: `/path/to/DoorayMCP/`部分は実際のプロジェクトパスに置き換えてください。
 
 #### ローカル実行のメリット
 
