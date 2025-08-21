@@ -2,6 +2,8 @@
 
 NHN Doorayサービス用のMCP（Model Context Protocol）サーバーです。
 
+> Repository moved to: https://github.com/sungmin-koo-ai/DoorayMCP
+
 ## 主要機能
 
 - **Wikiの管理**: Wiki閲覧、作成、編集、参照者管理
