@@ -76,7 +76,7 @@ data class ChannelMeMember(
 data class ChannelMe(
     val type: String, // "member"
     val member: ChannelMeMember,
-    val role: String // "member", "creator", "admin"
+    val role: String? = null // "member", "creator", "admin" - 옵셔널로 수정
 )
 
 /** 채널 조직 정보 */
