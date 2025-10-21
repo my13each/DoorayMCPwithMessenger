@@ -203,9 +203,8 @@ class DoorayMcpServer {
         // 30. 드라이브 파일 목록 조회
         addTool(getDriveFilesTool(), getDriveFilesHandler(doorayHttpClient))
 
-        // TODO: 추가 Drive 도구들 (파일 업로드, 폴더 생성, 파일 공유 등)
         // 31. 파일 업로드
-        // addTool(uploadFileTool(), uploadFileHandler(doorayHttpClient))
+        addTool(uploadFileTool(), uploadFileHandler(doorayHttpClient))
 
         // 32. 폴더 생성
         // addTool(createFolderTool(), createFolderHandler(doorayHttpClient))

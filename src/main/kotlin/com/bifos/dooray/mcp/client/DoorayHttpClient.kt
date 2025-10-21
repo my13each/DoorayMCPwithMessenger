@@ -8,20 +8,61 @@ import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.logging.*
 import io.ktor.client.request.*
+import io.ktor.client.request.forms.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
+import io.ktor.utils.io.core.*
 import kotlinx.serialization.json.Json
 import org.slf4j.LoggerFactory
+import java.util.Base64
 
 class DoorayHttpClient(private val baseUrl: String, private val doorayApiKey: String) :
         DoorayClient {
 
     private val log = LoggerFactory.getLogger(DoorayHttpClient::class.java)
     private val httpClient: HttpClient
+    private val fileHttpClient: HttpClient // 파일 API 전용 클라이언트
 
     init {
         httpClient = initHttpClient()
+        fileHttpClient = initFileHttpClient()
+    }
+
+    /** 파일 API 전용 HTTP 클라이언트 초기화 */
+    private fun initFileHttpClient(): HttpClient {
+        return HttpClient {
+            defaultRequest {
+                url("https://file-api.dooray.com")
+                header("Authorization", "dooray-api $doorayApiKey")
+            }
+
+            install(ContentNegotiation) {
+                json(
+                        Json {
+                            ignoreUnknownKeys = true
+                            prettyPrint = true
+                        }
+                )
+            }
+
+            install(Logging) {
+                logger =
+                        object : Logger {
+                            override fun log(message: String) {
+                                log.debug("FILE-HTTP: $message")
+                            }
+                        }
+                level =
+                        when (System.getenv("DOORAY_HTTP_LOG_LEVEL")?.uppercase()) {
+                            "ALL" -> LogLevel.ALL
+                            "HEADERS" -> LogLevel.HEADERS
+                            "BODY" -> LogLevel.BODY
+                            "INFO" -> LogLevel.INFO
+                            else -> LogLevel.NONE
+                        }
+            }
+        }
     }
 
     private fun initHttpClient(): HttpClient {
@@ -763,13 +804,39 @@ class DoorayHttpClient(private val baseUrl: String, private val doorayApiKey: St
     ): UploadFileResponse {
         return executeApiCall(
                 operation = "POST /drive/v1/drives/$driveId/files",
-                expectedStatusCode = HttpStatusCode.Created,
+                expectedStatusCode = HttpStatusCode.OK,
                 successMessage = "✅ 파일 업로드 성공"
         ) {
-            httpClient.post("/drive/v1/drives/$driveId/files") {
-                setBody(request)
-                request.parentId?.let { parameter("parentId", it) }
+            fileHttpClient.submitFormWithBinaryData(
+                    url = "/drive/v1/drives/$driveId/files",
+                    formData = formData {
+                        append("file", request.fileContent, Headers.build {
+                            append(HttpHeaders.ContentDisposition, "filename=\"${request.fileName}\"")
+                            request.mimeType?.let { append(HttpHeaders.ContentType, it) }
+                        })
+                    }
+            ) {
+                parameter("parentId", request.parentId)
             }
+        }
+    }
+    
+    override suspend fun uploadFileFromBase64(
+            driveId: String,
+            request: Base64UploadRequest
+    ): UploadFileResponse {
+        try {
+            val fileContent = Base64.getDecoder().decode(request.base64Content)
+            val uploadRequest = UploadFileRequest(
+                fileName = request.fileName,
+                fileContent = fileContent,
+                parentId = request.parentId,
+                mimeType = request.mimeType
+            )
+            return uploadFile(driveId, uploadRequest)
+        } catch (e: Exception) {
+            log.error("Base64 디코딩 실패: ${e.message}")
+            throw CustomException("Base64 파일 콘텐츠 디코딩에 실패했습니다: ${e.message}", 400, e)
         }
     }
 

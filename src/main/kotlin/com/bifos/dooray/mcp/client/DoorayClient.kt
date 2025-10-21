@@ -242,6 +242,12 @@ interface DoorayClient {
         driveId: String,
         request: UploadFileRequest
     ): UploadFileResponse
+    
+    /** Base64로 파일을 업로드합니다. (MCP 도구용) */
+    suspend fun uploadFileFromBase64(
+        driveId: String,
+        request: Base64UploadRequest
+    ): UploadFileResponse
 
     /** 파일 내용을 다운로드합니다. (raw data) */
     suspend fun downloadFile(driveId: String, fileId: String): String

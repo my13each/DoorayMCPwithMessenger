@@ -65,12 +65,38 @@ data class DriveFileDetailResponse(
     val result: DriveFile?
 )
 
-/** 파일 업로드 요청 */
-@Serializable
+/** 파일 업로드 요청 - multipart/form-data용 */
 data class UploadFileRequest(
-    val name: String,
-    val parentId: String? = null,
-    val content: String, // Base64 encoded file content
+    val fileName: String,
+    val fileContent: ByteArray,
+    val parentId: String,
+    val mimeType: String? = null
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as UploadFileRequest
+        return fileName == other.fileName && 
+               fileContent.contentEquals(other.fileContent) &&
+               parentId == other.parentId &&
+               mimeType == other.mimeType
+    }
+
+    override fun hashCode(): Int {
+        var result = fileName.hashCode()
+        result = 31 * result + fileContent.contentHashCode()
+        result = 31 * result + parentId.hashCode()
+        result = 31 * result + (mimeType?.hashCode() ?: 0)
+        return result
+    }
+}
+
+/** Base64 파일 업로드 요청 (MCP 도구용) */
+@Serializable  
+data class Base64UploadRequest(
+    val fileName: String,
+    val base64Content: String,
+    val parentId: String,
     val mimeType: String? = null
 )
 
