@@ -802,12 +802,11 @@ class DoorayHttpClient(private val baseUrl: String, private val doorayApiKey: St
             driveId: String,
             request: UploadFileRequest
     ): UploadFileResponse {
-        return executeApiCall(
-                operation = "POST /drive/v1/drives/$driveId/files",
-                expectedStatusCode = HttpStatusCode.OK,
-                successMessage = "✅ 파일 업로드 성공"
-        ) {
-            fileHttpClient.submitFormWithBinaryData(
+        try {
+            log.info("🔗 파일 업로드 요청: /drive/v1/drives/$driveId/files")
+            
+            // 1단계: api.dooray.com으로 초기 요청 (307 응답 받기)
+            val initialResponse = httpClient.submitFormWithBinaryData(
                     url = "/drive/v1/drives/$driveId/files",
                     formData = formData {
                         append("file", request.fileContent, Headers.build {
@@ -818,6 +817,52 @@ class DoorayHttpClient(private val baseUrl: String, private val doorayApiKey: St
             ) {
                 parameter("parentId", request.parentId)
             }
+
+            log.info("📡 초기 응답: ${initialResponse.status}")
+
+            return when (initialResponse.status) {
+                HttpStatusCode.TemporaryRedirect -> {
+                    // 2단계: 307 리다이렉트 처리 - location 헤더에서 실제 업로드 URL 추출
+                    val locationUrl = initialResponse.headers["Location"]
+                        ?: throw CustomException("307 응답에 Location 헤더가 없습니다", 307)
+                    
+                    log.info("🔄 307 리다이렉트 - 실제 업로드 URL: $locationUrl")
+                    
+                    // 3단계: 실제 파일 업로드를 file-api.dooray.com으로 수행
+                    val uploadResponse = fileHttpClient.submitFormWithBinaryData(
+                            url = locationUrl,
+                            formData = formData {
+                                append("file", request.fileContent, Headers.build {
+                                    append(HttpHeaders.ContentDisposition, "filename=\"${request.fileName}\"")
+                                    request.mimeType?.let { append(HttpHeaders.ContentType, it) }
+                                })
+                            }
+                    )
+                    
+                    log.info("📡 파일 업로드 응답: ${uploadResponse.status}")
+                    
+                    if (uploadResponse.status == HttpStatusCode.OK) {
+                        val result = uploadResponse.body<UploadFileResponse>()
+                        log.info("✅ 파일 업로드 성공")
+                        result
+                    } else {
+                        handleErrorResponse(uploadResponse)
+                    }
+                }
+                HttpStatusCode.OK -> {
+                    // 직접 성공한 경우 (리다이렉트 없음)
+                    val result = initialResponse.body<UploadFileResponse>()
+                    log.info("✅ 파일 업로드 성공 (직접)")
+                    result
+                }
+                else -> {
+                    handleErrorResponse(initialResponse)
+                }
+            }
+        } catch (e: CustomException) {
+            throw e
+        } catch (e: Exception) {
+            handleGenericException(e)
         }
     }
     
@@ -841,12 +886,62 @@ class DoorayHttpClient(private val baseUrl: String, private val doorayApiKey: St
     }
 
     override suspend fun downloadFile(driveId: String, fileId: String): String {
-        return executeApiCall<String>(
-                operation = "GET /drive/v1/drives/$driveId/files/$fileId?media=raw",
-                successMessage = "✅ 파일 다운로드 성공"
+        return try {
+            log.info("🔗 파일 다운로드 요청: /drive/v1/drives/$driveId/files/$fileId?media=raw")
+
+            // 1단계: api.dooray.com으로 다운로드 요청 (307 리다이렉트 가능)
+            val initialResponse = httpClient.get("/drive/v1/drives/$driveId/files/$fileId") {
+                parameter("media", "raw")
+            }
+
+            log.info("📡 초기 응답: ${initialResponse.status}")
+
+            when (initialResponse.status) {
+                HttpStatusCode.OK -> {
+                    // 직접 응답인 경우
+                    val fileContent = initialResponse.bodyAsText()
+                    log.info("✅ 파일 다운로드 성공 (직접 응답)")
+                    fileContent
+                }
+                HttpStatusCode.TemporaryRedirect -> {
+                    // 307 리다이렉트 처리
+                    val locationUrl = initialResponse.headers["Location"]
+                        ?: throw CustomException("307 응답에 Location 헤더가 없습니다", 307)
+                    
+                    log.info("🔄 307 리다이렉트 - 실제 다운로드 URL: $locationUrl")
+                    
+                    // 2단계: file-api.dooray.com에서 실제 파일 다운로드
+                    val downloadResponse = fileHttpClient.get(locationUrl)
+                    
+                    log.info("📡 파일 다운로드 응답: ${downloadResponse.status}")
+                    
+                    if (downloadResponse.status == HttpStatusCode.OK) {
+                        val fileContent = downloadResponse.bodyAsText()
+                        log.info("✅ 파일 다운로드 성공 (리다이렉트)")
+                        fileContent
+                    } else {
+                        throw CustomException("파일 다운로드 실패: ${downloadResponse.status}", downloadResponse.status.value)
+                    }
+                }
+                else -> {
+                    throw CustomException("파일 다운로드 실패: ${initialResponse.status}", initialResponse.status.value)
+                }
+            }
+        } catch (e: CustomException) {
+            throw e
+        } catch (e: Exception) {
+            log.error("❌ 파일 다운로드 중 오류 발생", e)
+            throw CustomException("파일 다운로드 중 오류 발생: ${e.message}", 500)
+        }
+    }
+
+    override suspend fun getFileMetadata(driveId: String, fileId: String): DriveFileMetadataResponse {
+        return executeApiCall(
+                operation = "GET /drive/v1/drives/$driveId/files/$fileId?media=meta",
+                successMessage = "✅ 드라이브 파일 메타정보 조회 성공"
         ) {
             httpClient.get("/drive/v1/drives/$driveId/files/$fileId") {
-                parameter("media", "raw")
+                parameter("media", "meta")
             }
         }
     }
@@ -854,15 +949,92 @@ class DoorayHttpClient(private val baseUrl: String, private val doorayApiKey: St
     override suspend fun updateFile(
             driveId: String,
             fileId: String,
-            request: UpdateFileRequest
-    ): DoorayApiUnitResponse {
-        return executeApiCallForNullableResult(
-                operation = "PUT /drive/v1/drives/$driveId/files/$fileId",
-                successMessage = "✅ 파일 수정 성공"
-        ) {
-            httpClient.put("/drive/v1/drives/$driveId/files/$fileId") {
-                setBody(request)
+            request: UploadFileRequest
+    ): UpdateFileResponse {
+        try {
+            log.info("🔗 파일 업데이트 요청: PUT /drive/v1/drives/$driveId/files/$fileId?media=raw")
+            
+            // 1단계: api.dooray.com으로 초기 요청 (307 응답 받기)
+            val initialResponse = httpClient.submitFormWithBinaryData(
+                    url = "/drive/v1/drives/$driveId/files/$fileId",
+                    formData = formData {
+                        append("file", request.fileContent, Headers.build {
+                            append(HttpHeaders.ContentDisposition, "filename=\"${request.fileName}\"")
+                            request.mimeType?.let { append(HttpHeaders.ContentType, it) }
+                        })
+                    }
+            ) {
+                parameter("media", "raw")
+                method = HttpMethod.Put
             }
+
+            log.info("📡 초기 응답: ${initialResponse.status}")
+
+            return when (initialResponse.status) {
+                HttpStatusCode.TemporaryRedirect -> {
+                    // 2단계: 307 리다이렉트 처리
+                    val locationUrl = initialResponse.headers["Location"]
+                        ?: throw CustomException("307 응답에 Location 헤더가 없습니다", 307)
+                    
+                    log.info("🔄 307 리다이렉트 - 실제 업데이트 URL: $locationUrl")
+                    
+                    // 3단계: 실제 파일 업데이트를 file-api.dooray.com으로 수행
+                    val updateResponse = fileHttpClient.submitFormWithBinaryData(
+                            url = locationUrl,
+                            formData = formData {
+                                append("file", request.fileContent, Headers.build {
+                                    append(HttpHeaders.ContentDisposition, "filename=\"${request.fileName}\"")
+                                    request.mimeType?.let { append(HttpHeaders.ContentType, it) }
+                                })
+                            }
+                    ) {
+                        method = HttpMethod.Put
+                    }
+                    
+                    log.info("📡 파일 업데이트 응답: ${updateResponse.status}")
+                    
+                    if (updateResponse.status == HttpStatusCode.OK) {
+                        val result = updateResponse.body<UpdateFileResponse>()
+                        log.info("✅ 파일 업데이트 성공")
+                        result
+                    } else {
+                        handleErrorResponse(updateResponse)
+                    }
+                }
+                HttpStatusCode.OK -> {
+                    // 직접 성공 응답인 경우
+                    val result = initialResponse.body<UpdateFileResponse>()
+                    log.info("✅ 파일 업데이트 성공 (직접 응답)")
+                    result
+                }
+                else -> {
+                    handleErrorResponse(initialResponse)
+                }
+            }
+        } catch (e: CustomException) {
+            throw e
+        } catch (e: Exception) {
+            handleGenericException(e)
+        }
+    }
+    
+    override suspend fun updateFileFromBase64(
+            driveId: String,
+            fileId: String,
+            request: Base64UploadRequest
+    ): UpdateFileResponse {
+        try {
+            val fileContent = Base64.getDecoder().decode(request.base64Content)
+            val uploadRequest = UploadFileRequest(
+                fileName = request.fileName,
+                fileContent = fileContent,
+                parentId = request.parentId,
+                mimeType = request.mimeType
+            )
+            return updateFile(driveId, fileId, uploadRequest)
+        } catch (e: Exception) {
+            log.error("Base64 디코딩 실패: ${e.message}")
+            throw CustomException("Base64 파일 콘텐츠 디코딩에 실패했습니다: ${e.message}", 400, e)
         }
     }
 
@@ -918,6 +1090,16 @@ class DoorayHttpClient(private val baseUrl: String, private val doorayApiKey: St
             httpClient.post("/drive/v1/drives/$driveId/files/$fileId/move") {
                 setBody(request)
             }
+        }
+    }
+    
+    override suspend fun moveFileToTrash(driveId: String, fileId: String): CopyMoveFileResponse {
+        return executeApiCall(
+                operation = "POST /drive/v1/drives/$driveId/files/$fileId/move (휴지통)",
+                successMessage = "✅ 파일을 휴지통으로 이동 성공"
+        ) {
+            // 휴지통으로 이동하는 특별한 API 엔드포인트
+            httpClient.post("/drive/v1/drives/$driveId/files/$fileId/move")
         }
     }
 }

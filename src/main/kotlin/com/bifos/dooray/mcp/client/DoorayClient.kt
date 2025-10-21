@@ -252,12 +252,22 @@ interface DoorayClient {
     /** 파일 내용을 다운로드합니다. (raw data) */
     suspend fun downloadFile(driveId: String, fileId: String): String
 
-    /** 파일을 수정합니다. */
+    /** 파일 메타정보를 조회합니다. */
+    suspend fun getFileMetadata(driveId: String, fileId: String): DriveFileMetadataResponse
+
+    /** 파일을 수정합니다. (새 버전 업로드) */
     suspend fun updateFile(
         driveId: String,
         fileId: String,
-        request: UpdateFileRequest
-    ): DoorayApiUnitResponse
+        request: UploadFileRequest
+    ): UpdateFileResponse
+    
+    /** Base64로 파일을 업데이트합니다. (MCP 도구용) */
+    suspend fun updateFileFromBase64(
+        driveId: String,
+        fileId: String,
+        request: Base64UploadRequest
+    ): UpdateFileResponse
 
     /** 파일을 삭제합니다. */
     suspend fun deleteFile(driveId: String, fileId: String): DeleteFileResponse
@@ -282,4 +292,7 @@ interface DoorayClient {
         fileId: String,
         request: CopyMoveFileRequest
     ): CopyMoveFileResponse
+    
+    /** 파일을 휴지통으로 이동합니다. */
+    suspend fun moveFileToTrash(driveId: String, fileId: String): CopyMoveFileResponse
 }

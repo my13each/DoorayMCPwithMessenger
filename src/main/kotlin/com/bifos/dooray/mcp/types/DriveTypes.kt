@@ -166,6 +166,62 @@ data class UpdateFileRequest(
     val mimeType: String? = null
 )
 
+/** 파일 메타정보 */
+@Serializable
+data class DriveFileMetadata(
+    val id: String,
+    val driveId: String,
+    val name: String,
+    val version: Int? = null,
+    val revision: String? = null,
+    val createdAt: String? = null,
+    val updatedAt: String? = null,
+    val creator: OrganizationMember? = null,
+    val lastUpdater: OrganizationMember? = null,
+    val type: String, // "file" or "folder"
+    val hasFolders: Boolean? = null, // folder인 경우에만 의미가 있음
+    val subType: String? = null, // folder(root, trash, users), file(etc, doc, photo, movie, music, zip)
+    val mimeType: String? = null,
+    val size: Long? = null, // folder인 경우 null
+    val annotations: FileAnnotations? = null,
+    val parentFile: ParentFileInfo? = null
+)
+
+/** 파일 메타정보 응답 */
+@Serializable
+data class DriveFileMetadataResponse(
+    val header: DoorayApiHeader,
+    val result: DriveFileMetadata?
+)
+
+/** 파일 애너테이션 정보 */
+@Serializable
+data class FileAnnotations(
+    val favorited: Boolean? = null,
+    val favoritedAt: String? = null
+)
+
+/** 부모 파일 정보 */
+@Serializable
+data class ParentFileInfo(
+    val id: String,
+    val path: String? = null // parent의 full-path
+)
+
+/** 파일 업데이트 결과 */
+@Serializable
+data class UpdateFileResult(
+    val id: String,
+    val version: Int? = null
+)
+
+/** 파일 업데이트 응답 */
+@Serializable
+data class UpdateFileResponse(
+    val header: DoorayApiHeader,
+    val result: UpdateFileResult?
+)
+
 /** 파일 삭제 응답 */
 typealias DeleteFileResponse = DoorayApiUnitResponse
 
