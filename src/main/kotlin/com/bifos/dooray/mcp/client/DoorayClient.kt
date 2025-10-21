@@ -217,4 +217,63 @@ interface DoorayClient {
         calendarId: String,
         request: CreateCalendarEventRequest
     ): CalendarEventCreateResponse
+
+    // ============ Drive 관련 API ============
+
+    /** 접근 가능한 드라이브 목록을 조회합니다. */
+    suspend fun getDrives(): DriveListResponse
+
+    /** 특정 드라이브의 상세 정보를 조회합니다. */
+    suspend fun getDriveDetail(driveId: String): DriveDetailResponse
+
+    /** 드라이브의 파일 목록을 조회합니다. */
+    suspend fun getDriveFiles(
+        driveId: String,
+        parentId: String? = null,
+        page: Int? = null,
+        size: Int? = null
+    ): DriveFileListResponse
+
+    /** 특정 파일의 상세 정보를 조회합니다. */
+    suspend fun getDriveFileDetail(driveId: String, fileId: String): DriveFileDetailResponse
+
+    /** 파일을 업로드합니다. */
+    suspend fun uploadFile(
+        driveId: String,
+        request: UploadFileRequest
+    ): UploadFileResponse
+
+    /** 파일 내용을 다운로드합니다. (raw data) */
+    suspend fun downloadFile(driveId: String, fileId: String): String
+
+    /** 파일을 수정합니다. */
+    suspend fun updateFile(
+        driveId: String,
+        fileId: String,
+        request: UpdateFileRequest
+    ): DoorayApiUnitResponse
+
+    /** 파일을 삭제합니다. */
+    suspend fun deleteFile(driveId: String, fileId: String): DeleteFileResponse
+
+    /** 폴더를 생성합니다. */
+    suspend fun createFolder(
+        driveId: String,
+        folderId: String,
+        request: CreateFolderRequest
+    ): CreateFolderResponse
+
+    /** 파일을 복사합니다. */
+    suspend fun copyFile(
+        driveId: String,
+        fileId: String,
+        request: CopyMoveFileRequest
+    ): CopyMoveFileResponse
+
+    /** 파일을 이동합니다. */
+    suspend fun moveFile(
+        driveId: String,
+        fileId: String,
+        request: CopyMoveFileRequest
+    ): CopyMoveFileResponse
 }

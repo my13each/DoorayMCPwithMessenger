@@ -195,6 +195,24 @@ class DoorayMcpServer {
         // 28. 캘린더 일정 등록
         addTool(createCalendarEventTool(), createCalendarEventHandler(doorayHttpClient))
 
+        // ============ Drive 관련 도구들 ============
+
+        // 29. 드라이브 목록 조회
+        addTool(getDrivesTool(), getDrivesHandler(doorayHttpClient))
+
+        // 30. 드라이브 파일 목록 조회
+        addTool(getDriveFilesTool(), getDriveFilesHandler(doorayHttpClient))
+
+        // TODO: 추가 Drive 도구들 (파일 업로드, 폴더 생성, 파일 공유 등)
+        // 31. 파일 업로드
+        // addTool(uploadFileTool(), uploadFileHandler(doorayHttpClient))
+
+        // 32. 폴더 생성
+        // addTool(createFolderTool(), createFolderHandler(doorayHttpClient))
+
+        // 33. 파일을 채널에 공유
+        // addTool(sendFileToChannelTool(), sendFileToChannelHandler(doorayHttpClient))
+
         log.info("Successfully added $toolCount tools to MCP server")
     }
 }

@@ -707,4 +707,150 @@ class DoorayHttpClient(private val baseUrl: String, private val doorayApiKey: St
             }
         }
     }
+
+    // ============ Drive 관련 API 구현 ============
+
+    override suspend fun getDrives(): DriveListResponse {
+        return executeApiCall(
+                operation = "GET /drive/v1/drives",
+                successMessage = "✅ 드라이브 목록 조회 성공"
+        ) {
+            httpClient.get("/drive/v1/drives")
+        }
+    }
+
+    override suspend fun getDriveDetail(driveId: String): DriveDetailResponse {
+        return executeApiCall(
+                operation = "GET /drive/v1/drives/$driveId",
+                successMessage = "✅ 드라이브 상세 조회 성공"
+        ) {
+            httpClient.get("/drive/v1/drives/$driveId")
+        }
+    }
+
+    override suspend fun getDriveFiles(
+            driveId: String,
+            parentId: String?,
+            page: Int?,
+            size: Int?
+    ): DriveFileListResponse {
+        return executeApiCall(
+                operation = "GET /drive/v1/drives/$driveId/files",
+                successMessage = "✅ 드라이브 파일 목록 조회 성공"
+        ) {
+            httpClient.get("/drive/v1/drives/$driveId/files") {
+                parentId?.let { parameter("parentId", it) }
+                page?.let { parameter("page", it) }
+                size?.let { parameter("size", it) }
+            }
+        }
+    }
+
+    override suspend fun getDriveFileDetail(driveId: String, fileId: String): DriveFileDetailResponse {
+        return executeApiCall(
+                operation = "GET /drive/v1/drives/$driveId/files/$fileId?media=meta",
+                successMessage = "✅ 드라이브 파일 상세 조회 성공"
+        ) {
+            httpClient.get("/drive/v1/drives/$driveId/files/$fileId") {
+                parameter("media", "meta")
+            }
+        }
+    }
+
+    override suspend fun uploadFile(
+            driveId: String,
+            request: UploadFileRequest
+    ): UploadFileResponse {
+        return executeApiCall(
+                operation = "POST /drive/v1/drives/$driveId/files",
+                expectedStatusCode = HttpStatusCode.Created,
+                successMessage = "✅ 파일 업로드 성공"
+        ) {
+            httpClient.post("/drive/v1/drives/$driveId/files") {
+                setBody(request)
+                request.parentId?.let { parameter("parentId", it) }
+            }
+        }
+    }
+
+    override suspend fun downloadFile(driveId: String, fileId: String): String {
+        return executeApiCall<String>(
+                operation = "GET /drive/v1/drives/$driveId/files/$fileId?media=raw",
+                successMessage = "✅ 파일 다운로드 성공"
+        ) {
+            httpClient.get("/drive/v1/drives/$driveId/files/$fileId") {
+                parameter("media", "raw")
+            }
+        }
+    }
+
+    override suspend fun updateFile(
+            driveId: String,
+            fileId: String,
+            request: UpdateFileRequest
+    ): DoorayApiUnitResponse {
+        return executeApiCallForNullableResult(
+                operation = "PUT /drive/v1/drives/$driveId/files/$fileId",
+                successMessage = "✅ 파일 수정 성공"
+        ) {
+            httpClient.put("/drive/v1/drives/$driveId/files/$fileId") {
+                setBody(request)
+            }
+        }
+    }
+
+    override suspend fun deleteFile(driveId: String, fileId: String): DeleteFileResponse {
+        return executeApiCallForNullableResult(
+                operation = "DELETE /drive/v1/drives/$driveId/files/$fileId",
+                successMessage = "✅ 파일 삭제 성공"
+        ) {
+            httpClient.delete("/drive/v1/drives/$driveId/files/$fileId")
+        }
+    }
+
+    override suspend fun createFolder(
+            driveId: String,
+            folderId: String,
+            request: CreateFolderRequest
+    ): CreateFolderResponse {
+        return executeApiCall(
+                operation = "POST /drive/v1/drives/$driveId/files/$folderId/create-folder",
+                expectedStatusCode = HttpStatusCode.Created,
+                successMessage = "✅ 폴더 생성 성공"
+        ) {
+            httpClient.post("/drive/v1/drives/$driveId/files/$folderId/create-folder") {
+                setBody(request)
+            }
+        }
+    }
+
+    override suspend fun copyFile(
+            driveId: String,
+            fileId: String,
+            request: CopyMoveFileRequest
+    ): CopyMoveFileResponse {
+        return executeApiCall(
+                operation = "POST /drive/v1/drives/$driveId/files/$fileId/copy",
+                successMessage = "✅ 파일 복사 성공"
+        ) {
+            httpClient.post("/drive/v1/drives/$driveId/files/$fileId/copy") {
+                setBody(request)
+            }
+        }
+    }
+
+    override suspend fun moveFile(
+            driveId: String,
+            fileId: String,
+            request: CopyMoveFileRequest
+    ): CopyMoveFileResponse {
+        return executeApiCall(
+                operation = "POST /drive/v1/drives/$driveId/files/$fileId/move",
+                successMessage = "✅ 파일 이동 성공"
+        ) {
+            httpClient.post("/drive/v1/drives/$driveId/files/$fileId/move") {
+                setBody(request)
+            }
+        }
+    }
 }
