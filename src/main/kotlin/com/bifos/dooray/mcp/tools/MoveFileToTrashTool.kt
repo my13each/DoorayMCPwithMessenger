@@ -15,7 +15,7 @@ import kotlinx.serialization.json.putJsonObject
 
 fun moveFileToTrashTool(): Tool {
     return Tool(
-        name = "dooray_drive_move_file_to_trash",
+        name = "dooray_drive_move_to_trash",
         description = "드라이브 파일을 휴지통으로 이동합니다. 휴지통으로 이동된 파일은 나중에 복원하거나 영구 삭제할 수 있습니다.",
         inputSchema = Tool.Input(
             properties = buildJsonObject {

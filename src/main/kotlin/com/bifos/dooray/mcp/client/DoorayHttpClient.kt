@@ -148,10 +148,20 @@ class DoorayHttpClient(private val baseUrl: String, private val doorayApiKey: St
 
         try {
             val errorResponse = response.body<DoorayErrorResponse>()
-            val errorMessage = "API 호출 실패: ${errorResponse.header.resultMessage}"
+            val errorMessage = when (response.status) {
+                HttpStatusCode.Conflict -> "충돌 에러: ${errorResponse.header.resultMessage} (동일한 이름의 파일/폴더가 이미 존재하거나 작업을 완료할 수 없습니다)"
+                HttpStatusCode.Unauthorized -> "인증 실패: ${errorResponse.header.resultMessage}"
+                HttpStatusCode.Forbidden -> "권한 없음: ${errorResponse.header.resultMessage}"
+                HttpStatusCode.NotFound -> "리소스를 찾을 수 없음: ${errorResponse.header.resultMessage}"
+                HttpStatusCode.InternalServerError -> "서버 내부 오류: ${errorResponse.header.resultMessage}"
+                else -> "API 호출 실패: ${errorResponse.header.resultMessage}"
+            }
             throw CustomException(errorMessage, response.status.value)
         } catch (parseException: Exception) {
-            val errorMessage = "API 응답 파싱 실패 (${response.status.value}): $responseBody"
+            val errorMessage = when (response.status) {
+                HttpStatusCode.Conflict -> "충돌 에러 (409): 동일한 이름의 파일/폴더가 이미 존재하거나 작업을 완료할 수 없습니다"
+                else -> "API 응답 파싱 실패 (${response.status.value}): $responseBody"
+            }
             throw CustomException(errorMessage, response.status.value, parseException)
         }
     }
@@ -1049,15 +1059,14 @@ class DoorayHttpClient(private val baseUrl: String, private val doorayApiKey: St
 
     override suspend fun createFolder(
             driveId: String,
-            folderId: String,
+            parentFolderId: String,
             request: CreateFolderRequest
     ): CreateFolderResponse {
         return executeApiCall(
-                operation = "POST /drive/v1/drives/$driveId/files/$folderId/create-folder",
-                expectedStatusCode = HttpStatusCode.Created,
+                operation = "POST /drive/v1/drives/$driveId/files/$parentFolderId/create-folder",
                 successMessage = "✅ 폴더 생성 성공"
         ) {
-            httpClient.post("/drive/v1/drives/$driveId/files/$folderId/create-folder") {
+            httpClient.post("/drive/v1/drives/$driveId/files/$parentFolderId/create-folder") {
                 setBody(request)
             }
         }
@@ -1066,8 +1075,8 @@ class DoorayHttpClient(private val baseUrl: String, private val doorayApiKey: St
     override suspend fun copyFile(
             driveId: String,
             fileId: String,
-            request: CopyMoveFileRequest
-    ): CopyMoveFileResponse {
+            request: CopyFileRequest
+    ): CopyFileResponse {
         return executeApiCall(
                 operation = "POST /drive/v1/drives/$driveId/files/$fileId/copy",
                 successMessage = "✅ 파일 복사 성공"
@@ -1081,9 +1090,9 @@ class DoorayHttpClient(private val baseUrl: String, private val doorayApiKey: St
     override suspend fun moveFile(
             driveId: String,
             fileId: String,
-            request: CopyMoveFileRequest
-    ): CopyMoveFileResponse {
-        return executeApiCall(
+            request: MoveFileRequest
+    ): MoveFileResponse {
+        return executeApiCallForNullableResult(
                 operation = "POST /drive/v1/drives/$driveId/files/$fileId/move",
                 successMessage = "✅ 파일 이동 성공"
         ) {
@@ -1093,13 +1102,15 @@ class DoorayHttpClient(private val baseUrl: String, private val doorayApiKey: St
         }
     }
     
-    override suspend fun moveFileToTrash(driveId: String, fileId: String): CopyMoveFileResponse {
-        return executeApiCall(
+    override suspend fun moveFileToTrash(driveId: String, fileId: String): MoveFileResponse {
+        return executeApiCallForNullableResult(
                 operation = "POST /drive/v1/drives/$driveId/files/$fileId/move (휴지통)",
                 successMessage = "✅ 파일을 휴지통으로 이동 성공"
         ) {
-            // 휴지통으로 이동하는 특별한 API 엔드포인트
-            httpClient.post("/drive/v1/drives/$driveId/files/$fileId/move")
+            val trashRequest = MoveFileRequest(destinationFileId = "trash")
+            httpClient.post("/drive/v1/drives/$driveId/files/$fileId/move") {
+                setBody(trashRequest)
+            }
         }
     }
 }

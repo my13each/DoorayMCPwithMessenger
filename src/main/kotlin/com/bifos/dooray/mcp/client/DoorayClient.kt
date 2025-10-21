@@ -275,7 +275,7 @@ interface DoorayClient {
     /** 폴더를 생성합니다. */
     suspend fun createFolder(
         driveId: String,
-        folderId: String,
+        parentFolderId: String,
         request: CreateFolderRequest
     ): CreateFolderResponse
 
@@ -283,16 +283,16 @@ interface DoorayClient {
     suspend fun copyFile(
         driveId: String,
         fileId: String,
-        request: CopyMoveFileRequest
-    ): CopyMoveFileResponse
+        request: CopyFileRequest
+    ): CopyFileResponse
 
     /** 파일을 이동합니다. */
     suspend fun moveFile(
         driveId: String,
         fileId: String,
-        request: CopyMoveFileRequest
-    ): CopyMoveFileResponse
+        request: MoveFileRequest
+    ): MoveFileResponse
     
     /** 파일을 휴지통으로 이동합니다. */
-    suspend fun moveFileToTrash(driveId: String, fileId: String): CopyMoveFileResponse
+    suspend fun moveFileToTrash(driveId: String, fileId: String): MoveFileResponse
 }

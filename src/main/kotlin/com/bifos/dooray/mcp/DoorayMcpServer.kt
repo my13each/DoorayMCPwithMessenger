@@ -222,9 +222,15 @@ class DoorayMcpServer {
         addTool(deleteFileTool(), deleteFileHandler(doorayHttpClient))
 
         // 37. 폴더 생성
-        // addTool(createFolderTool(), createFolderHandler(doorayHttpClient))
+        addTool(createFolderTool(), createFolderHandler(doorayHttpClient))
 
-        // 38. 파일을 채널에 공유
+        // 38. 파일 복사
+        addTool(copyFileTool(), copyFileHandler(doorayHttpClient))
+
+        // 39. 파일 이동
+        addTool(moveFileTool(), moveFileHandler(doorayHttpClient))
+
+        // 40. 파일을 채널에 공유
         // addTool(sendFileToChannelTool(), sendFileToChannelHandler(doorayHttpClient))
 
         log.info("Successfully added $toolCount tools to MCP server")

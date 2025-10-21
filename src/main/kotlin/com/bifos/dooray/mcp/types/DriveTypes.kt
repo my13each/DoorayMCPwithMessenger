@@ -136,27 +136,34 @@ data class CreateFolderResponse(
     val result: CreateFolderResult?
 )
 
-/** 파일 복사/이동 요청 */
+/** 파일 복사 요청 */
 @Serializable
-data class CopyMoveFileRequest(
-    val parentId: String,
-    val name: String? = null
+data class CopyFileRequest(
+    val destinationDriveId: String,
+    val destinationFileId: String // folder ID
 )
 
-/** 파일 복사/이동 결과 */
+/** 파일 이동 요청 */
 @Serializable
-data class CopyMoveFileResult(
-    val id: String,
-    val name: String,
-    val parentId: String
+data class MoveFileRequest(
+    val destinationFileId: String // folder ID or "trash" for trash
 )
 
-/** 파일 복사/이동 응답 */
+/** 파일 복사 결과 */
 @Serializable
-data class CopyMoveFileResponse(
+data class CopyFileResult(
+    val id: String? = null
+)
+
+/** 파일 복사 응답 */
+@Serializable  
+data class CopyFileResponse(
     val header: DoorayApiHeader,
-    val result: CopyMoveFileResult?
+    val result: CopyFileResult?
 )
+
+/** 파일 이동 응답 (result가 null) */
+typealias MoveFileResponse = DoorayApiUnitResponse
 
 /** 파일 수정 요청 */
 @Serializable

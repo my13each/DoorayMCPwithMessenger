@@ -220,7 +220,7 @@ export PATH=$JAVA_HOME/bin:$PATH
 4. 必要な権限を設定後、作成
 5. 生成されたAPI Keyを設定ファイルの`{Your Dooray API Key}`部分に入力
 
-## 使用可能なツール（合計36個）
+## 使用可能なツール（合計39個）
 
 ### Wiki関連ツール（8個）
 
@@ -364,7 +364,7 @@ Doorayでアクセス可能なカレンダー一覧を取得します。カレ�
 
 新しいカレンダーイベント（予定）を作成します。会議、約束などの予定を登録する際に使用します。タイトル、内容、開始時間、終了時間、場所、参加者、参照者などを設定でき、終日予定オプションにも対応しています。
 
-### 💾 ドライブ関連ツール（8個）
+### 💾 ドライブ関連ツール（11個）
 
 #### 30. dooray_drive_list
 
@@ -699,7 +699,7 @@ Doorayでアクセス可能なドライブ一覧を取得します。利用可�
 
 ```json
 {
-  "name": "dooray_drive_move_file_to_trash",
+  "name": "dooray_drive_move_to_trash",
   "arguments": {
     "drive_id": "drive_id_here",
     "file_id": "file_id_here"
@@ -715,6 +715,46 @@ Doorayでアクセス可能なドライブ一覧を取得します。利用可�
   "arguments": {
     "drive_id": "drive_id_here",
     "file_id": "file_id_here"
+  }
+}
+```
+
+### 💾 フォルダ作成
+
+```json
+{
+  "name": "dooray_drive_create_folder",
+  "arguments": {
+    "drive_id": "drive_id_here",
+    "parent_folder_id": "folder_id_here",
+    "folder_name": "新しいフォルダ"
+  }
+}
+```
+
+### 💾 ファイルコピー
+
+```json
+{
+  "name": "dooray_drive_copy_file",
+  "arguments": {
+    "drive_id": "source_drive_id_here",
+    "file_id": "file_id_here",
+    "destination_drive_id": "target_drive_id_here",
+    "destination_folder_id": "target_folder_id_here"
+  }
+}
+```
+
+### 💾 ファイル移動
+
+```json
+{
+  "name": "dooray_drive_move_file",
+  "arguments": {
+    "drive_id": "drive_id_here",
+    "file_id": "file_id_here",
+    "destination_folder_id": "target_folder_id_here"
   }
 }
 ```
