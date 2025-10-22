@@ -248,3 +248,78 @@ data class DriveFileListResponseData(
     val totalCount: Int,
     val driveId: String
 )
+
+// ============ Shared Link 관련 타입들 ============
+
+/** 공유 링크 범위 */
+enum class SharedLinkScope {
+    /** 손님을 제외한 조직 내 사용자(멤버, 업무계정) 공유 */
+    member,
+    /** 조직 내 모든 사용자(멤버, 업무계정, 손님) 공유 */
+    memberAndGuest,
+    /** 내,외부 상관없이 공유 */
+    memberAndGuestAndExternal
+}
+
+/** 공유 링크 생성 요청 */
+@Serializable
+data class CreateSharedLinkRequest(
+    val scope: String, // "member" | "memberAndGuest" | "memberAndGuestAndExternal"
+    val expiredAt: String // ISO 8601 format, null 불가능
+)
+
+/** 공유 링크 생성 결과 */
+@Serializable
+data class CreateSharedLinkResult(
+    val id: String
+)
+
+/** 공유 링크 생성 응답 */
+@Serializable
+data class CreateSharedLinkResponse(
+    val header: DoorayApiHeader,
+    val result: CreateSharedLinkResult?
+)
+
+/** 공유 링크 정보 */
+@Serializable
+data class SharedLink(
+    val id: String,
+    val sharedLink: String? = null,
+    val scope: String? = null, // "member" | "memberAndGuest" | "memberAndGuestAndExternal"
+    val createdAt: String? = null,
+    val expiredAt: String? = null,
+    val creator: SharedLinkCreator? = null
+)
+
+/** 공유 링크 생성자 정보 */
+@Serializable
+data class SharedLinkCreator(
+    val organizationMemberId: String
+)
+
+/** 공유 링크 목록 응답 */
+@Serializable
+data class SharedLinkListResponse(
+    val header: DoorayApiHeader,
+    val result: List<SharedLink>,
+    val totalCount: Int? = null
+)
+
+/** 공유 링크 상세 응답 */
+@Serializable
+data class SharedLinkDetailResponse(
+    val header: DoorayApiHeader,
+    val result: SharedLink?
+)
+
+/** 공유 링크 수정 요청 */
+@Serializable
+data class UpdateSharedLinkRequest(
+    val expiredAt: String, // ISO 8601 format
+    val scope: String // "member" | "memberAndGuest" | "memberAndGuestAndExternal"
+)
+
+/** 공유 링크 수정/삭제 응답 */
+typealias SharedLinkUpdateResponse = DoorayApiUnitResponse
+typealias SharedLinkDeleteResponse = DoorayApiUnitResponse

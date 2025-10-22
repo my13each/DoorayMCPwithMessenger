@@ -1113,4 +1113,78 @@ class DoorayHttpClient(private val baseUrl: String, private val doorayApiKey: St
             }
         }
     }
+
+    // ============ Drive Shared Link 관련 API 구현 ============
+
+    override suspend fun createSharedLink(
+        driveId: String,
+        fileId: String,
+        request: CreateSharedLinkRequest
+    ): CreateSharedLinkResponse {
+        return executeApiCall(
+                operation = "POST /drive/v1/drives/$driveId/files/$fileId/shared-links",
+                successMessage = "✅ 공유 링크 생성 성공"
+        ) {
+            httpClient.post("/drive/v1/drives/$driveId/files/$fileId/shared-links") {
+                setBody(request)
+            }
+        }
+    }
+
+    override suspend fun getSharedLinks(
+        driveId: String,
+        fileId: String,
+        valid: Boolean?
+    ): SharedLinkListResponse {
+        return executeApiCall(
+                operation = "GET /drive/v1/drives/$driveId/files/$fileId/shared-links",
+                successMessage = "✅ 공유 링크 목록 조회 성공"
+        ) {
+            httpClient.get("/drive/v1/drives/$driveId/files/$fileId/shared-links") {
+                valid?.let { parameter("valid", it) }
+            }
+        }
+    }
+
+    override suspend fun getSharedLinkDetail(
+        driveId: String,
+        fileId: String,
+        linkId: String
+    ): SharedLinkDetailResponse {
+        return executeApiCall(
+                operation = "GET /drive/v1/drives/$driveId/files/$fileId/shared-links/$linkId",
+                successMessage = "✅ 공유 링크 상세 조회 성공"
+        ) {
+            httpClient.get("/drive/v1/drives/$driveId/files/$fileId/shared-links/$linkId")
+        }
+    }
+
+    override suspend fun updateSharedLink(
+        driveId: String,
+        fileId: String,
+        linkId: String,
+        request: UpdateSharedLinkRequest
+    ): SharedLinkUpdateResponse {
+        return executeApiCallForNullableResult(
+                operation = "PUT /drive/v1/drives/$driveId/files/$fileId/shared-links/$linkId",
+                successMessage = "✅ 공유 링크 수정 성공"
+        ) {
+            httpClient.put("/drive/v1/drives/$driveId/files/$fileId/shared-links/$linkId") {
+                setBody(request)
+            }
+        }
+    }
+
+    override suspend fun deleteSharedLink(
+        driveId: String,
+        fileId: String,
+        linkId: String
+    ): SharedLinkDeleteResponse {
+        return executeApiCallForNullableResult(
+                operation = "DELETE /drive/v1/drives/$driveId/files/$fileId/shared-links/$linkId",
+                successMessage = "✅ 공유 링크 삭제 성공"
+        ) {
+            httpClient.delete("/drive/v1/drives/$driveId/files/$fileId/shared-links/$linkId")
+        }
+    }
 }

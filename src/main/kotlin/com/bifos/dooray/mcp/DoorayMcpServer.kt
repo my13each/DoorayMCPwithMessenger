@@ -230,8 +230,22 @@ class DoorayMcpServer {
         // 39. 파일 이동
         addTool(moveFileTool(), moveFileHandler(doorayHttpClient))
 
-        // 40. 파일을 채널에 공유
-        // addTool(sendFileToChannelTool(), sendFileToChannelHandler(doorayHttpClient))
+        // ============ Drive Shared Link 관련 도구들 ============
+
+        // 40. 공유 링크 생성
+        addTool(createSharedLinkTool(), createSharedLinkHandler(doorayHttpClient))
+
+        // 41. 공유 링크 목록 조회
+        addTool(getSharedLinksTool(), getSharedLinksHandler(doorayHttpClient))
+
+        // 42. 공유 링크 상세 조회
+        addTool(getSharedLinkDetailTool(), getSharedLinkDetailHandler(doorayHttpClient))
+
+        // 43. 공유 링크 수정
+        addTool(updateSharedLinkTool(), updateSharedLinkHandler(doorayHttpClient))
+
+        // 44. 공유 링크 삭제
+        addTool(deleteSharedLinkTool(), deleteSharedLinkHandler(doorayHttpClient))
 
         log.info("Successfully added $toolCount tools to MCP server")
     }

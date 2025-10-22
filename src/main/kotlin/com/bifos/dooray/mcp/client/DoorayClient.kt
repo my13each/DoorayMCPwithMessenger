@@ -295,4 +295,42 @@ interface DoorayClient {
     
     /** 파일을 휴지통으로 이동합니다. */
     suspend fun moveFileToTrash(driveId: String, fileId: String): MoveFileResponse
+
+    // ============ Drive Shared Link 관련 API ============
+
+    /** 파일의 공유 링크를 생성합니다. */
+    suspend fun createSharedLink(
+        driveId: String,
+        fileId: String,
+        request: CreateSharedLinkRequest
+    ): CreateSharedLinkResponse
+
+    /** 파일에 생성된 모든 공유 링크를 조회합니다. */
+    suspend fun getSharedLinks(
+        driveId: String,
+        fileId: String,
+        valid: Boolean? = true
+    ): SharedLinkListResponse
+
+    /** 특정 공유 링크의 상세 정보를 조회합니다. */
+    suspend fun getSharedLinkDetail(
+        driveId: String,
+        fileId: String,
+        linkId: String
+    ): SharedLinkDetailResponse
+
+    /** 특정 공유 링크를 수정합니다. */
+    suspend fun updateSharedLink(
+        driveId: String,
+        fileId: String,
+        linkId: String,
+        request: UpdateSharedLinkRequest
+    ): SharedLinkUpdateResponse
+
+    /** 특정 공유 링크를 삭제합니다. */
+    suspend fun deleteSharedLink(
+        driveId: String,
+        fileId: String,
+        linkId: String
+    ): SharedLinkDeleteResponse
 }
