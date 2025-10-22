@@ -94,7 +94,8 @@ Claude Desktop（Claude Code）でMCPサーバーを使用するには、設定�
         "-i",
         "--rm",
         "-v", "/Users/{username}/Desktop:/host/Desktop:ro",
-        "-v", "/Users/{username}/Downloads:/host/Downloads:ro",
+        "-v", "/Users/{username}/Downloads:/host/Downloads:rw",
+        "-v", "/Users/{username}/Downloads:/home/claude:rw",
         "-e", "DOORAY_API_KEY",
         "-e", "DOORAY_BASE_URL",
         "my13each/dooray-mcp:latest"
@@ -108,7 +109,16 @@ Claude Desktop（Claude Code）でMCPサーバーを使用するには、設定�
 }
 ```
 
-> 📁 **ファイルアップロード機能**: `-v`オプションでDesktopとDownloadsフォルダをマウントすることで、`dooray_drive_upload_file_from_path`ツールを使用してローカルファイルをDoorayドライブにアップロードできます。`{username}`は実際のユーザー名に置き換えてください。
+> 📁 **ファイルアップロード機能**: `-v`オプションでDesktopとDownloadsフォルダをマウントすることで、`dooray_drive_upload_file_from_path`ツールを使用してローカルファイルをDoorayドライブにアップロードできます。
+>
+> **マウント設定の説明:**
+> - `/host/Desktop:ro` - Desktopフォルダを読み取り専用でマウント
+> - `/host/Downloads:rw` - Downloadsフォルダを読み書き可能でマウント
+> - `/home/claude:rw` - Claude Desktopの作業ディレクトリ（Claudeがファイル生成時に使用）
+>
+> **重要:** `/home/claude`マウントにより、Claudeが生成したExcel、CSV等のファイルを直接アップロード可能です。
+>
+> `{username}`は実際のユーザー名に置き換えてください。
 >
 > **Windowsの場合**: `/Users/{username}/Desktop`の代わりに`C:\Users\{username}\Desktop`を使用し、パスは`C:/Users/{username}/Desktop:/host/Desktop:ro`のように`/`で記述してください。
 
@@ -128,7 +138,8 @@ Claude Desktop（Claude Code）でMCPサーバーを使用するには、設定�
         "-i",
         "--rm",
         "-v", "/Users/{username}/Desktop:/host/Desktop:ro",
-        "-v", "/Users/{username}/Downloads:/host/Downloads:ro",
+        "-v", "/Users/{username}/Downloads:/host/Downloads:rw",
+        "-v", "/Users/{username}/Downloads:/home/claude:rw",
         "-e", "DOORAY_API_KEY",
         "-e", "DOORAY_BASE_URL",
         "my13each/dooray-mcp:latest"
