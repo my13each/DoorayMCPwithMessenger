@@ -169,11 +169,14 @@ fun uploadFileFromPathHandler(doorayClient: DoorayClient): suspend (CallToolRequ
  * - /Users/jp17463/Desktop/file.txt → /host/Desktop/file.txt
  * - /Users/jp17463/Downloads/image.png → /host/Downloads/image.png
  * - /home/claude/file.xlsx → /home/claude/file.xlsx (変換不要、Claudeが生成したファイル)
+ * - /tmp/file.txt → /tmp/file.txt (変換不要、tmpディレクトリ)
  * - /host/Downloads/file.txt → /host/Downloads/file.txt (変換不要)
  */
 private fun convertHostPathToContainerPath(hostPath: String): String {
-    // すでにコンテナパス、またはClaude作業ディレクトリの場合はそのまま返す
-    if (hostPath.startsWith("/host/") || hostPath.startsWith("/home/claude")) {
+    // すでにコンテナパス、Claude作業ディレクトリ、または /tmp の場合はそのまま返す
+    if (hostPath.startsWith("/host/") ||
+        hostPath.startsWith("/home/claude") ||
+        hostPath.startsWith("/tmp/")) {
         return hostPath
     }
 
@@ -189,7 +192,7 @@ private fun convertHostPathToContainerPath(hostPath: String): String {
             hostPath.replaceFirst(Regex("^/Users/[^/]+/Downloads"), "/host/Downloads")
         }
         else -> {
-            // 変換できない場合は元のパスをそのまま返す（ローカル実行時、/home/claude など）
+            // 変換できない場合は元のパスをそのまま返す（ローカル実行時、/tmp、/home/claude など）
             hostPath
         }
     }
