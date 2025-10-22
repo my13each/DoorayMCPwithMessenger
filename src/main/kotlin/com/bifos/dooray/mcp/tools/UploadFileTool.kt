@@ -17,7 +17,18 @@ import kotlinx.serialization.json.putJsonObject
 fun uploadFileTool(): Tool {
     return Tool(
         name = "dooray_drive_upload_file",
-        description = "드라이브에 파일을 업로드합니다. 파일 내용은 Base64로 인코딩되어야 합니다.",
+        description = """
+            DoorayドライブにBase64エンコードされたファイルをアップロードします。
+
+            ⚠️ **使用制限**:
+            - 小さなファイル（10KB未満推奨）専用
+            - 大きなファイルはClaudeのメッセージ長制限（約200K文字）に達します
+
+            📌 **推奨事項**:
+            - 優先的に `dooray_drive_upload_file_from_path` を使用してください
+            - このツールは `dooray_drive_upload_file_from_path` が失敗した場合のフォールバック用です
+            - ファイルパスが利用できない場合や、既にBase64データがある場合に使用
+        """.trimIndent(),
         inputSchema = Tool.Input(
             properties = buildJsonObject {
                 putJsonObject("drive_id") {

@@ -229,7 +229,7 @@ export PATH=$JAVA_HOME/bin:$PATH
 4. 必要な権限を設定後、作成
 5. 生成されたAPI Keyを設定ファイルの`{Your Dooray API Key}`部分に入力
 
-## 使用可能なツール（合計44個）
+## 使用可能なツール（合計45個）
 
 ### Wiki関連ツール（8個）
 
@@ -383,11 +383,7 @@ Doorayでアクセス可能なドライブ一覧を取得します。利用可�
 
 特定のドライブの**ファイルとフォルダ一覧**を取得します。parent_idを指定してフォルダを階層別に探索することができます。各ファイルの詳細情報（サイズ、作成日時、更新日時、MIME タイプ、作成者など）を含んでいます。
 
-#### 32. ~~dooray_drive_upload_file~~ (非推奨・無効化)
-
-⚠️ **このツールは無効化されました。** Base64エンコード方式はメッセージサイズが大きくなり、Claude Desktopの最大文字数制限（約200K文字）に達する問題があります。代わりに `dooray_drive_upload_file_from_path` を使用してください。
-
-#### 32. dooray_drive_upload_file_from_path ⭐**推奨**
+#### 31. dooray_drive_upload_file_from_path ⭐**優先使用**
 
 **ローカルファイルパスから直接ファイルをアップロード**します。すべてのファイルアップロードに推奨される方法です。
 
@@ -402,6 +398,19 @@ Doorayでアクセス可能なドライブ一覧を取得します。利用可�
 ```
 /Users/username/Downloads/report.xlsx をDoorayドライブにアップロードしてください
 ```
+
+#### 32. dooray_drive_upload_file 🔄**フォールバック**
+
+Base64エンコードされたファイルをアップロードします。**`dooray_drive_upload_file_from_path`が失敗した場合のバックアップ方法です。**
+
+⚠️ **使用制限:**
+- 小さなファイル（10KB未満推奨）専用
+- 大きなファイルはClaudeのメッセージ長制限（約200K文字）に達します
+
+📌 **使用すべき場合:**
+- `dooray_drive_upload_file_from_path`でファイルが見つからない場合
+- 既にBase64エンコード済みのデータがある場合
+- ファイルパスが利用できない特殊なケース
 
 #### 33. dooray_drive_download_file
 
@@ -707,27 +716,9 @@ Doorayでアクセス可能なドライブ一覧を取得します。利用可�
 }
 ```
 
-### ~~💾 ファイルアップロード (Base64)~~ ⚠️ **無効化**
+### 💾 ファイルアップロード (パスから) ⭐ **優先使用**
 
-⚠️ **このツールは無効化されました。** Claude Desktopのメッセージ長制限問題により使用できません。
-
-```json
-// ❌ 使用不可 - Base64エンコードによりメッセージサイズが大きくなりすぎます
-// {
-//   "name": "dooray_drive_upload_file",
-//   "arguments": {
-//     "drive_id": "drive_id_here",
-//     "file_name": "example.txt",
-//     "base64_content": "SGVsbG8gV29ybGQ=",
-//     "parent_id": "folder_id_here",
-//     "mime_type": "text/plain"
-//   }
-// }
-```
-
-### 💾 ファイルアップロード (パスから) ⭐ **推奨**
-
-すべてのファイルアップロードにはこの方法を使用してください。
+すべてのファイルアップロードに推奨される方法です。
 
 ```json
 {
@@ -746,6 +737,28 @@ Doorayでアクセス可能なドライブ一覧を取得します。利用可�
 > - サーバー側でBase64エンコード処理
 > - 大容量ファイル（画像、Excel、PDF等）も問題なく処理
 > - Docker環境で自動パス変換対応
+
+### 💾 ファイルアップロード (Base64) 🔄 **フォールバック**
+
+Base64エンコード済みのファイルをアップロードします。`dooray_drive_upload_file_from_path`が失敗した場合のバックアップ方法です。
+
+```json
+{
+  "name": "dooray_drive_upload_file",
+  "arguments": {
+    "drive_id": "drive_id_here",
+    "file_name": "example.txt",
+    "base64_content": "SGVsbG8gV29ybGQ=",
+    "parent_id": "folder_id_here",
+    "mime_type": "text/plain"
+  }
+}
+```
+
+> ⚠️ **注意事項**:
+> - 小さなファイル（10KB未満推奨）専用
+> - 大きなファイルはClaudeのメッセージ長制限に達します
+> - 優先的に `dooray_drive_upload_file_from_path` を使用してください
 
 ### 💾 ファイルダウンロード
 
