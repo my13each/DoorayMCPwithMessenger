@@ -229,7 +229,7 @@ export PATH=$JAVA_HOME/bin:$PATH
 4. 必要な権限を設定後、作成
 5. 生成されたAPI Keyを設定ファイルの`{Your Dooray API Key}`部分に入力
 
-## 使用可能なツール（合計45個）
+## 使用可能なツール（合計44個）
 
 ### Wiki関連ツール（8個）
 
@@ -383,19 +383,25 @@ Doorayでアクセス可能なドライブ一覧を取得します。利用可�
 
 特定のドライブの**ファイルとフォルダ一覧**を取得します。parent_idを指定してフォルダを階層別に探索することができます。各ファイルの詳細情報（サイズ、作成日時、更新日時、MIME タイプ、作成者など）を含んでいます。
 
-#### 32. dooray_drive_upload_file
+#### 32. ~~dooray_drive_upload_file~~ (非推奨・無効化)
 
-ドライブに**ファイルをアップロード**します。Base64でエンコードされたファイル内容を指定されたドライブの特定フォルダに保存します。ファイル名、MIMEタイプ、アップロード先フォルダIDを指定できます。
+⚠️ **このツールは無効化されました。** Base64エンコード方式はメッセージサイズが大きくなり、Claude Desktopの最大文字数制限（約200K文字）に達する問題があります。代わりに `dooray_drive_upload_file_from_path` を使用してください。
 
-#### 32-2. dooray_drive_upload_file_from_path
+#### 32. dooray_drive_upload_file_from_path ⭐**推奨**
 
-**ローカルファイルパスから直接ファイルをアップロード**します。大きなファイル（画像、PDF等）のアップロードに最適です。
+**ローカルファイルパスから直接ファイルをアップロード**します。すべてのファイルアップロードに推奨される方法です。
 
 📌 **特徴:**
-- ファイルパスを指定するだけで自動的にBase64エンコード
-- Claudeのメッセージ長制限を回避
-- MIMEタイプの自動検出（100種類以上対応）
+- ファイルパスを指定するだけで自動的にBase64エンコード（サーバー側で処理）
+- **Claudeのメッセージ長制限を回避** - 大容量ファイルも問題なくアップロード可能
+- MIMEタイプの自動検出（25種類以上対応）
 - ファイルサイズ制限: 100MB
+- Docker環境で自動パス変換対応（`/Users/{user}/Downloads` → `/host/Downloads`）
+
+📋 **使用例:**
+```
+/Users/username/Downloads/report.xlsx をDoorayドライブにアップロードしてください
+```
 
 #### 33. dooray_drive_download_file
 
@@ -701,36 +707,45 @@ Doorayでアクセス可能なドライブ一覧を取得します。利用可�
 }
 ```
 
-### 💾 ファイルアップロード (Base64)
+### ~~💾 ファイルアップロード (Base64)~~ ⚠️ **無効化**
+
+⚠️ **このツールは無効化されました。** Claude Desktopのメッセージ長制限問題により使用できません。
 
 ```json
-{
-  "name": "dooray_drive_upload_file",
-  "arguments": {
-    "drive_id": "drive_id_here",
-    "file_name": "example.txt",
-    "base64_content": "SGVsbG8gV29ybGQ=",
-    "parent_id": "folder_id_here",
-    "mime_type": "text/plain"
-  }
-}
+// ❌ 使用不可 - Base64エンコードによりメッセージサイズが大きくなりすぎます
+// {
+//   "name": "dooray_drive_upload_file",
+//   "arguments": {
+//     "drive_id": "drive_id_here",
+//     "file_name": "example.txt",
+//     "base64_content": "SGVsbG8gV29ybGQ=",
+//     "parent_id": "folder_id_here",
+//     "mime_type": "text/plain"
+//   }
+// }
 ```
 
-### 💾 ファイルアップロード (パスから) 🆕
+### 💾 ファイルアップロード (パスから) ⭐ **推奨**
+
+すべてのファイルアップロードにはこの方法を使用してください。
 
 ```json
 {
   "name": "dooray_drive_upload_file_from_path",
   "arguments": {
     "drive_id": "drive_id_here",
-    "file_path": "/path/to/image.png",
+    "file_path": "/Users/username/Downloads/report.xlsx",
     "parent_id": "folder_id_here",
-    "mime_type": "image/png"
+    "mime_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   }
 }
 ```
 
-> 💡 **推奨**: 大きなファイル（画像、PDF等）のアップロードには `dooray_drive_upload_file_from_path` を使用してください。Claudeのメッセージ長制限を回避できます。
+> ✅ **推奨理由**:
+> - Claudeのメッセージ長制限を回避
+> - サーバー側でBase64エンコード処理
+> - 大容量ファイル（画像、Excel、PDF等）も問題なく処理
+> - Docker環境で自動パス変換対応
 
 ### 💾 ファイルダウンロード
 

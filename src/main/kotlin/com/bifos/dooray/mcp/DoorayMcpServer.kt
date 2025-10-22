@@ -203,10 +203,12 @@ class DoorayMcpServer {
         // 30. 드라이브 파일 목록 조회
         addTool(getDriveFilesTool(), getDriveFilesHandler(doorayHttpClient))
 
-        // 31. 파일 업로드 (Base64)
-        addTool(uploadFileTool(), uploadFileHandler(doorayHttpClient))
+        // 31. 파일 업로드 (Base64) - Deprecated: Claude メッセージ長制限により使用非推奨
+        // Base64エンコードはメッセージサイズが大きくなり、Claude Desktopの最大文字数制限に達する問題があるため無効化
+        // 代わりに dooray_drive_upload_file_from_path を使用してください
+        // addTool(uploadFileTool(), uploadFileHandler(doorayHttpClient))
 
-        // 31-2. 파일 업로드 (パスから)
+        // 31. 파일 업로드 (パスから) - 推奨方法
         addTool(uploadFileFromPathTool(), uploadFileFromPathHandler(doorayHttpClient))
 
         // 32. 파일 다운로드
@@ -249,6 +251,8 @@ class DoorayMcpServer {
 
         // 44. 공유 링크 삭제
         addTool(deleteSharedLinkTool(), deleteSharedLinkHandler(doorayHttpClient))
+
+        // 도구 개数: 44個 (Base64アップロードツールは無効化)
 
         log.info("Successfully added $toolCount tools to MCP server")
     }
