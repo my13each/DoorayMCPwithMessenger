@@ -96,6 +96,7 @@ Claude Desktop（Claude Code）でMCPサーバーを使用するには、設定�
         "-v", "/Users/{username}/Desktop:/host/Desktop:ro",
         "-v", "/Users/{username}/Downloads:/host/Downloads:rw",
         "-v", "/Users/{username}/Downloads:/home/claude:rw",
+        "-v", "/tmp:/tmp:rw",
         "-e", "DOORAY_API_KEY",
         "-e", "DOORAY_BASE_URL",
         "my13each/dooray-mcp:latest"
@@ -115,8 +116,9 @@ Claude Desktop（Claude Code）でMCPサーバーを使用するには、設定�
 > - `/host/Desktop:ro` - Desktopフォルダを読み取り専用でマウント
 > - `/host/Downloads:rw` - Downloadsフォルダを読み書き可能でマウント
 > - `/home/claude:rw` - Claude Desktopの作業ディレクトリ（Claudeがファイル生成時に使用）
+> - `/tmp:rw` - 一時ファイルディレクトリ（Claudeが一時ファイル作成時に使用）
 >
-> **重要:** `/home/claude`マウントにより、Claudeが生成したExcel、CSV等のファイルを直接アップロード可能です。
+> **重要:** `/home/claude`と`/tmp`のマウントにより、Claudeが生成したExcel、CSV等のファイルを直接アップロード可能です。
 >
 > `{username}`は実際のユーザー名に置き換えてください。
 >
@@ -140,6 +142,7 @@ Claude Desktop（Claude Code）でMCPサーバーを使用するには、設定�
         "-v", "/Users/{username}/Desktop:/host/Desktop:ro",
         "-v", "/Users/{username}/Downloads:/host/Downloads:rw",
         "-v", "/Users/{username}/Downloads:/home/claude:rw",
+        "-v", "/tmp:/tmp:rw",
         "-e", "DOORAY_API_KEY",
         "-e", "DOORAY_BASE_URL",
         "my13each/dooray-mcp:latest"
