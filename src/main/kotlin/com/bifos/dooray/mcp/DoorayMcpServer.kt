@@ -203,8 +203,11 @@ class DoorayMcpServer {
         // 30. 드라이브 파일 목록 조회
         addTool(getDriveFilesTool(), getDriveFilesHandler(doorayHttpClient))
 
-        // 31. 파일 업로드
+        // 31. 파일 업로드 (Base64)
         addTool(uploadFileTool(), uploadFileHandler(doorayHttpClient))
+
+        // 31-2. 파일 업로드 (パスから)
+        addTool(uploadFileFromPathTool(), uploadFileFromPathHandler(doorayHttpClient))
 
         // 32. 파일 다운로드
         addTool(downloadFileTool(), downloadFileHandler(doorayHttpClient))
