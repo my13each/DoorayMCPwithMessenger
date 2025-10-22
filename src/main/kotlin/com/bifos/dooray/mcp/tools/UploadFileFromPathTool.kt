@@ -79,8 +79,11 @@ fun uploadFileFromPathHandler(doorayClient: DoorayClient): suspend (CallToolRequ
 
             val mimeType = request.arguments["mime_type"]?.jsonPrimitive?.content
 
+            // Docker環境での経路自動変換（ホストパス → コンテナパス）
+            val convertedPath = convertHostPathToContainerPath(filePath)
+
             // ファイルの存在確認
-            val file = File(filePath)
+            val file = File(convertedPath)
             if (!file.exists()) {
                 throw ToolException(
                     type = ToolException.VALIDATION_ERROR,
@@ -152,6 +155,41 @@ fun uploadFileFromPathHandler(doorayClient: DoorayClient): suspend (CallToolRequ
             ).toErrorResponse()
 
             CallToolResult(content = listOf(TextContent(JsonUtils.toJsonString(errorResponse))))
+        }
+    }
+}
+
+/**
+ * ホストマシンのパスをDockerコンテナ内のパスに変換します
+ *
+ * Docker環境では、ホストの /Users/... パスが /host/... にマウントされているため、
+ * 自動的に変換を行います。
+ *
+ * 例:
+ * - /Users/jp17463/Desktop/file.txt → /host/Desktop/file.txt
+ * - /Users/jp17463/Downloads/image.png → /host/Downloads/image.png
+ * - /host/Downloads/file.txt → /host/Downloads/file.txt (変換不要)
+ */
+private fun convertHostPathToContainerPath(hostPath: String): String {
+    // すでにコンテナパスの場合はそのまま返す
+    if (hostPath.startsWith("/host/")) {
+        return hostPath
+    }
+
+    // macOS/Linux の /Users/{username}/Desktop, /Users/{username}/Downloads を変換
+    val desktopPattern = Regex("^(/Users/[^/]+/Desktop)(/.*)?$")
+    val downloadsPattern = Regex("^(/Users/[^/]+/Downloads)(/.*)?$")
+
+    return when {
+        desktopPattern.matches(hostPath) -> {
+            hostPath.replaceFirst(Regex("^/Users/[^/]+/Desktop"), "/host/Desktop")
+        }
+        downloadsPattern.matches(hostPath) -> {
+            hostPath.replaceFirst(Regex("^/Users/[^/]+/Downloads"), "/host/Downloads")
+        }
+        else -> {
+            // 変換できない場合は元のパスをそのまま返す（ローカル実行時など）
+            hostPath
         }
     }
 }
