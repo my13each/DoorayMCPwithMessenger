@@ -20,22 +20,19 @@ fun uploadFileWithSaveTool(): Tool {
     return Tool(
         name = "dooray_drive_upload_file_with_save",
         description = """
-            Claude Desktopで生成されたファイル（Excel等）をDoorayドライブにアップロードします。
+            **[RECOMMENDED for Excel/generated files]** Claude가 생성한 파일(Excel 등)을 Dooray 드라이브에 업로드합니다.
 
-            🎯 **主な用途**:
-            - Claude DesktopのExcel生成機能で作成したファイルのアップロード
-            - Base64データを受け取り、自動的にDownloadsフォルダに保存してからアップロード
-            - 一時ファイルは自動的にクリーンアップ
+            ✅ **이 툴을 사용해야 하는 경우**:
+            - Claude가 방금 생성한 Excel, PDF, 이미지 등의 파일을 업로드할 때
+            - Base64 데이터가 있고 파일 경로가 불확실할 때
+            - 파일을 Downloads 폴더에도 저장하고 싶을 때
 
-            📌 **ワークフロー**:
-            1. Base64エンコードされたファイルデータを受け取る
-            2. Downloadsフォルダに一時保存
-            3. Doorayドライブにアップロード
-            4. 成功後、一時ファイルを削除（keep_local=trueで保持可能）
+            🚀 **자동 처리**:
+            1. Base64 데이터를 받아서 Downloads 폴더에 저장
+            2. 저장된 파일을 Dooray 드라이브에 업로드
+            3. 업로드 완료 후 임시 파일 자동 정리 (keep_local=true로 보관 가능)
 
-            ⚠️ **注意事項**:
-            - ファイルサイズ制限: 100MB
-            - 一時保存先: /host/Downloads/ (コンテナ内パス)
+            ⚠️ **제한사항**: 최대 100MB
         """.trimIndent(),
         inputSchema = Tool.Input(
             properties = buildJsonObject {
