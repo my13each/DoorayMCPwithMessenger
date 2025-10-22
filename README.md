@@ -93,6 +93,8 @@ Claude Desktop（Claude Code）でMCPサーバーを使用するには、設定�
         "--platform", "linux/amd64",
         "-i",
         "--rm",
+        "-v", "/Users/{username}/Desktop:/host/Desktop:ro",
+        "-v", "/Users/{username}/Downloads:/host/Downloads:ro",
         "-e", "DOORAY_API_KEY",
         "-e", "DOORAY_BASE_URL",
         "my13each/dooray-mcp:latest"
@@ -105,6 +107,10 @@ Claude Desktop（Claude Code）でMCPサーバーを使用するには、設定�
   }
 }
 ```
+
+> 📁 **ファイルアップロード機能**: `-v`オプションでDesktopとDownloadsフォルダをマウントすることで、`dooray_drive_upload_file_from_path`ツールを使用してローカルファイルをDoorayドライブにアップロードできます。`{username}`は実際のユーザー名に置き換えてください。
+>
+> **Windowsの場合**: `/Users/{username}/Desktop`の代わりに`C:\Users\{username}\Desktop`を使用し、パスは`C:/Users/{username}/Desktop:/host/Desktop:ro`のように`/`で記述してください。
 
 ### 常に最新版を使用（オプション）
 
@@ -121,6 +127,8 @@ Claude Desktop（Claude Code）でMCPサーバーを使用するには、設定�
         "--pull=always",
         "-i",
         "--rm",
+        "-v", "/Users/{username}/Desktop:/host/Desktop:ro",
+        "-v", "/Users/{username}/Downloads:/host/Downloads:ro",
         "-e", "DOORAY_API_KEY",
         "-e", "DOORAY_BASE_URL",
         "my13each/dooray-mcp:latest"
