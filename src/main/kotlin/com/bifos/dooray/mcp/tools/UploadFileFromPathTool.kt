@@ -162,17 +162,18 @@ fun uploadFileFromPathHandler(doorayClient: DoorayClient): suspend (CallToolRequ
 /**
  * ホストマシンのパスをDockerコンテナ内のパスに変換します
  *
- * Docker環境では、ホストの /Users/... パスが /host/... にマウントされているため、
+ * Docker環境では、ホストの /Users/... パスが /host/... または /home/claude にマウントされているため、
  * 自動的に変換を行います。
  *
  * 例:
  * - /Users/jp17463/Desktop/file.txt → /host/Desktop/file.txt
  * - /Users/jp17463/Downloads/image.png → /host/Downloads/image.png
+ * - /home/claude/file.xlsx → /home/claude/file.xlsx (変換不要、Claudeが生成したファイル)
  * - /host/Downloads/file.txt → /host/Downloads/file.txt (変換不要)
  */
 private fun convertHostPathToContainerPath(hostPath: String): String {
-    // すでにコンテナパスの場合はそのまま返す
-    if (hostPath.startsWith("/host/")) {
+    // すでにコンテナパス、またはClaude作業ディレクトリの場合はそのまま返す
+    if (hostPath.startsWith("/host/") || hostPath.startsWith("/home/claude")) {
         return hostPath
     }
 
@@ -188,7 +189,7 @@ private fun convertHostPathToContainerPath(hostPath: String): String {
             hostPath.replaceFirst(Regex("^/Users/[^/]+/Downloads"), "/host/Downloads")
         }
         else -> {
-            // 変換できない場合は元のパスをそのまま返す（ローカル実行時など）
+            // 変換できない場合は元のパスをそのまま返す（ローカル実行時、/home/claude など）
             hostPath
         }
     }
