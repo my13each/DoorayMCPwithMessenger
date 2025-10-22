@@ -206,59 +206,54 @@ class DoorayMcpServer {
         // 31. 파일 업로드 (パスから) - 推奨方法 (優先使用)
         addTool(uploadFileFromPathTool(), uploadFileFromPathHandler(doorayHttpClient))
 
-        // 32. 파일 업로드 (Base64 + 自動保存) - Claude Desktop生成ファイル用 (推奨)
-        // Claude Desktopで生成されたExcel等のファイルをアップロードする際に最適
-        // Base64データを受け取り、Downloadsフォルダに保存してからアップロード
-        addTool(uploadFileWithSaveTool(), uploadFileWithSaveHandler(doorayHttpClient))
-
-        // 33. 파일 업로드 (Base64) - フォールバック用
+        // 32. 파일 업로드 (Base64) - フォールバック用
         // dooray_drive_upload_file_from_path が失敗した場合（ファイルが見つからない等）の
         // バックアップ方法として使用。小さなファイル（10KB未満推奨）に適しています。
         // ⚠️ 大きなファイルはClaudeのメッセージ長制限（200K文字）に達する可能性があります
         addTool(uploadFileTool(), uploadFileHandler(doorayHttpClient))
 
-        // 34. 파일 다운로드
+        // 33. 파일 다운로드
         addTool(downloadFileTool(), downloadFileHandler(doorayHttpClient))
 
-        // 35. 파일 메타정보 조회
+        // 34. 파일 메타정보 조회
         addTool(getFileMetadataTool(), getFileMetadataHandler(doorayHttpClient))
 
-        // 36. 파일 업데이트
+        // 35. 파일 업데이트
         addTool(updateFileTool(), updateFileHandler(doorayHttpClient))
 
-        // 37. 파일을 휴지통으로 이동
+        // 36. 파일을 휴지통으로 이동
         addTool(moveFileToTrashTool(), moveFileToTrashHandler(doorayHttpClient))
 
-        // 38. 파일 영구 삭제
+        // 37. 파일 영구 삭제
         addTool(deleteFileTool(), deleteFileHandler(doorayHttpClient))
 
-        // 39. 폴더 생성
+        // 38. 폴더 생성
         addTool(createFolderTool(), createFolderHandler(doorayHttpClient))
 
-        // 40. 파일 복사
+        // 39. 파일 복사
         addTool(copyFileTool(), copyFileHandler(doorayHttpClient))
 
-        // 41. 파일 이동
+        // 40. 파일 이동
         addTool(moveFileTool(), moveFileHandler(doorayHttpClient))
 
         // ============ Drive Shared Link 관련 도구들 ============
 
-        // 42. 공유 링크 생성
+        // 41. 공유 링크 생성
         addTool(createSharedLinkTool(), createSharedLinkHandler(doorayHttpClient))
 
-        // 43. 공유 링크 목록 조회
+        // 42. 공유 링크 목록 조회
         addTool(getSharedLinksTool(), getSharedLinksHandler(doorayHttpClient))
 
-        // 44. 공유 링크 상세 조회
+        // 43. 공유 링크 상세 조회
         addTool(getSharedLinkDetailTool(), getSharedLinkDetailHandler(doorayHttpClient))
 
-        // 45. 공유 링크 수정
+        // 44. 공유 링크 수정
         addTool(updateSharedLinkTool(), updateSharedLinkHandler(doorayHttpClient))
 
-        // 46. 공유 링크 삭제
+        // 45. 공유 링크 삭제
         addTool(deleteSharedLinkTool(), deleteSharedLinkHandler(doorayHttpClient))
 
-        // 도구 개数: 46個 (Base64+自動保存を追加、Claude Desktop生成ファイルに対応)
+        // 도구 개수: 45個 (パスベースのアップロードを優先、Base64はフォールバック)
 
         log.info("Successfully added $toolCount tools to MCP server")
     }
