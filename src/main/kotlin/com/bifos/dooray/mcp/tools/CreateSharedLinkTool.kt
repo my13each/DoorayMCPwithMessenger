@@ -36,11 +36,12 @@ fun createSharedLinkTool(): Tool {
                 })
                 put("scope", buildJsonObject {
                     put("type", "string")
-                    put("description", "공유 범위: member | memberAndGuest | memberAndGuestAndExternal")
+                    put("description", "공유 범위 (기본값: memberAndGuest): member | memberAndGuest | memberAndGuestAndExternal")
+                    put("default", "memberAndGuest")
                     put("enum", buildJsonObject {
                         put("member", "손님 제외 조직 내 사용자")
-                        put("memberAndGuest", "조직 내 모든 사용자")
-                        put("memberAndGuestAndExternal", "내외부 상관없이")
+                        put("memberAndGuest", "조직 내 모든 사용자 (기본값)")
+                        put("memberAndGuestAndExternal", "내외부 상관없이 (조직 정책으로 차단될 수 있음)")
                     })
                 })
                 put("expired_at", buildJsonObject {
@@ -48,7 +49,7 @@ fun createSharedLinkTool(): Tool {
                     put("description", "만료 날짜 (ISO 8601 형식, 예: 2025-12-31T23:59:59+09:00)")
                 })
             },
-            required = listOf("drive_id", "file_id", "scope", "expired_at")
+            required = listOf("drive_id", "file_id", "expired_at")  // scope는 선택적 (기본값: memberAndGuest)
         ),
         outputSchema = null,
         annotations = null
@@ -65,7 +66,7 @@ fun createSharedLinkHandler(doorayClient: DoorayClient): suspend (CallToolReques
                 ?: throw ToolException(ToolException.VALIDATION_ERROR, "file_id는 필수입니다", "MISSING_FILE_ID")
 
             val scope = request.arguments["scope"]?.jsonPrimitive?.content
-                ?: throw ToolException(ToolException.VALIDATION_ERROR, "scope는 필수입니다", "MISSING_SCOPE")
+                ?: "memberAndGuest"  // 기본값: 조직 내 모든 사용자 (외부 공유는 조직 정책으로 차단될 수 있음)
 
             val expiredAt = request.arguments["expired_at"]?.jsonPrimitive?.content
                 ?: throw ToolException(ToolException.VALIDATION_ERROR, "expired_at는 필수입니다", "MISSING_EXPIRED_AT")
