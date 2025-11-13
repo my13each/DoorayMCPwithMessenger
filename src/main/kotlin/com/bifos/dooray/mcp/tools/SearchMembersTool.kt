@@ -13,6 +13,9 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonObject
+import kotlinx.serialization.json.putJsonArray
+import kotlinx.serialization.json.add
+import kotlinx.serialization.json.JsonPrimitive
 
 fun searchMembersTool(): Tool {
     return Tool(
@@ -20,19 +23,17 @@ fun searchMembersTool(): Tool {
         description = "두레이 조직의 멤버를 검색합니다. 이름, 이메일, 사용자 코드 등으로 검색할 수 있습니다.",
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
-putJsonObject("name") {
-                    put("type", "string")
-                    put("description", "검색할 멤버 이름")
-                }
                 putJsonObject("email") {
                     put("type", "string")
-                    put("description", "검색할 멤버 이메일 주소")
+                    put("description", "검색할 멤버 이메일 주소 (필수). 정확히 일치하는 이메일로 검색합니다.")
+                }
+                putJsonObject("name") {
+                    put("type", "string")
+                    put("description", "검색할 멤버 이름 (선택사항)")
                 }
                 putJsonObject("user_code") {
                     put("type", "string")
-                    put("description", "검색할 사용자 코드")
+                    put("description", "검색할 사용자 코드 (선택사항)")
                 }
                 putJsonObject("page") {
                     put("type", "integer")
@@ -44,6 +45,8 @@ putJsonObject("name") {
                     put("description", "페이지 크기 (기본값: 20, 최대: 100)")
                     put("default", 20)
                 }
+                putJsonArray("required") {
+                    add(JsonPrimitive("email"))
                 }
             }),
         outputSchema = null,
@@ -54,13 +57,19 @@ putJsonObject("name") {
 fun searchMembersHandler(doorayClient: DoorayClient): suspend (CallToolRequest) -> CallToolResult {
     return { request ->
         try {
-            val name = request.arguments["name"]?.jsonPrimitive?.content
             val email = request.arguments["email"]?.jsonPrimitive?.content
+                ?: throw ToolException(
+                    type = ToolException.PARAMETER_MISSING,
+                    message = "email은 필수 파라미터입니다. Dooray API 명세에 따라 externalEmailAddresses가 필수입니다.",
+                    code = "MISSING_EMAIL"
+                )
+
+            val name = request.arguments["name"]?.jsonPrimitive?.content
             val userCode = request.arguments["user_code"]?.jsonPrimitive?.content
             val page = request.arguments["page"]?.jsonPrimitive?.content?.toIntOrNull() ?: 0
             val size = request.arguments["size"]?.jsonPrimitive?.content?.toIntOrNull() ?: 20
 
-            val emailList = email?.let { listOf(it) }
+            val emailList = listOf(email)
 
             val response = doorayClient.searchMembers(
                 name = name,

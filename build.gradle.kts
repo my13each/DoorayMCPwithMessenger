@@ -16,7 +16,7 @@ repositories {
     mavenCentral()
 }
 
-val mcpVersion = project.findProperty("mcp.version") as String? ?: "0.6.0"
+val mcpVersion = project.findProperty("mcp.version") as String? ?: "0.7.7"
 val ktorVersion = project.findProperty("ktor.version") as String? ?: "3.1.1"
 val logbackVersion = project.findProperty("logback.version") as String? ?: "1.5.18"
 
@@ -90,4 +90,11 @@ tasks.register<JavaExec>("runLocal") {
     standardInput = System.`in`
     standardOutput = System.out
     errorOutput = System.err
+}
+
+tasks.register<JavaExec>("validateSchemas") {
+    description = "Validate all tool JSON schemas"
+    group = "verification"
+    mainClass.set("com.bifos.dooray.mcp.ValidateToolSchemasKt")
+    classpath = sourceSets["main"].runtimeClasspath
 }
