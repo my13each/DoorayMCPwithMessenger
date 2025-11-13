@@ -25,22 +25,19 @@ fun getWikiPageTool(): Tool {
             Tool.Input(
                 properties =
                     buildJsonObject {
-                        put("type", "object")
-                        putJsonObject("properties") {
-                            putJsonObject("project_id") {
-                                put("type", "string")
-                                put(
-                                    "description",
-                                    "위키 프로젝트 ID (dooray_wiki_list_projects로 조회 가능)"
-                                )
-                            }
-                            putJsonObject("page_id") {
-                                put("type", "string")
-                                put(
-                                    "description",
-                                    "위키 페이지 ID (dooray_wiki_list_pages로 조회 가능)"
-                                )
-                            }
+                        putJsonObject("project_id") {
+                            put("type", "string")
+                            put(
+                                "description",
+                                "위키 프로젝트 ID (dooray_wiki_list_projects로 조회 가능)"
+                            )
+                        }
+                        putJsonObject("page_id") {
+                            put("type", "string")
+                            put(
+                                "description",
+                                "위키 페이지 ID (dooray_wiki_list_pages로 조회 가능)"
+                            )
                         }
                         putJsonArray("required") {
                             add(JsonPrimitive("project_id"))

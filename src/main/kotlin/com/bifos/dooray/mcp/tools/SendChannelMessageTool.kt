@@ -18,47 +18,44 @@ fun sendChannelMessageTool(): Tool {
         description = "두레이 메신저 채널에 메시지를 전송합니다. 멘션 기능 지원: [@사용자명](dooray://조직ID/members/멤버ID \"member\") 또는 [@Channel](dooray://조직ID/channels/채널ID \"channel\")",
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
-                    putJsonObject("channel_id") {
-                        put("type", "string")
-                        put("description", "메시지를 전송할 채널의 ID (dooray_messenger_get_channels로 조회 가능)")
-                    }
-                    putJsonObject("text") {
-                        put("type", "string")
-                        put("description", "전송할 메시지 내용. 멘션 사용법: [@사용자명](dooray://조직ID/members/멤버ID \"member\") 또는 [@Channel](dooray://조직ID/channels/채널ID \"channel\")")
-                    }
-                    putJsonObject("mention_members") {
-                        put("type", "array")
-                        put("description", "멘션할 멤버 목록 (선택사항). 각 항목: {\"id\": \"멤버ID\", \"name\": \"멤버명\", \"organizationId\": \"조직ID\"}")
-                        putJsonObject("items") {
-                            put("type", "object")
-                            putJsonObject("properties") {
-                                putJsonObject("id") {
-                                    put("type", "string")
-                                    put("description", "멤버 ID")
-                                }
-                                putJsonObject("name") {
-                                    put("type", "string")
-                                    put("description", "멤버 이름")
-                                }
-                                putJsonObject("organizationId") {
-                                    put("type", "string")
-                                    put("description", "조직 ID")
-                                }
+                putJsonObject("channel_id") {
+                    put("type", "string")
+                    put("description", "메시지를 전송할 채널의 ID (dooray_messenger_get_channels로 조회 가능)")
+                }
+                putJsonObject("text") {
+                    put("type", "string")
+                    put("description", "전송할 메시지 내용. 멘션 사용법: [@사용자명](dooray://조직ID/members/멤버ID \"member\") 또는 [@Channel](dooray://조직ID/channels/채널ID \"channel\")")
+                }
+                putJsonObject("mention_members") {
+                    put("type", "array")
+                    put("description", "멘션할 멤버 목록 (선택사항). 각 항목: {\"id\": \"멤버ID\", \"name\": \"멤버명\", \"organizationId\": \"조직ID\"}")
+                    putJsonObject("items") {
+                        put("type", "object")
+                        put("properties", buildJsonObject {
+                            putJsonObject("id") {
+                                put("type", "string")
+                                put("description", "멤버 ID")
                             }
-                        }
+                            putJsonObject("name") {
+                                put("type", "string")
+                                put("description", "멤버 이름")
+                            }
+                            putJsonObject("organizationId") {
+                                put("type", "string")
+                                put("description", "조직 ID")
+                            }
+                        })
                     }
-                    putJsonObject("mention_all") {
-                        put("type", "boolean")
-                        put("description", "채널 전체 멘션 여부 (선택사항). true이면 [@Channel] 멘션 자동 추가")
-                        put("default", false)
-                    }
-                    putJsonObject("message_type") {
-                        put("type", "string")
-                        put("description", "메시지 타입 (기본값: text)")
-                        put("default", "text")
-                    }
+                }
+                putJsonObject("mention_all") {
+                    put("type", "boolean")
+                    put("description", "채널 전체 멘션 여부 (선택사항). true이면 [@Channel] 멘션 자동 추가")
+                    put("default", false)
+                }
+                putJsonObject("message_type") {
+                    put("type", "string")
+                    put("description", "메시지 타입 (기본값: text)")
+                    put("default", "text")
                 }
                 putJsonArray("required") {
                     add(JsonPrimitive("channel_id"))

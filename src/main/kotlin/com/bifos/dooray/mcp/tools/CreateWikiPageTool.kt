@@ -26,30 +26,27 @@ fun createWikiPageTool(): Tool {
                     Tool.Input(
                             properties =
                                     buildJsonObject {
-                                        put("type", "object")
-                                        putJsonObject("properties") {
-                                            putJsonObject("wiki_id") {
-                                                put("type", "string")
-                                                put(
-                                                        "description",
-                                                    "위키 ID (dooray_wiki_list_projects로 조회 가능)"
-                                                )
-                                            }
-                                            putJsonObject("subject") {
-                                                put("type", "string")
-                                                put("description", "위키 페이지 제목")
-                                            }
-                                            putJsonObject("body") {
-                                                put("type", "string")
-                                                put("description", "위키 페이지 내용 (Markdown 형식 지원)")
-                                            }
-                                            putJsonObject("parent_page_id") {
-                                                put("type", "string")
-                                                put(
-                                                        "description",
-                                                        "상위 페이지 ID (필수, dooray_wiki_list_pages로 조회 가능)"
-                                                )
-                                            }
+                                        putJsonObject("wiki_id") {
+                                            put("type", "string")
+                                            put(
+                                                    "description",
+                                                "위키 ID (dooray_wiki_list_projects로 조회 가능)"
+                                            )
+                                        }
+                                        putJsonObject("subject") {
+                                            put("type", "string")
+                                            put("description", "위키 페이지 제목")
+                                        }
+                                        putJsonObject("body") {
+                                            put("type", "string")
+                                            put("description", "위키 페이지 내용 (Markdown 형식 지원)")
+                                        }
+                                        putJsonObject("parent_page_id") {
+                                            put("type", "string")
+                                            put(
+                                                    "description",
+                                                    "상위 페이지 ID (필수, dooray_wiki_list_pages로 조회 가능)"
+                                            )
                                         }
                                         putJsonArray("required") {
                                             add(JsonPrimitive("wiki_id"))

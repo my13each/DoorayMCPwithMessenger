@@ -19,16 +19,13 @@ fun moveFileToTrashTool(): Tool {
         description = "드라이브 파일을 휴지통으로 이동합니다. 휴지통으로 이동된 파일은 나중에 복원하거나 영구 삭제할 수 있습니다.",
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
-putJsonObject("drive_id") {
+                putJsonObject("drive_id") {
                     put("type", "string")
                     put("description", "드라이브 ID")
                 }
                 putJsonObject("file_id") {
                     put("type", "string")
                     put("description", "휴지통으로 이동할 파일 ID")
-                }
                 }
             }),
         outputSchema = null,

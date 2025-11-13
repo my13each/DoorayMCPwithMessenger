@@ -19,9 +19,7 @@ fun getDriveFilesTool(): Tool {
         description = "특정 드라이브의 파일 목록을 조회합니다. 폴더 구조를 탐색할 수 있습니다.",
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
-putJsonObject("drive_id") {
+                putJsonObject("drive_id") {
                     put("type", "string")
                     put("description", "드라이브 ID")
                 }
@@ -30,7 +28,7 @@ putJsonObject("drive_id") {
                     put("description", "상위 폴더 ID (선택사항, 루트는 null)")
                 }
                 putJsonObject("page") {
-                    put("type", "integer") 
+                    put("type", "integer")
                     put("description", "페이지 번호 (기본값: 0)")
                     put("default", 0)
                 }
@@ -38,7 +36,6 @@ putJsonObject("drive_id") {
                     put("type", "integer")
                     put("description", "페이지당 항목 수 (기본값: 50)")
                     put("default", 50)
-                }
                 }
             }),
         outputSchema = null,

@@ -26,9 +26,7 @@ fun updatePostCommentTool(): Tool {
                     Tool.Input(
                             properties =
                                     buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
-putJsonObject("project_id") {
+                                        putJsonObject("project_id") {
                                             put("type", "string")
                                             put(
                                                     "description",
@@ -61,8 +59,7 @@ putJsonObject("project_id") {
                                             )
                                             put("default", "text/x-markdown")
                                         }
-                }
-                putJsonArray("required") {
+                                        putJsonArray("required") {
                     add(JsonPrimitive("project_id"))
                     add(JsonPrimitive("post_id"))
                     add(JsonPrimitive("log_id"))

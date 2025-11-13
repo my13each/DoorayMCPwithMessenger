@@ -30,30 +30,27 @@ fun createSharedLinkTool(): Tool {
         """.trimIndent(),
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
-                    putJsonObject("drive_id") {
-                        put("type", "string")
-                        put("description", "드라이브 ID")
+                putJsonObject("drive_id") {
+                    put("type", "string")
+                    put("description", "드라이브 ID")
+                }
+                putJsonObject("file_id") {
+                    put("type", "string")
+                    put("description", "파일 ID")
+                }
+                putJsonObject("scope") {
+                    put("type", "string")
+                    put("description", "공유 범위 (기본값: memberAndGuest): member | memberAndGuest | memberAndGuestAndExternal")
+                    put("default", "memberAndGuest")
+                    putJsonObject("enum") {
+                        put("member", "손님 제외 조직 내 사용자")
+                        put("memberAndGuest", "조직 내 모든 사용자 (기본값)")
+                        put("memberAndGuestAndExternal", "내외부 상관없이 (조직 정책으로 차단될 수 있음)")
                     }
-                    putJsonObject("file_id") {
-                        put("type", "string")
-                        put("description", "파일 ID")
-                    }
-                    putJsonObject("scope") {
-                        put("type", "string")
-                        put("description", "공유 범위 (기본값: memberAndGuest): member | memberAndGuest | memberAndGuestAndExternal")
-                        put("default", "memberAndGuest")
-                        putJsonObject("enum") {
-                            put("member", "손님 제외 조직 내 사용자")
-                            put("memberAndGuest", "조직 내 모든 사용자 (기본값)")
-                            put("memberAndGuestAndExternal", "내외부 상관없이 (조직 정책으로 차단될 수 있음)")
-                        }
-                    }
-                    putJsonObject("expired_at") {
-                        put("type", "string")
-                        put("description", "만료 날짜 (ISO 8601 형식, 예: 2025-12-31T23:59:59+09:00)")
-                    }
+                }
+                putJsonObject("expired_at") {
+                    put("type", "string")
+                    put("description", "만료 날짜 (ISO 8601 형식, 예: 2025-12-31T23:59:59+09:00)")
                 }
                 putJsonArray("required") {
                     add(JsonPrimitive("drive_id"))

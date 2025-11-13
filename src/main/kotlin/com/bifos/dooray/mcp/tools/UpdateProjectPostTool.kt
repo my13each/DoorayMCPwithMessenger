@@ -18,8 +18,6 @@ fun updateProjectPostTool(): Tool {
             Tool.Input(
                 properties =
                     buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
 putJsonObject("project_id") {
                             put("type", "string")
                             put(
@@ -75,7 +73,6 @@ putJsonObject("project_id") {
                                 "만기일 (ISO8601 형식, 예: 2024-12-31T18:00:00+09:00) (선택사항)"
                             )
                         }
-                }
                 putJsonArray("required") {
                     add(JsonPrimitive("project_id"))
                     add(JsonPrimitive("post_id"))

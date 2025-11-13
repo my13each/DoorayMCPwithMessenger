@@ -25,9 +25,7 @@ fun getCalendarEventsTool(): Tool {
         description = "두레이 캘린더에서 지정된 기간의 일정 목록을 조회합니다. 특정 날짜나 기간의 일정을 확인할 때 사용하세요.",
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
-putJsonObject("calendars") {
+                putJsonObject("calendars") {
                     put("type", "string")
                     put("description", "조회할 캘린더 ID들 (쉼표로 구분, 비워두면 모든 캘린더)")
                 }
@@ -36,7 +34,7 @@ putJsonObject("calendars") {
                     put("description", "조회 시작 시간 (ISO 8601 형식, 예: 2025-04-11T00:00:00+09:00)")
                 }
                 putJsonObject("timeMax") {
-                    put("type", "string") 
+                    put("type", "string")
                     put("description", "조회 종료 시간 (ISO 8601 형식, 예: 2025-04-12T00:00:00+09:00)")
                 }
                 putJsonObject("postType") {
@@ -46,7 +44,6 @@ putJsonObject("calendars") {
                 putJsonObject("category") {
                     put("type", "string")
                     put("description", "카테고리 필터 (general: 일반 일정, post: 업무, milestone: 마일스톤, 선택사항)")
-                }
                 }
                 putJsonArray("required") {
                     add(JsonPrimitive("timeMin"))

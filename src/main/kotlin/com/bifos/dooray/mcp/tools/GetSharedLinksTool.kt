@@ -29,8 +29,6 @@ fun getSharedLinksTool(): Tool {
         """.trimIndent(),
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
 put("drive_id", buildJsonObject {
                     put("type", "string")
                     put("description", "드라이브 ID")
@@ -43,7 +41,6 @@ put("drive_id", buildJsonObject {
                     put("type", "boolean")
                     put("description", "true: 유효한 링크(기본값), false: 만료된 링크")
                 })
-                }
                 putJsonArray("required") {
                     add(JsonPrimitive("drive_id"))
                     add(JsonPrimitive("file_id"))

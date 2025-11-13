@@ -16,45 +16,42 @@ fun createCalendarEventTool(): Tool {
         description = "두레이 캘린더에 새로운 일정을 등록합니다. 회의, 약속 등의 일정을 생성할 때 사용하세요.",
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
-                    putJsonObject("calendarId") {
-                        put("type", "string")
-                        put("description", "일정을 등록할 캘린더 ID (dooray_calendar_list에서 확인 가능)")
-                    }
-                    putJsonObject("subject") {
-                        put("type", "string")
-                        put("description", "일정 제목")
-                    }
-                    putJsonObject("content") {
-                        put("type", "string")
-                        put("description", "일정 내용/설명")
-                    }
-                    putJsonObject("toMemberIds") {
-                        put("type", "string")
-                        put("description", "참석자 멤버 ID들 (쉼표로 구분, 예: member1,member2)")
-                    }
-                    putJsonObject("ccMemberIds") {
-                        put("type", "string")
-                        put("description", "참조자 멤버 ID들 (쉼표로 구분, 선택사항)")
-                    }
-                    putJsonObject("startedAt") {
-                        put("type", "string")
-                        put("description", "일정 시작 시간 (ISO 8601 형식, 예: 2025-04-11T09:00:00+09:00)")
-                    }
-                    putJsonObject("endedAt") {
-                        put("type", "string")
-                        put("description", "일정 종료 시간 (ISO 8601 형식, 예: 2025-04-11T11:00:00+09:00)")
-                    }
-                    putJsonObject("wholeDayFlag") {
-                        put("type", "boolean")
-                        put("description", "종일 일정 여부 (기본값: false)")
-                        put("default", false)
-                    }
-                    putJsonObject("location") {
-                        put("type", "string")
-                        put("description", "일정 장소 (선택사항)")
-                    }
+                putJsonObject("calendarId") {
+                    put("type", "string")
+                    put("description", "일정을 등록할 캘린더 ID (dooray_calendar_list에서 확인 가능)")
+                }
+                putJsonObject("subject") {
+                    put("type", "string")
+                    put("description", "일정 제목")
+                }
+                putJsonObject("content") {
+                    put("type", "string")
+                    put("description", "일정 내용/설명")
+                }
+                putJsonObject("toMemberIds") {
+                    put("type", "string")
+                    put("description", "참석자 멤버 ID들 (쉼표로 구분, 예: member1,member2)")
+                }
+                putJsonObject("ccMemberIds") {
+                    put("type", "string")
+                    put("description", "참조자 멤버 ID들 (쉼표로 구분, 선택사항)")
+                }
+                putJsonObject("startedAt") {
+                    put("type", "string")
+                    put("description", "일정 시작 시간 (ISO 8601 형식, 예: 2025-04-11T09:00:00+09:00)")
+                }
+                putJsonObject("endedAt") {
+                    put("type", "string")
+                    put("description", "일정 종료 시간 (ISO 8601 형식, 예: 2025-04-11T11:00:00+09:00)")
+                }
+                putJsonObject("wholeDayFlag") {
+                    put("type", "boolean")
+                    put("description", "종일 일정 여부 (기본값: false)")
+                    put("default", false)
+                }
+                putJsonObject("location") {
+                    put("type", "string")
+                    put("description", "일정 장소 (선택사항)")
                 }
                 putJsonArray("required") {
                     add(JsonPrimitive("calendarId"))

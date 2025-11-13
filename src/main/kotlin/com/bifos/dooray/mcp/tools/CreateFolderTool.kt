@@ -20,9 +20,7 @@ fun createFolderTool(): Tool {
         description = "드라이브에 새 폴더를 생성합니다. 지정된 상위 폴더 하위에 새 폴더를 생성합니다.",
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
-putJsonObject("drive_id") {
+                putJsonObject("drive_id") {
                     put("type", "string")
                     put("description", "드라이브 ID")
                 }
@@ -33,7 +31,6 @@ putJsonObject("drive_id") {
                 putJsonObject("folder_name") {
                     put("type", "string")
                     put("description", "생성할 폴더명")
-                }
                 }
             }),
         outputSchema = null,

@@ -24,29 +24,26 @@ fun deletePostCommentTool(): Tool {
             Tool.Input(
                 properties =
                     buildJsonObject {
-                        put("type", "object")
-                        putJsonObject("properties") {
-                            putJsonObject("project_id") {
-                                put("type", "string")
-                                put(
-                                    "description",
-                                    "프로젝트 ID (dooray_project_list_projects로 조회 가능)"
-                                )
-                            }
-                            putJsonObject("post_id") {
-                                put("type", "string")
-                                put(
-                                    "description",
-                                    "업무 ID (dooray_project_list_posts로 조회 가능)"
-                                )
-                            }
-                            putJsonObject("log_id") {
-                                put("type", "string")
-                                put(
-                                    "description",
-                                    "댓글 ID (dooray_project_get_post_comments로 조회 가능)"
-                                )
-                            }
+                        putJsonObject("project_id") {
+                            put("type", "string")
+                            put(
+                                "description",
+                                "프로젝트 ID (dooray_project_list_projects로 조회 가능)"
+                            )
+                        }
+                        putJsonObject("post_id") {
+                            put("type", "string")
+                            put(
+                                "description",
+                                "업무 ID (dooray_project_list_posts로 조회 가능)"
+                            )
+                        }
+                        putJsonObject("log_id") {
+                            put("type", "string")
+                            put(
+                                "description",
+                                "댓글 ID (dooray_project_get_post_comments로 조회 가능)"
+                            )
                         }
                         putJsonArray("required") {
                             add(JsonPrimitive("project_id"))

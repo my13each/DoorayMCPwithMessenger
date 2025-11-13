@@ -21,9 +21,7 @@ fun getProjectsTool(): Tool {
                     Tool.Input(
                             properties =
                                     buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
-putJsonObject("page") {
+                                        putJsonObject("page") {
                                             put("type", "integer")
                                             put("description", "페이지 번호 (0부터 시작, 기본값: 0)")
                                             put("default", 0)
@@ -57,8 +55,8 @@ putJsonObject("page") {
                                                     "프로젝트 상태 (active: 활성화, archived: 보관됨, deleted: 삭제됨)"
                                             )
                                         }
-                }
-            }),
+                                    }
+                    ),
             outputSchema = null,
             annotations = null
     )

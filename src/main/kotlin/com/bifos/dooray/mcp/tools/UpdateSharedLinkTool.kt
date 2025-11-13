@@ -29,8 +29,6 @@ fun updateSharedLinkTool(): Tool {
         """.trimIndent(),
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
 put("drive_id", buildJsonObject {
                     put("type", "string")
                     put("description", "드라이브 ID")
@@ -56,7 +54,6 @@ put("drive_id", buildJsonObject {
                         put("memberAndGuestAndExternal", "내외부 상관없이")
                     })
                 })
-                }
                 putJsonArray("required") {
                     add(JsonPrimitive("drive_id"))
                     add(JsonPrimitive("file_id"))

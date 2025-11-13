@@ -28,20 +28,17 @@ fun deleteSharedLinkTool(): Tool {
         """.trimIndent(),
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
-                    putJsonObject("drive_id") {
-                        put("type", "string")
-                        put("description", "드라이브 ID")
-                    }
-                    putJsonObject("file_id") {
-                        put("type", "string")
-                        put("description", "파일 ID")
-                    }
-                    putJsonObject("link_id") {
-                        put("type", "string")
-                        put("description", "삭제할 공유 링크 ID")
-                    }
+                putJsonObject("drive_id") {
+                    put("type", "string")
+                    put("description", "드라이브 ID")
+                }
+                putJsonObject("file_id") {
+                    put("type", "string")
+                    put("description", "파일 ID")
+                }
+                putJsonObject("link_id") {
+                    put("type", "string")
+                    put("description", "삭제할 공유 링크 ID")
                 }
                 putJsonArray("required") {
                     add(JsonPrimitive("drive_id"))

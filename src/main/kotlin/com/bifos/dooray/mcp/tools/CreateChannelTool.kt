@@ -25,33 +25,30 @@ fun createChannelTool(): Tool {
         description = "두레이 메신저에서 새로운 채널을 생성합니다. (private 또는 direct 타입)",
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
-                    putJsonObject("type") {
+                putJsonObject("type") {
+                    put("type", "string")
+                    put("description", "채널 타입 (private 또는 direct)")
+                }
+                putJsonObject("title") {
+                    put("type", "string")
+                    put("description", "채널 제목/이름")
+                }
+                putJsonObject("capacity") {
+                    put("type", "string")
+                    put("description", "채널 참가 가능 인원수 (문자열)")
+                    put("default", "100")
+                }
+                putJsonObject("member_ids") {
+                    put("type", "array")
+                    put("description", "초대할 멤버 ID 목록")
+                    putJsonObject("items") {
                         put("type", "string")
-                        put("description", "채널 타입 (private 또는 direct)")
                     }
-                    putJsonObject("title") {
-                        put("type", "string")
-                        put("description", "채널 제목/이름")
-                    }
-                    putJsonObject("capacity") {
-                        put("type", "string")
-                        put("description", "채널 참가 가능 인원수 (문자열)")
-                        put("default", "100")
-                    }
-                    putJsonObject("member_ids") {
-                        put("type", "array")
-                        put("description", "초대할 멤버 ID 목록")
-                        putJsonObject("items") {
-                            put("type", "string")
-                        }
-                    }
-                    putJsonObject("id_type") {
-                        put("type", "string")
-                        put("description", "멤버 ID 타입 (email 또는 memberId)")
-                        put("default", "memberId")
-                    }
+                }
+                putJsonObject("id_type") {
+                    put("type", "string")
+                    put("description", "멤버 ID 타입 (email 또는 memberId)")
+                    put("default", "memberId")
                 }
                 putJsonArray("required") {
                     add(JsonPrimitive("type"))

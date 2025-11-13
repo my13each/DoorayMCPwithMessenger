@@ -24,8 +24,6 @@ fun setProjectPostWorkflowTool(): Tool {
             Tool.Input(
                 properties =
                     buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
 putJsonObject("project_id") {
                             put("type", "string")
                             put("description", "프로젝트 ID (필수)")
@@ -41,7 +39,6 @@ putJsonObject("project_id") {
                             put("type", "string")
                             put("description", "변경할 워크플로우 ID (필수)")
                         }
-                }
                 putJsonArray("required") {
                     add(JsonPrimitive("project_id"))
                     add(JsonPrimitive("post_id"))

@@ -16,16 +16,13 @@ fun getCalendarEventDetailTool(): Tool {
         description = "두레이 캘린더에서 특정 일정의 상세 정보를 조회합니다. 전체 참석자 정보, 회의 내용, 첨부파일 등을 확인할 수 있습니다.",
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
-putJsonObject("calendarId") {
+                putJsonObject("calendarId") {
                     put("type", "string")
                     put("description", "캘린더 ID (dooray_calendar_list 또는 dooray_calendar_events에서 확인 가능)")
                 }
                 putJsonObject("eventId") {
                     put("type", "string")
                     put("description", "일정 ID (dooray_calendar_events에서 확인 가능)")
-                }
                 }
                 putJsonArray("required") {
                     add(JsonPrimitive("calendarId"))
