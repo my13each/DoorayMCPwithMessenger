@@ -11,6 +11,9 @@ import io.modelcontextprotocol.kotlin.sdk.Tool
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
+import kotlinx.serialization.json.putJsonArray
+import kotlinx.serialization.json.add
+import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.putJsonObject
 
 fun getWikiPagesTool(): Tool {
@@ -21,7 +24,9 @@ fun getWikiPagesTool(): Tool {
                     Tool.Input(
                             properties =
                                     buildJsonObject {
-                                        putJsonObject("project_id") {
+                put("type", "object")
+                putJsonObject("properties") {
+putJsonObject("project_id") {
                                             put("type", "string")
                                             put(
                                                     "description",
@@ -32,9 +37,11 @@ fun getWikiPagesTool(): Tool {
                                             put("type", "string")
                                             put("description", "상위 페이지 ID (선택사항, 없으면 루트 페이지들 조회)")
                                         }
-                                    },
-                            required = listOf("project_id")
-                    ),
+                }
+                putJsonArray("required") {
+                    add(JsonPrimitive("project_id"))
+                }
+            }),
             outputSchema = null,
             annotations = null
     )

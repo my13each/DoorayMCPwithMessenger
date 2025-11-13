@@ -11,6 +11,9 @@ import io.modelcontextprotocol.kotlin.sdk.Tool
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
+import kotlinx.serialization.json.putJsonArray
+import kotlinx.serialization.json.add
+import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.putJsonObject
 
 fun createProjectPostTool(): Tool {
@@ -21,58 +24,66 @@ fun createProjectPostTool(): Tool {
             Tool.Input(
                 properties =
                     buildJsonObject {
-                        putJsonObject("project_id") {
-                            put("type", "string")
-                            put("description", "프로젝트 ID (필수)")
+                        put("type", "object")
+                        putJsonObject("properties") {
+                            putJsonObject("project_id") {
+                                put("type", "string")
+                                put("description", "프로젝트 ID (필수)")
+                            }
+                            putJsonObject("subject") {
+                                put("type", "string")
+                                put("description", "업무 제목 (필수)")
+                            }
+                            putJsonObject("body") {
+                                put("type", "string")
+                                put("description", "업무 내용 (필수)")
+                            }
+                            putJsonObject("to_member_ids") {
+                                put("type", "array")
+                                putJsonObject("items") { put("type", "string") }
+                                put("description", "담당자 멤버 ID 목록 (필수)")
+                            }
+                            putJsonObject("cc_member_ids") {
+                                put("type", "array")
+                                putJsonObject("items") { put("type", "string") }
+                                put("description", "참조자 멤버 ID 목록 (선택사항)")
+                            }
+                            putJsonObject("parent_post_id") {
+                                put("type", "string")
+                                put("description", "상위 업무 ID - 하위 업무로 생성할 경우 (선택사항)")
+                            }
+                            putJsonObject("due_date") {
+                                put("type", "string")
+                                put(
+                                    "description",
+                                    "만기일 (ISO8601 형식, 예: 2024-12-31T18:00:00+09:00) (선택사항)"
+                                )
+                            }
+                            putJsonObject("milestone_id") {
+                                put("type", "string")
+                                put("description", "마일스톤 ID (선택사항)")
+                            }
+                            putJsonObject("tag_ids") {
+                                put("type", "array")
+                                putJsonObject("items") { put("type", "string") }
+                                put("description", "태그 ID 목록 (선택사항)")
+                            }
+                            putJsonObject("priority") {
+                                put("type", "string")
+                                put(
+                                    "description",
+                                    "우선순위 (highest, high, normal, low, lowest, none) (기본값: none)"
+                                )
+                                put("default", "none")
+                            }
                         }
-                        putJsonObject("subject") {
-                            put("type", "string")
-                            put("description", "업무 제목 (필수)")
+                        putJsonArray("required") {
+                            add(JsonPrimitive("project_id"))
+                            add(JsonPrimitive("subject"))
+                            add(JsonPrimitive("body"))
+                            add(JsonPrimitive("to_member_ids"))
                         }
-                        putJsonObject("body") {
-                            put("type", "string")
-                            put("description", "업무 내용 (필수)")
-                        }
-                        putJsonObject("to_member_ids") {
-                            put("type", "array")
-                            putJsonObject("items") { put("type", "string") }
-                            put("description", "담당자 멤버 ID 목록 (필수)")
-                        }
-                        putJsonObject("cc_member_ids") {
-                            put("type", "array")
-                            putJsonObject("items") { put("type", "string") }
-                            put("description", "참조자 멤버 ID 목록 (선택사항)")
-                        }
-                        putJsonObject("parent_post_id") {
-                            put("type", "string")
-                            put("description", "상위 업무 ID - 하위 업무로 생성할 경우 (선택사항)")
-                        }
-                        putJsonObject("due_date") {
-                            put("type", "string")
-                            put(
-                                "description",
-                                "만기일 (ISO8601 형식, 예: 2024-12-31T18:00:00+09:00) (선택사항)"
-                            )
-                        }
-                        putJsonObject("milestone_id") {
-                            put("type", "string")
-                            put("description", "마일스톤 ID (선택사항)")
-                        }
-                        putJsonObject("tag_ids") {
-                            put("type", "array")
-                            putJsonObject("items") { put("type", "string") }
-                            put("description", "태그 ID 목록 (선택사항)")
-                        }
-                        putJsonObject("priority") {
-                            put("type", "string")
-                            put(
-                                "description",
-                                "우선순위 (highest, high, normal, low, lowest, none) (기본값: none)"
-                            )
-                            put("default", "none")
-                        }
-                    },
-                required = listOf("project_id", "subject", "body", "to_member_ids")
+                    }
             ),
         outputSchema = null,
         annotations = null

@@ -11,6 +11,9 @@ import io.modelcontextprotocol.kotlin.sdk.Tool
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
+import kotlinx.serialization.json.putJsonArray
+import kotlinx.serialization.json.add
+import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.putJsonObject
 
 fun getProjectPostsTool(): Tool {
@@ -21,7 +24,9 @@ fun getProjectPostsTool(): Tool {
             Tool.Input(
                 properties =
                     buildJsonObject {
-                        putJsonObject("project_id") {
+                put("type", "object")
+                putJsonObject("properties") {
+putJsonObject("project_id") {
                             put("type", "string")
                             put("description", "프로젝트 ID (필수)")
                         }
@@ -81,9 +86,11 @@ fun getProjectPostsTool(): Tool {
                                 "정렬 조건 (postDueAt, postUpdatedAt, createdAt, 역순은 앞에 '-' 추가) (선택사항)"
                             )
                         }
-                    },
-                required = listOf("project_id")
-            ),
+                }
+                putJsonArray("required") {
+                    add(JsonPrimitive("project_id"))
+                }
+            }),
         outputSchema = null,
         annotations = null
     )

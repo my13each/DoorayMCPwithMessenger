@@ -19,7 +19,9 @@ fun updateWikiPageTool(): Tool {
             Tool.Input(
                 properties =
                     buildJsonObject {
-                        putJsonObject("wiki_id") {
+                put("type", "object")
+                putJsonObject("properties") {
+putJsonObject("wiki_id") {
                             put("type", "string")
                             put(
                                 "description",
@@ -52,9 +54,12 @@ fun updateWikiPageTool(): Tool {
                             )
                             putJsonObject("items") { put("type", "string") }
                         }
-                    },
-                required = listOf("wiki_id", "page_id")
-            ),
+                }
+                putJsonArray("required") {
+                    add(JsonPrimitive("wiki_id"))
+                    add(JsonPrimitive("page_id"))
+                }
+            }),
         outputSchema = null,
         annotations = null
     )

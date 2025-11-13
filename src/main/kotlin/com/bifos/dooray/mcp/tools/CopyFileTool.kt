@@ -20,7 +20,9 @@ fun copyFileTool(): Tool {
         description = "드라이브 파일을 다른 폴더나 드라이브로 복사합니다. 원본 파일은 그대로 유지되고 복사본이 생성됩니다.",
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                putJsonObject("drive_id") {
+                put("type", "object")
+                putJsonObject("properties") {
+putJsonObject("drive_id") {
                     put("type", "string")
                     put("description", "원본 파일이 있는 드라이브 ID")
                 }
@@ -36,8 +38,8 @@ fun copyFileTool(): Tool {
                     put("type", "string")
                     put("description", "복사될 대상 폴더 ID")
                 }
-            }
-        ),
+                }
+            }),
         outputSchema = null,
         annotations = null
     )

@@ -12,6 +12,10 @@ import io.modelcontextprotocol.kotlin.sdk.Tool
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
+import kotlinx.serialization.json.putJsonObject
+import kotlinx.serialization.json.putJsonArray
+import kotlinx.serialization.json.add
+import kotlinx.serialization.json.JsonPrimitive
 
 fun createSharedLinkTool(): Tool {
     return Tool(
@@ -26,30 +30,37 @@ fun createSharedLinkTool(): Tool {
         """.trimIndent(),
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                put("drive_id", buildJsonObject {
-                    put("type", "string")
-                    put("description", "드라이브 ID")
-                })
-                put("file_id", buildJsonObject {
-                    put("type", "string")
-                    put("description", "파일 ID")
-                })
-                put("scope", buildJsonObject {
-                    put("type", "string")
-                    put("description", "공유 범위 (기본값: memberAndGuest): member | memberAndGuest | memberAndGuestAndExternal")
-                    put("default", "memberAndGuest")
-                    put("enum", buildJsonObject {
-                        put("member", "손님 제외 조직 내 사용자")
-                        put("memberAndGuest", "조직 내 모든 사용자 (기본값)")
-                        put("memberAndGuestAndExternal", "내외부 상관없이 (조직 정책으로 차단될 수 있음)")
-                    })
-                })
-                put("expired_at", buildJsonObject {
-                    put("type", "string")
-                    put("description", "만료 날짜 (ISO 8601 형식, 예: 2025-12-31T23:59:59+09:00)")
-                })
-            },
-            required = listOf("drive_id", "file_id", "expired_at")  // scope는 선택적 (기본값: memberAndGuest)
+                put("type", "object")
+                putJsonObject("properties") {
+                    putJsonObject("drive_id") {
+                        put("type", "string")
+                        put("description", "드라이브 ID")
+                    }
+                    putJsonObject("file_id") {
+                        put("type", "string")
+                        put("description", "파일 ID")
+                    }
+                    putJsonObject("scope") {
+                        put("type", "string")
+                        put("description", "공유 범위 (기본값: memberAndGuest): member | memberAndGuest | memberAndGuestAndExternal")
+                        put("default", "memberAndGuest")
+                        putJsonObject("enum") {
+                            put("member", "손님 제외 조직 내 사용자")
+                            put("memberAndGuest", "조직 내 모든 사용자 (기본값)")
+                            put("memberAndGuestAndExternal", "내외부 상관없이 (조직 정책으로 차단될 수 있음)")
+                        }
+                    }
+                    putJsonObject("expired_at") {
+                        put("type", "string")
+                        put("description", "만료 날짜 (ISO 8601 형식, 예: 2025-12-31T23:59:59+09:00)")
+                    }
+                }
+                putJsonArray("required") {
+                    add(JsonPrimitive("drive_id"))
+                    add(JsonPrimitive("file_id"))
+                    add(JsonPrimitive("expired_at"))
+                }
+            }
         ),
         outputSchema = null,
         annotations = null

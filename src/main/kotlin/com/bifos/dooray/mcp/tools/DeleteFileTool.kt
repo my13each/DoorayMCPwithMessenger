@@ -19,7 +19,9 @@ fun deleteFileTool(): Tool {
         description = "드라이브에서 파일을 영구 삭제합니다. 휴지통에 있는 파일만 영구 삭제할 수 있습니다.",
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                putJsonObject("drive_id") {
+                put("type", "object")
+                putJsonObject("properties") {
+putJsonObject("drive_id") {
                     put("type", "string")
                     put("description", "드라이브 ID")
                 }
@@ -27,8 +29,8 @@ fun deleteFileTool(): Tool {
                     put("type", "string")
                     put("description", "삭제할 파일 ID")
                 }
-            }
-        ),
+                }
+            }),
         outputSchema = null,
         annotations = null
     )

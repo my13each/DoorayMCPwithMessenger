@@ -13,6 +13,9 @@ import io.modelcontextprotocol.kotlin.sdk.Tool
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
+import kotlinx.serialization.json.putJsonArray
+import kotlinx.serialization.json.add
+import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.putJsonObject
 
 fun createPostCommentTool(): Tool {
@@ -23,34 +26,41 @@ fun createPostCommentTool(): Tool {
             Tool.Input(
                 properties =
                     buildJsonObject {
-                        putJsonObject("project_id") {
-                            put("type", "string")
-                            put(
-                                "description",
-                                "프로젝트 ID (dooray_project_list_projects로 조회 가능)"
-                            )
+                        put("type", "object")
+                        putJsonObject("properties") {
+                            putJsonObject("project_id") {
+                                put("type", "string")
+                                put(
+                                    "description",
+                                    "프로젝트 ID (dooray_project_list_projects로 조회 가능)"
+                                )
+                            }
+                            putJsonObject("post_id") {
+                                put("type", "string")
+                                put(
+                                    "description",
+                                    "업무 ID (dooray_project_list_posts로 조회 가능)"
+                                )
+                            }
+                            putJsonObject("content") {
+                                put("type", "string")
+                                put("description", "댓글 내용")
+                            }
+                            putJsonObject("mime_type") {
+                                put("type", "string")
+                                put(
+                                    "description",
+                                    "MIME 타입 (text/x-markdown 또는 text/html, 기본값: text/x-markdown)"
+                                )
+                                put("default", "text/x-markdown")
+                            }
                         }
-                        putJsonObject("post_id") {
-                            put("type", "string")
-                            put(
-                                "description",
-                                "업무 ID (dooray_project_list_posts로 조회 가능)"
-                            )
+                        putJsonArray("required") {
+                            add(JsonPrimitive("project_id"))
+                            add(JsonPrimitive("post_id"))
+                            add(JsonPrimitive("content"))
                         }
-                        putJsonObject("content") {
-                            put("type", "string")
-                            put("description", "댓글 내용")
-                        }
-                        putJsonObject("mime_type") {
-                            put("type", "string")
-                            put(
-                                "description",
-                                "MIME 타입 (text/x-markdown 또는 text/html, 기본값: text/x-markdown)"
-                            )
-                            put("default", "text/x-markdown")
-                        }
-                    },
-                required = listOf("project_id", "post_id", "content")
+                    }
             ),
         outputSchema = null,
         annotations = null

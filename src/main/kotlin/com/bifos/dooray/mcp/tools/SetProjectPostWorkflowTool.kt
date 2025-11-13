@@ -11,6 +11,9 @@ import io.modelcontextprotocol.kotlin.sdk.Tool
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
+import kotlinx.serialization.json.putJsonArray
+import kotlinx.serialization.json.add
+import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.putJsonObject
 
 fun setProjectPostWorkflowTool(): Tool {
@@ -21,7 +24,9 @@ fun setProjectPostWorkflowTool(): Tool {
             Tool.Input(
                 properties =
                     buildJsonObject {
-                        putJsonObject("project_id") {
+                put("type", "object")
+                putJsonObject("properties") {
+putJsonObject("project_id") {
                             put("type", "string")
                             put("description", "프로젝트 ID (필수)")
                         }
@@ -36,9 +41,13 @@ fun setProjectPostWorkflowTool(): Tool {
                             put("type", "string")
                             put("description", "변경할 워크플로우 ID (필수)")
                         }
-                    },
-                required = listOf("project_id", "post_id", "workflow_id")
-            ),
+                }
+                putJsonArray("required") {
+                    add(JsonPrimitive("project_id"))
+                    add(JsonPrimitive("post_id"))
+                    add(JsonPrimitive("workflow_id"))
+                }
+            }),
         outputSchema = null,
         annotations = null
     )

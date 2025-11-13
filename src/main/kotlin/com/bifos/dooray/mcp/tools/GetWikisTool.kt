@@ -21,7 +21,9 @@ fun getWikisTool(): Tool {
             Tool.Input(
                 properties =
                     buildJsonObject {
-                        putJsonObject("page") {
+                put("type", "object")
+                putJsonObject("properties") {
+putJsonObject("page") {
                             put("type", "integer")
                             put("description", "조회할 페이지 번호 (0부터 시작, 기본값: 0)")
                             put("default", 0)
@@ -31,8 +33,8 @@ fun getWikisTool(): Tool {
                             put("description", "한 페이지당 결과 수 (기본값: 200)")
                             put("default", 200)
                         }
-                    }
-            ),
+                }
+            }),
         outputSchema = null,
         annotations = null
     )

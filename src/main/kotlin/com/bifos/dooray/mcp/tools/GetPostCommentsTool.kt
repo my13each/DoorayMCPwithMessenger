@@ -12,6 +12,9 @@ import io.modelcontextprotocol.kotlin.sdk.Tool
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
+import kotlinx.serialization.json.putJsonArray
+import kotlinx.serialization.json.add
+import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.putJsonObject
 
 fun getPostCommentsTool(): Tool {
@@ -22,7 +25,9 @@ fun getPostCommentsTool(): Tool {
                     Tool.Input(
                             properties =
                                     buildJsonObject {
-                                        putJsonObject("project_id") {
+                put("type", "object")
+                putJsonObject("properties") {
+putJsonObject("project_id") {
                                             put("type", "string")
                                             put(
                                                     "description",
@@ -54,9 +59,12 @@ fun getPostCommentsTool(): Tool {
                                             )
                                             put("default", "createdAt")
                                         }
-                                    },
-                            required = listOf("project_id", "post_id")
-                    ),
+                }
+                putJsonArray("required") {
+                    add(JsonPrimitive("project_id"))
+                    add(JsonPrimitive("post_id"))
+                }
+            }),
             outputSchema = null,
             annotations = null
     )

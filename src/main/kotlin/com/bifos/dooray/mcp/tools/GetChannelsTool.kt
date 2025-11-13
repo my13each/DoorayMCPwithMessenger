@@ -17,23 +17,26 @@ fun getChannelsTool(): Tool {
         description = "두레이 메신저에서 접근 가능한 채널 목록을 조회합니다. 최근 활성 채널만 필터링할 수 있어 대용량 결과를 방지합니다.",
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                put("page", buildJsonObject {
-                    put("type", JsonPrimitive("integer"))
-                    put("description", JsonPrimitive("페이지 번호 (0부터 시작, 기본값: 0)"))
-                    put("minimum", JsonPrimitive(0))
-                })
-                put("size", buildJsonObject {
-                    put("type", JsonPrimitive("integer"))
-                    put("description", JsonPrimitive("페이지당 채널 수 (기본값: 모든 채널)"))
-                    put("minimum", JsonPrimitive(1))
-                    put("maximum", JsonPrimitive(1000))
-                })
-                put("recentMonths", buildJsonObject {
-                    put("type", JsonPrimitive("integer"))
-                    put("description", JsonPrimitive("최근 N개월 내 업데이트된 채널만 필터링 (예: 3개월=3, 기본값: 필터링 없음)"))
-                    put("minimum", JsonPrimitive(1))
-                    put("maximum", JsonPrimitive(12))
-                })
+                put("type", "object")
+                putJsonObject("properties") {
+                    putJsonObject("page") {
+                        put("type", "integer")
+                        put("description", "페이지 번호 (0부터 시작, 기본값: 0)")
+                        put("minimum", 0)
+                    }
+                    putJsonObject("size") {
+                        put("type", "integer")
+                        put("description", "페이지당 채널 수 (기본값: 모든 채널)")
+                        put("minimum", 1)
+                        put("maximum", 1000)
+                    }
+                    putJsonObject("recentMonths") {
+                        put("type", "integer")
+                        put("description", "최근 N개월 내 업데이트된 채널만 필터링 (예: 3개월=3, 기본값: 필터링 없음)")
+                        put("minimum", 1)
+                        put("maximum", 12)
+                    }
+                }
             }
         ),
         outputSchema = null,

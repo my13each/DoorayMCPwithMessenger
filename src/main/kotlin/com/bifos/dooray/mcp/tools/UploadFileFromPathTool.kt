@@ -12,6 +12,9 @@ import io.modelcontextprotocol.kotlin.sdk.Tool
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
+import kotlinx.serialization.json.putJsonArray
+import kotlinx.serialization.json.add
+import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.putJsonObject
 import java.io.File
 import java.util.Base64
@@ -29,7 +32,9 @@ fun uploadFileFromPathTool(): Tool {
         """.trimIndent(),
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                putJsonObject("drive_id") {
+                put("type", "object")
+                putJsonObject("properties") {
+putJsonObject("drive_id") {
                     put("type", "string")
                     put("description", "ドライブID")
                 }
@@ -45,9 +50,13 @@ fun uploadFileFromPathTool(): Tool {
                     put("type", "string")
                     put("description", "MIMEタイプ（例: text/plain, image/jpeg, image/png, application/pdf）省略可能")
                 }
-            },
-            required = listOf("drive_id", "file_path", "parent_id")
-        ),
+                }
+                putJsonArray("required") {
+                    add(JsonPrimitive("drive_id"))
+                    add(JsonPrimitive("file_path"))
+                    add(JsonPrimitive("parent_id"))
+                }
+            }),
         outputSchema = null,
         annotations = null
     )

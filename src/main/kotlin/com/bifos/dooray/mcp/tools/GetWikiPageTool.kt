@@ -11,6 +11,9 @@ import io.modelcontextprotocol.kotlin.sdk.Tool
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
+import kotlinx.serialization.json.putJsonArray
+import kotlinx.serialization.json.add
+import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.putJsonObject
 
 fun getWikiPageTool(): Tool {
@@ -22,22 +25,28 @@ fun getWikiPageTool(): Tool {
             Tool.Input(
                 properties =
                     buildJsonObject {
-                        putJsonObject("project_id") {
-                            put("type", "string")
-                            put(
-                                "description",
-                                "위키 프로젝트 ID (dooray_wiki_list_projects로 조회 가능)"
-                            )
+                        put("type", "object")
+                        putJsonObject("properties") {
+                            putJsonObject("project_id") {
+                                put("type", "string")
+                                put(
+                                    "description",
+                                    "위키 프로젝트 ID (dooray_wiki_list_projects로 조회 가능)"
+                                )
+                            }
+                            putJsonObject("page_id") {
+                                put("type", "string")
+                                put(
+                                    "description",
+                                    "위키 페이지 ID (dooray_wiki_list_pages로 조회 가능)"
+                                )
+                            }
                         }
-                        putJsonObject("page_id") {
-                            put("type", "string")
-                            put(
-                                "description",
-                                "위키 페이지 ID (dooray_wiki_list_pages로 조회 가능)"
-                            )
+                        putJsonArray("required") {
+                            add(JsonPrimitive("project_id"))
+                            add(JsonPrimitive("page_id"))
                         }
-                    },
-                required = listOf("project_id", "page_id")
+                    }
             ),
         outputSchema = null,
         annotations = null

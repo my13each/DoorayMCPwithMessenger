@@ -11,6 +11,9 @@ import io.modelcontextprotocol.kotlin.sdk.Tool
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
+import kotlinx.serialization.json.putJsonArray
+import kotlinx.serialization.json.add
+import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.putJsonObject
 
 fun setProjectPostDoneTool(): Tool {
@@ -22,7 +25,9 @@ fun setProjectPostDoneTool(): Tool {
             Tool.Input(
                 properties =
                     buildJsonObject {
-                        putJsonObject("project_id") {
+                put("type", "object")
+                putJsonObject("properties") {
+putJsonObject("project_id") {
                             put("type", "string")
                             put("description", "프로젝트 ID (필수)")
                         }
@@ -33,9 +38,12 @@ fun setProjectPostDoneTool(): Tool {
                                 "업무 ID (dooray_project_list_posts로 조회 가능) (필수)"
                             )
                         }
-                    },
-                required = listOf("project_id", "post_id")
-            ),
+                }
+                putJsonArray("required") {
+                    add(JsonPrimitive("project_id"))
+                    add(JsonPrimitive("post_id"))
+                }
+            }),
         outputSchema = null,
         annotations = null
     )

@@ -9,13 +9,20 @@ import io.modelcontextprotocol.kotlin.sdk.CallToolResult
 import io.modelcontextprotocol.kotlin.sdk.TextContent
 import io.modelcontextprotocol.kotlin.sdk.Tool
 import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
+import kotlinx.serialization.json.putJsonObject
 
 fun getDrivesTool(): Tool {
     return Tool(
         name = "dooray_drive_list",
         description = "Dooray에서 접근 가능한 드라이브 목록을 조회합니다.",
         inputSchema = Tool.Input(
-            properties = buildJsonObject { }
+            properties = buildJsonObject {
+                put("type", "object")
+                putJsonObject("properties") {
+                    // 드라이브 목록 조회는 별도 파라미터가 필요하지 않음
+                }
+            }
         ),
         outputSchema = null,
         annotations = null

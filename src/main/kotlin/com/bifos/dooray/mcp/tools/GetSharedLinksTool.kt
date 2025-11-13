@@ -11,6 +11,10 @@ import io.modelcontextprotocol.kotlin.sdk.Tool
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
+import kotlinx.serialization.json.putJsonObject
+import kotlinx.serialization.json.putJsonArray
+import kotlinx.serialization.json.add
+import kotlinx.serialization.json.JsonPrimitive
 
 fun getSharedLinksTool(): Tool {
     return Tool(
@@ -25,7 +29,9 @@ fun getSharedLinksTool(): Tool {
         """.trimIndent(),
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                put("drive_id", buildJsonObject {
+                put("type", "object")
+                putJsonObject("properties") {
+put("drive_id", buildJsonObject {
                     put("type", "string")
                     put("description", "드라이브 ID")
                 })
@@ -37,9 +43,12 @@ fun getSharedLinksTool(): Tool {
                     put("type", "boolean")
                     put("description", "true: 유효한 링크(기본값), false: 만료된 링크")
                 })
-            },
-            required = listOf("drive_id", "file_id")
-        ),
+                }
+                putJsonArray("required") {
+                    add(JsonPrimitive("drive_id"))
+                    add(JsonPrimitive("file_id"))
+                }
+            }),
         outputSchema = null,
         annotations = null
     )

@@ -11,6 +11,9 @@ import io.modelcontextprotocol.kotlin.sdk.Tool
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
+import kotlinx.serialization.json.putJsonArray
+import kotlinx.serialization.json.add
+import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.putJsonObject
 
 fun deletePostCommentTool(): Tool {
@@ -21,29 +24,36 @@ fun deletePostCommentTool(): Tool {
             Tool.Input(
                 properties =
                     buildJsonObject {
-                        putJsonObject("project_id") {
-                            put("type", "string")
-                            put(
-                                "description",
-                                "프로젝트 ID (dooray_project_list_projects로 조회 가능)"
-                            )
+                        put("type", "object")
+                        putJsonObject("properties") {
+                            putJsonObject("project_id") {
+                                put("type", "string")
+                                put(
+                                    "description",
+                                    "프로젝트 ID (dooray_project_list_projects로 조회 가능)"
+                                )
+                            }
+                            putJsonObject("post_id") {
+                                put("type", "string")
+                                put(
+                                    "description",
+                                    "업무 ID (dooray_project_list_posts로 조회 가능)"
+                                )
+                            }
+                            putJsonObject("log_id") {
+                                put("type", "string")
+                                put(
+                                    "description",
+                                    "댓글 ID (dooray_project_get_post_comments로 조회 가능)"
+                                )
+                            }
                         }
-                        putJsonObject("post_id") {
-                            put("type", "string")
-                            put(
-                                "description",
-                                "업무 ID (dooray_project_list_posts로 조회 가능)"
-                            )
+                        putJsonArray("required") {
+                            add(JsonPrimitive("project_id"))
+                            add(JsonPrimitive("post_id"))
+                            add(JsonPrimitive("log_id"))
                         }
-                        putJsonObject("log_id") {
-                            put("type", "string")
-                            put(
-                                "description",
-                                "댓글 ID (dooray_project_get_post_comments로 조회 가능)"
-                            )
-                        }
-                    },
-                required = listOf("project_id", "post_id", "log_id")
+                    }
             ),
         outputSchema = null,
         annotations = null

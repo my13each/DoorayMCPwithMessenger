@@ -11,6 +11,10 @@ import io.modelcontextprotocol.kotlin.sdk.Tool
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
+import kotlinx.serialization.json.putJsonObject
+import kotlinx.serialization.json.putJsonArray
+import kotlinx.serialization.json.add
+import kotlinx.serialization.json.JsonPrimitive
 
 fun getSharedLinkDetailTool(): Tool {
     return Tool(
@@ -26,20 +30,27 @@ fun getSharedLinkDetailTool(): Tool {
         """.trimIndent(),
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                put("drive_id", buildJsonObject {
-                    put("type", "string")
-                    put("description", "드라이브 ID")
-                })
-                put("file_id", buildJsonObject {
-                    put("type", "string")
-                    put("description", "파일 ID")
-                })
-                put("link_id", buildJsonObject {
-                    put("type", "string")
-                    put("description", "공유 링크 ID")
-                })
-            },
-            required = listOf("drive_id", "file_id", "link_id")
+                put("type", "object")
+                putJsonObject("properties") {
+                    putJsonObject("drive_id") {
+                        put("type", "string")
+                        put("description", "드라이브 ID")
+                    }
+                    putJsonObject("file_id") {
+                        put("type", "string")
+                        put("description", "파일 ID")
+                    }
+                    putJsonObject("link_id") {
+                        put("type", "string")
+                        put("description", "공유 링크 ID")
+                    }
+                }
+                putJsonArray("required") {
+                    add(JsonPrimitive("drive_id"))
+                    add(JsonPrimitive("file_id"))
+                    add(JsonPrimitive("link_id"))
+                }
+            }
         ),
         outputSchema = null,
         annotations = null

@@ -12,6 +12,10 @@ import io.modelcontextprotocol.kotlin.sdk.Tool
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
+import kotlinx.serialization.json.putJsonObject
+import kotlinx.serialization.json.putJsonArray
+import kotlinx.serialization.json.add
+import kotlinx.serialization.json.JsonPrimitive
 
 fun updateSharedLinkTool(): Tool {
     return Tool(
@@ -25,7 +29,9 @@ fun updateSharedLinkTool(): Tool {
         """.trimIndent(),
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                put("drive_id", buildJsonObject {
+                put("type", "object")
+                putJsonObject("properties") {
+put("drive_id", buildJsonObject {
                     put("type", "string")
                     put("description", "드라이브 ID")
                 })
@@ -50,9 +56,15 @@ fun updateSharedLinkTool(): Tool {
                         put("memberAndGuestAndExternal", "내외부 상관없이")
                     })
                 })
-            },
-            required = listOf("drive_id", "file_id", "link_id", "expired_at", "scope")
-        ),
+                }
+                putJsonArray("required") {
+                    add(JsonPrimitive("drive_id"))
+                    add(JsonPrimitive("file_id"))
+                    add(JsonPrimitive("link_id"))
+                    add(JsonPrimitive("expired_at"))
+                    add(JsonPrimitive("scope"))
+                }
+            }),
         outputSchema = null,
         annotations = null
     )

@@ -13,6 +13,9 @@ import io.modelcontextprotocol.kotlin.sdk.Tool
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
+import kotlinx.serialization.json.putJsonArray
+import kotlinx.serialization.json.add
+import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.putJsonObject
 
 fun updatePostCommentTool(): Tool {
@@ -23,7 +26,9 @@ fun updatePostCommentTool(): Tool {
                     Tool.Input(
                             properties =
                                     buildJsonObject {
-                                        putJsonObject("project_id") {
+                put("type", "object")
+                putJsonObject("properties") {
+putJsonObject("project_id") {
                                             put("type", "string")
                                             put(
                                                     "description",
@@ -56,9 +61,14 @@ fun updatePostCommentTool(): Tool {
                                             )
                                             put("default", "text/x-markdown")
                                         }
-                                    },
-                            required = listOf("project_id", "post_id", "log_id", "content")
-                    ),
+                }
+                putJsonArray("required") {
+                    add(JsonPrimitive("project_id"))
+                    add(JsonPrimitive("post_id"))
+                    add(JsonPrimitive("log_id"))
+                    add(JsonPrimitive("content"))
+                }
+            }),
             outputSchema = null,
             annotations = null
     )

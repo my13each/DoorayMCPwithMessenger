@@ -10,6 +10,8 @@ import io.modelcontextprotocol.kotlin.sdk.CallToolResult
 import io.modelcontextprotocol.kotlin.sdk.TextContent
 import io.modelcontextprotocol.kotlin.sdk.Tool
 import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
+import kotlinx.serialization.json.putJsonObject
 
 fun getCalendarsTool(): Tool {
     return Tool(
@@ -17,7 +19,10 @@ fun getCalendarsTool(): Tool {
         description = "두레이에서 접근 가능한 캘린더 목록을 조회합니다. 캘린더 ID를 찾거나 사용 가능한 캘린더를 확인할 때 사용하세요.",
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                // 캘린더 목록 조회는 별도 파라미터가 필요하지 않음
+                put("type", "object")
+                putJsonObject("properties") {
+                    // 캘린더 목록 조회는 별도 파라미터가 필요하지 않음
+                }
             }
         ),
         outputSchema = null,

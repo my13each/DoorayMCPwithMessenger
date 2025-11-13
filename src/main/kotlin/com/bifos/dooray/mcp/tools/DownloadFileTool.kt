@@ -20,7 +20,9 @@ fun downloadFileTool(): Tool {
         description = "드라이브에서 파일을 다운로드합니다. 파일 내용을 Base64로 인코딩하여 반환합니다.",
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                putJsonObject("drive_id") {
+                put("type", "object")
+                putJsonObject("properties") {
+putJsonObject("drive_id") {
                     put("type", "string")
                     put("description", "드라이브 ID")
                 }
@@ -28,8 +30,8 @@ fun downloadFileTool(): Tool {
                     put("type", "string")
                     put("description", "다운로드할 파일 ID")
                 }
-            }
-        ),
+                }
+            }),
         outputSchema = null,
         annotations = null
     )
