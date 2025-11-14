@@ -16,8 +16,7 @@ fun createCalendarEventTool(): Tool {
         description = "두레이 캘린더에 새로운 일정을 등록합니다. 회의, 약속 등의 일정을 생성할 때 사용하세요.",
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
+                
 
                 putJsonObject("calendarId") {
                     put("type", "string")
@@ -56,17 +55,8 @@ fun createCalendarEventTool(): Tool {
                     put("type", "string")
                     put("description", "일정 장소 (선택사항)")
                 }
-            
-                }
-                putJsonArray("required") {
-                    add("calendarId")
-                    add("subject")
-                    add("content")
-                    add("startedAt")
-                    add("endedAt")
-                    add("toMemberIds")
-                }
-            }
+            },
+            required = listOf("calendarId", "subject", "content", "startedAt", "endedAt", "toMemberIds")
         ),
         outputSchema = null,
         annotations = null

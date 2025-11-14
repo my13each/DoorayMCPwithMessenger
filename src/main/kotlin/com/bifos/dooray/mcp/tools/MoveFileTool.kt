@@ -22,8 +22,7 @@ fun moveFileTool(): Tool {
         description = "드라이브 파일을 다른 폴더로 이동합니다. 원본 파일은 새 위치로 이동되며 기존 위치에서는 사라집니다.",
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
+                
 
                 putJsonObject("drive_id") {
                     put("type", "string")
@@ -37,13 +36,8 @@ fun moveFileTool(): Tool {
                     put("type", "string")
                     put("description", "이동될 대상 폴더 ID")
                 }
-                }
-                putJsonArray("required") {
-                    add("drive_id")
-                    add("file_id")
-                    add("destination_folder_id")
-                }
-            }
+            },
+            required = listOf("drive_id", "file_id", "destination_folder_id")
         ),
         outputSchema = null,
         annotations = null

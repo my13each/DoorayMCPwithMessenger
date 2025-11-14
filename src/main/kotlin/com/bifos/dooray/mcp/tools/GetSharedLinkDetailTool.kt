@@ -30,8 +30,7 @@ fun getSharedLinkDetailTool(): Tool {
         """.trimIndent(),
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
+                
 
                     putJsonObject("drive_id") {
                         put("type", "string")
@@ -45,14 +44,8 @@ fun getSharedLinkDetailTool(): Tool {
                         put("type", "string")
                         put("description", "공유 링크 ID")
                     }
-            
-                }
-                putJsonArray("required") {
-                    add("drive_id")
-                    add("file_id")
-                    add("link_id")
-                }
-            }
+            },
+            required = listOf("drive_id", "file_id", "link_id")
         ),
         outputSchema = null,
         annotations = null

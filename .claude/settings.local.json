@@ -33,7 +33,12 @@
       "Bash(./gradlew run:*)",
       "Bash(./gradlew clean build:*)",
       "Bash(python3:*)",
-      "Bash(./gradlew -q run:*)"
+      "Bash(./gradlew -q run:*)",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "Bash(docker run:*)",
+      "Bash(jar tf:*)",
+      "Bash(docker logs:*)"
     ],
     "deny": [],
     "ask": [],
