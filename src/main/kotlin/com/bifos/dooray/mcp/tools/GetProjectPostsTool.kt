@@ -24,6 +24,9 @@ fun getProjectPostsTool(): Tool {
             Tool.Input(
                 properties =
                     buildJsonObject {
+                put("type", "object")
+                putJsonObject("properties") {
+
 putJsonObject("project_id") {
                             put("type", "string")
                             put("description", "프로젝트 ID (필수)")
@@ -84,9 +87,13 @@ putJsonObject("project_id") {
                                 "정렬 조건 (postDueAt, postUpdatedAt, createdAt, 역순은 앞에 '-' 추가) (선택사항)"
                             )
                         }
-                    },
-                required = listOf("project_id")
-            ),
+                    
+                }
+                putJsonArray("required") {
+                    add("project_id")
+                }
+            }
+        ),
         outputSchema = null,
         annotations = null
     )

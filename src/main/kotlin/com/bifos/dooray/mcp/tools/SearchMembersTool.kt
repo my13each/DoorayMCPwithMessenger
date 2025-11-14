@@ -23,6 +23,9 @@ fun searchMembersTool(): Tool {
         description = "두레이 조직의 멤버를 검색합니다. 이름, 이메일, 사용자 코드 등으로 검색할 수 있습니다.",
         inputSchema = Tool.Input(
             properties = buildJsonObject {
+                put("type", "object")
+                putJsonObject("properties") {
+
                 putJsonObject("email") {
                     put("type", "string")
                     put("description", "검색할 멤버 이메일 주소 (필수). 정확히 일치하는 이메일로 검색합니다.")
@@ -45,8 +48,12 @@ fun searchMembersTool(): Tool {
                     put("description", "페이지 크기 (기본값: 20, 최대: 100)")
                     put("default", 20)
                 }
-            },
-            required = listOf("email")
+            
+                }
+                putJsonArray("required") {
+                    add("email")
+                }
+            }
         ),
         outputSchema = null,
         annotations = null

@@ -1,0 +1,1873 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.bifos.dooray.mcp.tools.ToolSchemaValidationTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2025-11-14T01:41:59.901Z" hostname="MN01609710.local" time="0.036">
+  <properties/>
+  <testcase name="validate all tool schemas()" classname="com.bifos.dooray.mcp.tools.ToolSchemaValidationTest" time="0.024"/>
+  <testcase name="print all tool schemas()" classname="com.bifos.dooray.mcp.tools.ToolSchemaValidationTest" time="0.012"/>
+  <system-out><![CDATA[
+=== Validating 45 tools ===
+
+[0] dooray_wiki_list_projects
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 2 fields
+      - page
+      - size
+
+[1] dooray_wiki_list_pages
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 2 fields
+      - project_id
+      - parent_page_id
+  ✅ required is a JsonArray with 1 items: [project_id]
+
+[2] dooray_wiki_get_page
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 2 fields
+      - project_id
+      - page_id
+  ✅ required is a JsonArray with 2 items: [project_id, page_id]
+
+[3] dooray_wiki_create_page
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 4 fields
+      - wiki_id
+      - subject
+      - body
+      - parent_page_id
+  ✅ required is a JsonArray with 4 items: [wiki_id, subject, body, parent_page_id]
+
+[4] dooray_wiki_update_page
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 5 fields
+      - wiki_id
+      - page_id
+      - subject
+      - body
+      - referrer_member_ids
+  ✅ required is a JsonArray with 2 items: [wiki_id, page_id]
+
+[5] dooray_project_list_posts
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 11 fields
+      - project_id
+      - page
+      - size
+      - to_member_ids
+      - cc_member_ids
+      - tag_ids
+      - parent_post_id
+      - post_workflow_classes
+      - milestone_ids
+      - subjects
+      - order
+  ✅ required is a JsonArray with 1 items: [project_id]
+
+[6] dooray_project_get_post
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 2 fields
+      - project_id
+      - post_id
+  ✅ required is a JsonArray with 2 items: [project_id, post_id]
+
+[7] dooray_project_create_post
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 10 fields
+      - project_id
+      - subject
+      - body
+      - to_member_ids
+      - cc_member_ids
+      - parent_post_id
+      - due_date
+      - milestone_id
+      - tag_ids
+      - priority
+  ✅ required is a JsonArray with 4 items: [project_id, subject, body, to_member_ids]
+
+[8] dooray_project_set_post_workflow
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 3 fields
+      - project_id
+      - post_id
+      - workflow_id
+  ✅ required is a JsonArray with 3 items: [project_id, post_id, workflow_id]
+
+[9] dooray_project_set_post_done
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 2 fields
+      - project_id
+      - post_id
+  ✅ required is a JsonArray with 2 items: [project_id, post_id]
+
+[10] dooray_project_list_projects
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 5 fields
+      - page
+      - size
+      - type
+      - scope
+      - state
+
+[11] dooray_project_update_post
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 10 fields
+      - project_id
+      - post_id
+      - subject
+      - body
+      - to_member_ids
+      - cc_member_ids
+      - priority
+      - milestone_id
+      - tag_ids
+      - due_date
+  ✅ required is a JsonArray with 2 items: [project_id, post_id]
+
+[12] dooray_project_create_post_comment
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 4 fields
+      - project_id
+      - post_id
+      - content
+      - mime_type
+  ✅ required is a JsonArray with 3 items: [project_id, post_id, content]
+
+[13] dooray_project_get_post_comments
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 5 fields
+      - project_id
+      - post_id
+      - page
+      - size
+      - order
+  ✅ required is a JsonArray with 2 items: [project_id, post_id]
+
+[14] dooray_project_update_post_comment
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 5 fields
+      - project_id
+      - post_id
+      - log_id
+      - content
+      - mime_type
+  ✅ required is a JsonArray with 4 items: [project_id, post_id, log_id, content]
+
+[15] dooray_project_delete_post_comment
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 3 fields
+      - project_id
+      - post_id
+      - log_id
+  ✅ required is a JsonArray with 3 items: [project_id, post_id, log_id]
+
+[16] dooray_messenger_search_members
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 5 fields
+      - email
+      - name
+      - user_code
+      - page
+      - size
+  ✅ required is a JsonArray with 1 items: [email]
+
+[17] dooray_messenger_send_direct_message
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 2 fields
+      - organization_member_id
+      - text
+  ✅ required is a JsonArray with 2 items: [organization_member_id, text]
+
+[18] dooray_messenger_get_channels
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 3 fields
+      - page
+      - size
+      - recentMonths
+
+[19] dooray_messenger_get_simple_channels
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 3 fields
+      - page
+      - size
+      - recentMonths
+
+[20] dooray_messenger_get_channel
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 1 fields
+      - channelId
+  ✅ required is a JsonArray with 1 items: [channelId]
+
+[21] dooray_messenger_send_channel_message
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 5 fields
+      - channel_id
+      - text
+      - mention_members
+      - mention_all
+      - message_type
+  ✅ required is a JsonArray with 2 items: [channel_id, text]
+
+[22] dooray_messenger_create_channel
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 5 fields
+      - type
+      - title
+      - capacity
+      - member_ids
+      - id_type
+  ✅ required is a JsonArray with 2 items: [type, title]
+
+[23] dooray_calendar_list
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 0 fields
+
+[24] dooray_calendar_detail
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 1 fields
+      - calendarId
+  ✅ required is a JsonArray with 1 items: [calendarId]
+
+[25] dooray_calendar_events
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 5 fields
+      - calendars
+      - timeMin
+      - timeMax
+      - postType
+      - category
+  ✅ required is a JsonArray with 2 items: [timeMin, timeMax]
+
+[26] dooray_calendar_event_detail
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 2 fields
+      - calendarId
+      - eventId
+  ✅ required is a JsonArray with 2 items: [calendarId, eventId]
+
+[27] dooray_calendar_create_event
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 9 fields
+      - calendarId
+      - subject
+      - content
+      - toMemberIds
+      - ccMemberIds
+      - startedAt
+      - endedAt
+      - wholeDayFlag
+      - location
+  ✅ required is a JsonArray with 6 items: [calendarId, subject, content, startedAt, endedAt, toMemberIds]
+
+[28] dooray_drive_list
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 0 fields
+
+[29] dooray_drive_list_files
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 4 fields
+      - drive_id
+      - parent_id
+      - page
+      - size
+
+[30] dooray_drive_upload_file_from_path
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 4 fields
+      - drive_id
+      - file_path
+      - parent_id
+      - mime_type
+  ✅ required is a JsonArray with 3 items: [drive_id, file_path, parent_id]
+
+[31] dooray_drive_upload_file
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 5 fields
+      - drive_id
+      - file_name
+      - base64_content
+      - parent_id
+      - mime_type
+
+[32] dooray_drive_download_file
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 2 fields
+      - drive_id
+      - file_id
+
+[33] dooray_drive_get_file_metadata
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 2 fields
+      - drive_id
+      - file_id
+
+[34] dooray_drive_update_file
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 5 fields
+      - drive_id
+      - file_id
+      - file_name
+      - base64_content
+      - mime_type
+
+[35] dooray_drive_move_to_trash
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 2 fields
+      - drive_id
+      - file_id
+
+[36] dooray_drive_delete_file
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 2 fields
+      - drive_id
+      - file_id
+
+[37] dooray_drive_create_folder
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 3 fields
+      - drive_id
+      - parent_folder_id
+      - folder_name
+
+[38] dooray_drive_copy_file
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 4 fields
+      - drive_id
+      - file_id
+      - destination_drive_id
+      - destination_folder_id
+
+[39] dooray_drive_move_file
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 3 fields
+      - drive_id
+      - file_id
+      - destination_folder_id
+
+[40] dooray_drive_create_shared_link
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 4 fields
+      - drive_id
+      - file_id
+      - scope
+      - expired_at
+  ✅ required is a JsonArray with 3 items: [drive_id, file_id, expired_at]
+
+[41] dooray_drive_get_shared_links
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 3 fields
+      - drive_id
+      - file_id
+      - valid
+  ✅ required is a JsonArray with 2 items: [drive_id, file_id]
+
+[42] dooray_drive_get_shared_link_detail
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 3 fields
+      - drive_id
+      - file_id
+      - link_id
+  ✅ required is a JsonArray with 3 items: [drive_id, file_id, link_id]
+
+[43] dooray_drive_update_shared_link
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 5 fields
+      - drive_id
+      - file_id
+      - link_id
+      - expired_at
+      - scope
+  ✅ required is a JsonArray with 5 items: [drive_id, file_id, link_id, expired_at, scope]
+
+[44] dooray_drive_delete_shared_link
+  - Has 'type' at root: true
+  - Has 'properties' at root: true
+  ✅ Schema structure looks correct (type + properties at root)
+  ✅ type = 'object' is correct
+  ✅ properties is a JsonObject with 3 fields
+      - drive_id
+      - file_id
+      - link_id
+  ✅ required is a JsonArray with 3 items: [drive_id, file_id, link_id]
+
+
+=== Tool #0: dooray_wiki_list_projects ===
+Description: 두레이에서 접근 가능한 위키 프로젝트 목록을 조회합니다. 특정 프로젝트의 이름으로 프로젝트 ID를 찾을 때 사용하세요.
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "page": {
+            "type": "integer",
+            "description": "조회할 페이지 번호 (0부터 시작, 기본값: 0)",
+            "default": 0
+        },
+        "size": {
+            "type": "integer",
+            "description": "한 페이지당 결과 수 (기본값: 200)",
+            "default": 200
+        }
+    }
+}
+
+=== Tool #1: dooray_wiki_list_pages ===
+Description: 특정 두레이 위키 프로젝트의 페이지 목록을 조회합니다. 전체 목록 또는 특정 부모 페이지의 하위 페이지들을 조회할 수 있습니다.
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "project_id": {
+            "type": "string",
+            "description": "위키 프로젝트 ID (dooray_wiki_list_projects로 조회 가능)"
+        },
+        "parent_page_id": {
+            "type": "string",
+            "description": "상위 페이지 ID (선택사항, 없으면 루트 페이지들 조회)"
+        }
+    },
+    "required": [
+        "project_id"
+    ]
+}
+
+=== Tool #2: dooray_wiki_get_page ===
+Description: 특정 두레이 위키 페이지의 상세 정보를 조회합니다. 페이지 제목, 내용, 작성자, 수정 이력 등 모든 정보를 확인할 수 있습니다.
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "project_id": {
+            "type": "string",
+            "description": "위키 프로젝트 ID (dooray_wiki_list_projects로 조회 가능)"
+        },
+        "page_id": {
+            "type": "string",
+            "description": "위키 페이지 ID (dooray_wiki_list_pages로 조회 가능)"
+        }
+    },
+    "required": [
+        "project_id",
+        "page_id"
+    ]
+}
+
+=== Tool #3: dooray_wiki_create_page ===
+Description: 새로운 두레이 위키 페이지를 생성합니다. 제목과 내용을 입력하여 새 페이지를 만들 수 있습니다.
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "wiki_id": {
+            "type": "string",
+            "description": "위키 ID (dooray_wiki_list_projects로 조회 가능)"
+        },
+        "subject": {
+            "type": "string",
+            "description": "위키 페이지 제목"
+        },
+        "body": {
+            "type": "string",
+            "description": "위키 페이지 내용 (Markdown 형식 지원)"
+        },
+        "parent_page_id": {
+            "type": "string",
+            "description": "상위 페이지 ID (필수, dooray_wiki_list_pages로 조회 가능)"
+        }
+    },
+    "required": [
+        "wiki_id",
+        "subject",
+        "body",
+        "parent_page_id"
+    ]
+}
+
+=== Tool #4: dooray_wiki_update_page ===
+Description: 기존 두레이 위키 페이지를 수정합니다. 제목, 내용, 참조자 등을 변경할 수 있습니다. 변경되지 않은 필드는 기존 값을 유지합니다.
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "wiki_id": {
+            "type": "string",
+            "description": "위키 ID (dooray_wiki_list_projects로 조회 가능)"
+        },
+        "page_id": {
+            "type": "string",
+            "description": "수정할 위키 페이지 ID (dooray_wiki_list_pages로 조회 가능)"
+        },
+        "subject": {
+            "type": "string",
+            "description": "새로운 위키 페이지 제목 (선택사항)"
+        },
+        "body": {
+            "type": "string",
+            "description": "새로운 위키 페이지 내용 (Markdown 형식 지원, 선택사항)"
+        },
+        "referrer_member_ids": {
+            "type": "array",
+            "description": "참조자로 설정할 조직 멤버 ID 목록 (선택사항, 빈 배열이면 모든 참조자 제거)",
+            "items": {
+                "type": "string"
+            }
+        }
+    },
+    "required": [
+        "wiki_id",
+        "page_id"
+    ]
+}
+
+=== Tool #5: dooray_project_list_posts ===
+Description: 두레이 프로젝트의 업무 목록을 조회합니다. 다양한 필터 조건과 정렬 옵션을 지원합니다.
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "project_id": {
+            "type": "string",
+            "description": "프로젝트 ID (필수)"
+        },
+        "page": {
+            "type": "integer",
+            "description": "페이지 번호 (기본값: 0)",
+            "default": 0
+        },
+        "size": {
+            "type": "integer",
+            "description": "페이지 크기 (기본값: 20, 최대: 100)",
+            "default": 20
+        },
+        "to_member_ids": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "description": "담당자 멤버 ID 목록 (선택사항)"
+        },
+        "cc_member_ids": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "description": "참조자 멤버 ID 목록 (선택사항)"
+        },
+        "tag_ids": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "description": "태그 ID 목록 (선택사항)"
+        },
+        "parent_post_id": {
+            "type": "string",
+            "description": "상위 업무 ID - 특정 업무의 하위 업무들만 조회 (선택사항)"
+        },
+        "post_workflow_classes": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "description": "워크플로우 클래스 (backlog, registered, working, closed) (선택사항)"
+        },
+        "milestone_ids": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "description": "마일스톤 ID 목록 (선택사항)"
+        },
+        "subjects": {
+            "type": "string",
+            "description": "업무 제목 검색어 (선택사항)"
+        },
+        "order": {
+            "type": "string",
+            "description": "정렬 조건 (postDueAt, postUpdatedAt, createdAt, 역순은 앞에 '-' 추가) (선택사항)"
+        }
+    },
+    "required": [
+        "project_id"
+    ]
+}
+
+=== Tool #6: dooray_project_get_post ===
+Description: 두레이 프로젝트의 특정 업무의 상세 정보를 조회합니다. 업무 내용, 담당자, 첨부파일 등 모든 정보를 확인할 수 있습니다.
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "project_id": {
+            "type": "string",
+            "description": "프로젝트 ID (필수)"
+        },
+        "post_id": {
+            "type": "string",
+            "description": "업무 ID (dooray_project_list_posts로 조회 가능) (필수)"
+        }
+    },
+    "required": [
+        "project_id",
+        "post_id"
+    ]
+}
+
+=== Tool #7: dooray_project_create_post ===
+Description: 두레이 프로젝트에 새로운 업무를 생성합니다. 담당자, 참조자, 우선순위 등을 설정할 수 있습니다.
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "project_id": {
+            "type": "string",
+            "description": "프로젝트 ID (필수)"
+        },
+        "subject": {
+            "type": "string",
+            "description": "업무 제목 (필수)"
+        },
+        "body": {
+            "type": "string",
+            "description": "업무 내용 (필수)"
+        },
+        "to_member_ids": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "description": "담당자 멤버 ID 목록 (필수)"
+        },
+        "cc_member_ids": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "description": "참조자 멤버 ID 목록 (선택사항)"
+        },
+        "parent_post_id": {
+            "type": "string",
+            "description": "상위 업무 ID - 하위 업무로 생성할 경우 (선택사항)"
+        },
+        "due_date": {
+            "type": "string",
+            "description": "만기일 (ISO8601 형식, 예: 2024-12-31T18:00:00+09:00) (선택사항)"
+        },
+        "milestone_id": {
+            "type": "string",
+            "description": "마일스톤 ID (선택사항)"
+        },
+        "tag_ids": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "description": "태그 ID 목록 (선택사항)"
+        },
+        "priority": {
+            "type": "string",
+            "description": "우선순위 (highest, high, normal, low, lowest, none) (기본값: none)",
+            "default": "none"
+        }
+    },
+    "required": [
+        "project_id",
+        "subject",
+        "body",
+        "to_member_ids"
+    ]
+}
+
+=== Tool #8: dooray_project_set_post_workflow ===
+Description: 두레이 프로젝트 업무의 상태(워크플로우)를 변경합니다. 업무 전체의 상태를 변경하며, 모든 담당자의 상태가 함께 변경됩니다.
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "project_id": {
+            "type": "string",
+            "description": "프로젝트 ID (필수)"
+        },
+        "post_id": {
+            "type": "string",
+            "description": "업무 ID (dooray_project_list_posts로 조회 가능) (필수)"
+        },
+        "workflow_id": {
+            "type": "string",
+            "description": "변경할 워크플로우 ID (필수)"
+        }
+    },
+    "required": [
+        "project_id",
+        "post_id",
+        "workflow_id"
+    ]
+}
+
+=== Tool #9: dooray_project_set_post_done ===
+Description: 두레이 프로젝트 업무를 완료 상태로 변경합니다. 완료 클래스 내의 대표 상태로 변경되며, 모든 담당자의 상태가 완료로 변경됩니다.
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "project_id": {
+            "type": "string",
+            "description": "프로젝트 ID (필수)"
+        },
+        "post_id": {
+            "type": "string",
+            "description": "업무 ID (dooray_project_list_posts로 조회 가능) (필수)"
+        }
+    },
+    "required": [
+        "project_id",
+        "post_id"
+    ]
+}
+
+=== Tool #10: dooray_project_list_projects ===
+Description: 두레이에서 접근 가능한 프로젝트 목록을 조회합니다. 다양한 필터 조건으로 원하는 프로젝트를 찾을 수 있습니다.
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "page": {
+            "type": "integer",
+            "description": "페이지 번호 (0부터 시작, 기본값: 0)",
+            "default": 0
+        },
+        "size": {
+            "type": "integer",
+            "description": "페이지 크기 (최대 100, 기본값: 20, 권장: 100)",
+            "default": 20,
+            "maximum": 100
+        },
+        "type": {
+            "type": "string",
+            "description": "프로젝트 타입 (public: 일반 프로젝트, private: 개인 프로젝트, 기본값: public)",
+            "default": "public"
+        },
+        "scope": {
+            "type": "string",
+            "description": "접근 범위 (private: 프로젝트 멤버만 접근, public: 조직 멤버 누구나 접근, 기본값: private)",
+            "default": "private"
+        },
+        "state": {
+            "type": "string",
+            "description": "프로젝트 상태 (active: 활성화, archived: 보관됨, deleted: 삭제됨)"
+        }
+    }
+}
+
+=== Tool #11: dooray_project_update_post ===
+Description: 두레이 프로젝트의 기존 업무를 수정합니다. 제목, 내용, 담당자, 참조자, 우선순위, 마일스톤, 태그 등을 변경할 수 있습니다.
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "project_id": {
+            "type": "string",
+            "description": "프로젝트 ID (dooray_project_list_projects로 조회 가능)"
+        },
+        "post_id": {
+            "type": "string",
+            "description": "수정할 업무 ID (dooray_project_list_posts로 조회 가능)"
+        },
+        "subject": {
+            "type": "string",
+            "description": "업무 제목 (선택사항)"
+        },
+        "body": {
+            "type": "string",
+            "description": "업무 내용 (선택사항)"
+        },
+        "to_member_ids": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "description": "담당자 멤버 ID 목록 (선택사항)"
+        },
+        "cc_member_ids": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "description": "참조자 멤버 ID 목록 (선택사항)"
+        },
+        "priority": {
+            "type": "string",
+            "description": "우선순위 (highest, high, normal, low, lowest, none) (선택사항)"
+        },
+        "milestone_id": {
+            "type": "string",
+            "description": "마일스톤 ID (선택사항)"
+        },
+        "tag_ids": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "description": "태그 ID 목록 (선택사항)"
+        },
+        "due_date": {
+            "type": "string",
+            "description": "만기일 (ISO8601 형식, 예: 2024-12-31T18:00:00+09:00) (선택사항)"
+        }
+    },
+    "required": [
+        "project_id",
+        "post_id"
+    ]
+}
+
+=== Tool #12: dooray_project_create_post_comment ===
+Description: 두레이 프로젝트 업무에 댓글을 생성합니다. 마크다운 또는 HTML 형식으로 댓글을 작성할 수 있습니다.
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "project_id": {
+            "type": "string",
+            "description": "프로젝트 ID (dooray_project_list_projects로 조회 가능)"
+        },
+        "post_id": {
+            "type": "string",
+            "description": "업무 ID (dooray_project_list_posts로 조회 가능)"
+        },
+        "content": {
+            "type": "string",
+            "description": "댓글 내용"
+        },
+        "mime_type": {
+            "type": "string",
+            "description": "MIME 타입 (text/x-markdown 또는 text/html, 기본값: text/x-markdown)",
+            "default": "text/x-markdown"
+        }
+    },
+    "required": [
+        "project_id",
+        "post_id",
+        "content"
+    ]
+}
+
+=== Tool #13: dooray_project_get_post_comments ===
+Description: 두레이 프로젝트 업무의 댓글 목록을 조회합니다. 페이징과 정렬 옵션을 지원합니다.
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "project_id": {
+            "type": "string",
+            "description": "프로젝트 ID (dooray_project_list_projects로 조회 가능)"
+        },
+        "post_id": {
+            "type": "string",
+            "description": "업무 ID (dooray_project_list_posts로 조회 가능)"
+        },
+        "page": {
+            "type": "number",
+            "description": "페이지 번호 (0부터 시작, 기본값: 0)",
+            "default": 0
+        },
+        "size": {
+            "type": "number",
+            "description": "페이지 크기 (최대 100, 기본값: 20)",
+            "default": 20
+        },
+        "order": {
+            "type": "string",
+            "description": "정렬 조건 (createdAt: 오래된순, -createdAt: 최신순, 기본값: createdAt)",
+            "default": "createdAt"
+        }
+    },
+    "required": [
+        "project_id",
+        "post_id"
+    ]
+}
+
+=== Tool #14: dooray_project_update_post_comment ===
+Description: 두레이 프로젝트 업무의 댓글을 수정합니다. 이메일로 발송된 댓글은 수정할 수 없습니다.
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "project_id": {
+            "type": "string",
+            "description": "프로젝트 ID (dooray_project_list_projects로 조회 가능)"
+        },
+        "post_id": {
+            "type": "string",
+            "description": "업무 ID (dooray_project_list_posts로 조회 가능)"
+        },
+        "log_id": {
+            "type": "string",
+            "description": "댓글 ID (dooray_project_get_post_comments로 조회 가능)"
+        },
+        "content": {
+            "type": "string",
+            "description": "수정할 댓글 내용"
+        },
+        "mime_type": {
+            "type": "string",
+            "description": "MIME 타입 (text/x-markdown 또는 text/html, 기본값: text/x-markdown)",
+            "default": "text/x-markdown"
+        }
+    },
+    "required": [
+        "project_id",
+        "post_id",
+        "log_id",
+        "content"
+    ]
+}
+
+=== Tool #15: dooray_project_delete_post_comment ===
+Description: 두레이 프로젝트 업무의 댓글을 삭제합니다.
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "project_id": {
+            "type": "string",
+            "description": "프로젝트 ID (dooray_project_list_projects로 조회 가능)"
+        },
+        "post_id": {
+            "type": "string",
+            "description": "업무 ID (dooray_project_list_posts로 조회 가능)"
+        },
+        "log_id": {
+            "type": "string",
+            "description": "댓글 ID (dooray_project_get_post_comments로 조회 가능)"
+        }
+    },
+    "required": [
+        "project_id",
+        "post_id",
+        "log_id"
+    ]
+}
+
+=== Tool #16: dooray_messenger_search_members ===
+Description: 두레이 조직의 멤버를 검색합니다. 이름, 이메일, 사용자 코드 등으로 검색할 수 있습니다.
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "email": {
+            "type": "string",
+            "description": "검색할 멤버 이메일 주소 (필수). 정확히 일치하는 이메일로 검색합니다."
+        },
+        "name": {
+            "type": "string",
+            "description": "검색할 멤버 이름 (선택사항)"
+        },
+        "user_code": {
+            "type": "string",
+            "description": "검색할 사용자 코드 (선택사항)"
+        },
+        "page": {
+            "type": "integer",
+            "description": "페이지 번호 (기본값: 0)",
+            "default": 0
+        },
+        "size": {
+            "type": "integer",
+            "description": "페이지 크기 (기본값: 20, 최대: 100)",
+            "default": 20
+        }
+    },
+    "required": [
+        "email"
+    ]
+}
+
+=== Tool #17: dooray_messenger_send_direct_message ===
+Description: 두레이에서 특정 멤버에게 1:1 다이렉트 메시지를 전송합니다.
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "organization_member_id": {
+            "type": "string",
+            "description": "메시지를 받을 멤버의 조직 멤버 ID (dooray_messenger_search_members로 조회 가능)"
+        },
+        "text": {
+            "type": "string",
+            "description": "전송할 메시지 내용"
+        }
+    },
+    "required": [
+        "organization_member_id",
+        "text"
+    ]
+}
+
+=== Tool #18: dooray_messenger_get_channels ===
+Description: 두레이 메신저에서 접근 가능한 채널 목록을 조회합니다. 최근 활성 채널만 필터링할 수 있어 대용량 결과를 방지합니다.
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "page": {
+            "type": "integer",
+            "description": "페이지 번호 (0부터 시작, 기본값: 0)",
+            "minimum": 0
+        },
+        "size": {
+            "type": "integer",
+            "description": "페이지당 채널 수 (기본값: 모든 채널)",
+            "minimum": 1,
+            "maximum": 1000
+        },
+        "recentMonths": {
+            "type": "integer",
+            "description": "최근 N개월 내 업데이트된 채널만 필터링 (예: 3개월=3, 기본값: 필터링 없음)",
+            "minimum": 1,
+            "maximum": 12
+        }
+    }
+}
+
+=== Tool #19: dooray_messenger_get_simple_channels ===
+Description: 두레이 메신저에서 간단한 채널 목록을 조회합니다. 채널 검색용으로 ID, 제목, 타입, 상태, 업데이트 날짜, 참가자 수만 포함하여 모든 채널을 안전하게 조회할 수 있습니다.
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "page": {
+            "type": "integer",
+            "description": "페이지 번호 (0부터 시작, 기본값: 0)",
+            "minimum": 0
+        },
+        "size": {
+            "type": "integer",
+            "description": "페이지당 채널 수 (기본값: 모든 채널)",
+            "minimum": 1,
+            "maximum": 1000
+        },
+        "recentMonths": {
+            "type": "integer",
+            "description": "선택사항: 최근 N개월 내 업데이트된 채널만 필터링 (예: 3개월=3, 기본값: 모든 채널)",
+            "minimum": 1,
+            "maximum": 12
+        }
+    }
+}
+
+=== Tool #20: dooray_messenger_get_channel ===
+Description: 두레이 메신저에서 특정 채널의 상세 정보를 조회합니다. 채널 ID를 통해 해당 채널의 모든 멤버, 설정 등 상세 정보를 확인할 수 있습니다.
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "channelId": {
+            "type": "string",
+            "description": "조회할 채널의 ID"
+        }
+    },
+    "required": [
+        "channelId"
+    ]
+}
+
+=== Tool #21: dooray_messenger_send_channel_message ===
+Description: 두레이 메신저 채널에 메시지를 전송합니다. 멘션 기능 지원: [@사용자명](dooray://조직ID/members/멤버ID "member") 또는 [@Channel](dooray://조직ID/channels/채널ID "channel")
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "channel_id": {
+            "type": "string",
+            "description": "메시지를 전송할 채널의 ID (dooray_messenger_get_channels로 조회 가능)"
+        },
+        "text": {
+            "type": "string",
+            "description": "전송할 메시지 내용. 멘션 사용법: [@사용자명](dooray://조직ID/members/멤버ID \"member\") 또는 [@Channel](dooray://조직ID/channels/채널ID \"channel\")"
+        },
+        "mention_members": {
+            "type": "array",
+            "description": "멘션할 멤버 목록 (선택사항). 각 항목: {\"id\": \"멤버ID\", \"name\": \"멤버명\", \"organizationId\": \"조직ID\"}",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "description": "멤버 ID"
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "멤버 이름"
+                    },
+                    "organizationId": {
+                        "type": "string",
+                        "description": "조직 ID"
+                    }
+                }
+            }
+        },
+        "mention_all": {
+            "type": "boolean",
+            "description": "채널 전체 멘션 여부 (선택사항). true이면 [@Channel] 멘션 자동 추가",
+            "default": false
+        },
+        "message_type": {
+            "type": "string",
+            "description": "메시지 타입 (기본값: text)",
+            "default": "text"
+        }
+    },
+    "required": [
+        "channel_id",
+        "text"
+    ]
+}
+
+=== Tool #22: dooray_messenger_create_channel ===
+Description: 두레이 메신저에서 새로운 채널을 생성합니다. (private 또는 direct 타입)
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "type": {
+            "type": "string",
+            "description": "채널 타입 (private 또는 direct)"
+        },
+        "title": {
+            "type": "string",
+            "description": "채널 제목/이름"
+        },
+        "capacity": {
+            "type": "string",
+            "description": "채널 참가 가능 인원수 (문자열)",
+            "default": "100"
+        },
+        "member_ids": {
+            "type": "array",
+            "description": "초대할 멤버 ID 목록",
+            "items": {
+                "type": "string"
+            }
+        },
+        "id_type": {
+            "type": "string",
+            "description": "멤버 ID 타입 (email 또는 memberId)",
+            "default": "memberId"
+        }
+    },
+    "required": [
+        "type",
+        "title"
+    ]
+}
+
+=== Tool #23: dooray_calendar_list ===
+Description: 두레이에서 접근 가능한 캘린더 목록을 조회합니다. 캘린더 ID를 찾거나 사용 가능한 캘린더를 확인할 때 사용하세요.
+Input Schema:
+{
+    "type": "object",
+    "properties": {}
+}
+
+=== Tool #24: dooray_calendar_detail ===
+Description: 두레이에서 특정 캘린더의 상세 정보를 조회합니다. 캘린더 멤버 목록, 권한 정보, 위임 정보 등을 확인할 수 있습니다.
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "calendarId": {
+            "type": "string",
+            "description": "조회할 캘린더 ID (dooray_calendar_list에서 확인 가능)"
+        }
+    },
+    "required": [
+        "calendarId"
+    ]
+}
+
+=== Tool #25: dooray_calendar_events ===
+Description: 두레이 캘린더에서 지정된 기간의 일정 목록을 조회합니다. 특정 날짜나 기간의 일정을 확인할 때 사용하세요.
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "calendars": {
+            "type": "string",
+            "description": "조회할 캘린더 ID들 (쉼표로 구분, 비워두면 모든 캘린더)"
+        },
+        "timeMin": {
+            "type": "string",
+            "description": "조회 시작 시간 (ISO 8601 형식, 예: 2025-04-11T00:00:00+09:00)"
+        },
+        "timeMax": {
+            "type": "string",
+            "description": "조회 종료 시간 (ISO 8601 형식, 예: 2025-04-12T00:00:00+09:00)"
+        },
+        "postType": {
+            "type": "string",
+            "description": "참석자 필터 (toMe: 나에게 온 일정, toCcMe: 나에게 온 일정+참조, fromToCcMe: 모든 관련 일정, 선택사항)"
+        },
+        "category": {
+            "type": "string",
+            "description": "카테고리 필터 (general: 일반 일정, post: 업무, milestone: 마일스톤, 선택사항)"
+        }
+    },
+    "required": [
+        "timeMin",
+        "timeMax"
+    ]
+}
+
+=== Tool #26: dooray_calendar_event_detail ===
+Description: 두레이 캘린더에서 특정 일정의 상세 정보를 조회합니다. 전체 참석자 정보, 회의 내용, 첨부파일 등을 확인할 수 있습니다.
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "calendarId": {
+            "type": "string",
+            "description": "캘린더 ID (dooray_calendar_list 또는 dooray_calendar_events에서 확인 가능)"
+        },
+        "eventId": {
+            "type": "string",
+            "description": "일정 ID (dooray_calendar_events에서 확인 가능)"
+        }
+    },
+    "required": [
+        "calendarId",
+        "eventId"
+    ]
+}
+
+=== Tool #27: dooray_calendar_create_event ===
+Description: 두레이 캘린더에 새로운 일정을 등록합니다. 회의, 약속 등의 일정을 생성할 때 사용하세요.
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "calendarId": {
+            "type": "string",
+            "description": "일정을 등록할 캘린더 ID (dooray_calendar_list에서 확인 가능)"
+        },
+        "subject": {
+            "type": "string",
+            "description": "일정 제목"
+        },
+        "content": {
+            "type": "string",
+            "description": "일정 내용/설명"
+        },
+        "toMemberIds": {
+            "type": "string",
+            "description": "참석자 멤버 ID들 (쉼표로 구분, 예: member1,member2)"
+        },
+        "ccMemberIds": {
+            "type": "string",
+            "description": "참조자 멤버 ID들 (쉼표로 구분, 선택사항)"
+        },
+        "startedAt": {
+            "type": "string",
+            "description": "일정 시작 시간 (ISO 8601 형식, 예: 2025-04-11T09:00:00+09:00)"
+        },
+        "endedAt": {
+            "type": "string",
+            "description": "일정 종료 시간 (ISO 8601 형식, 예: 2025-04-11T11:00:00+09:00)"
+        },
+        "wholeDayFlag": {
+            "type": "boolean",
+            "description": "종일 일정 여부 (기본값: false)",
+            "default": false
+        },
+        "location": {
+            "type": "string",
+            "description": "일정 장소 (선택사항)"
+        }
+    },
+    "required": [
+        "calendarId",
+        "subject",
+        "content",
+        "startedAt",
+        "endedAt",
+        "toMemberIds"
+    ]
+}
+
+=== Tool #28: dooray_drive_list ===
+Description: Dooray에서 접근 가능한 드라이브 목록을 조회합니다.
+Input Schema:
+{
+    "type": "object",
+    "properties": {}
+}
+
+=== Tool #29: dooray_drive_list_files ===
+Description: 특정 드라이브의 파일 목록을 조회합니다. 폴더 구조를 탐색할 수 있습니다.
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "drive_id": {
+            "type": "string",
+            "description": "드라이브 ID"
+        },
+        "parent_id": {
+            "type": "string",
+            "description": "상위 폴더 ID (선택사항, 루트는 null)"
+        },
+        "page": {
+            "type": "integer",
+            "description": "페이지 번호 (기본값: 0)",
+            "default": 0
+        },
+        "size": {
+            "type": "integer",
+            "description": "페이지당 항목 수 (기본값: 50)",
+            "default": 50
+        }
+    }
+}
+
+=== Tool #30: dooray_drive_upload_file_from_path ===
+Description: ローカルファイルシステムからファイルを読み取り、Doorayドライブにアップロードします。
+
+]]>&#x1f4cc;<![CDATA[ 使用方法:
+- file_pathにローカルファイルの絶対パスを指定
+- ファイルは自動的にBase64エンコードされます
+- 大きなファイル（画像、PDF等）のアップロードに適しています
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "drive_id": {
+            "type": "string",
+            "description": "ドライブID"
+        },
+        "file_path": {
+            "type": "string",
+            "description": "アップロードするファイルの絶対パス"
+        },
+        "parent_id": {
+            "type": "string",
+            "description": "親フォルダID（必須）"
+        },
+        "mime_type": {
+            "type": "string",
+            "description": "MIMEタイプ（例: text/plain, image/jpeg, image/png, application/pdf）省略可能"
+        }
+    },
+    "required": [
+        "drive_id",
+        "file_path",
+        "parent_id"
+    ]
+}
+
+=== Tool #31: dooray_drive_upload_file ===
+Description: DoorayドライブにBase64エンコードされたファイルをアップロードします。
+
+⚠️ **使用制限**:
+- 小さなファイル（10KB未満推奨）専用
+- 大きなファイルはClaudeのメッセージ長制限（約200K文字）に達します
+
+]]>&#x1f4cc;<![CDATA[ **推奨事項**:
+- 優先的に `dooray_drive_upload_file_from_path` を使用してください
+- このツールは `dooray_drive_upload_file_from_path` が失敗した場合のフォールバック用です
+- ファイルパスが利用できない場合や、既にBase64データがある場合に使用
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "drive_id": {
+            "type": "string",
+            "description": "드라이브 ID"
+        },
+        "file_name": {
+            "type": "string",
+            "description": "파일명 (확장자 포함)"
+        },
+        "base64_content": {
+            "type": "string",
+            "description": "Base64로 인코딩된 파일 내용"
+        },
+        "parent_id": {
+            "type": "string",
+            "description": "상위 폴더 ID (필수)"
+        },
+        "mime_type": {
+            "type": "string",
+            "description": "MIME 타입 (예: text/plain, image/jpeg, application/pdf)"
+        }
+    }
+}
+
+=== Tool #32: dooray_drive_download_file ===
+Description: 드라이브에서 파일을 다운로드합니다. 파일 내용을 Base64로 인코딩하여 반환합니다.
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "drive_id": {
+            "type": "string",
+            "description": "드라이브 ID"
+        },
+        "file_id": {
+            "type": "string",
+            "description": "다운로드할 파일 ID"
+        }
+    }
+}
+
+=== Tool #33: dooray_drive_get_file_metadata ===
+Description: 드라이브 파일의 상세한 메타정보를 조회합니다. 파일의 버전, 생성자, 수정자, 즐겨찾기 상태 등을 확인할 수 있습니다.
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "drive_id": {
+            "type": "string",
+            "description": "드라이브 ID"
+        },
+        "file_id": {
+            "type": "string",
+            "description": "파일 ID"
+        }
+    }
+}
+
+=== Tool #34: dooray_drive_update_file ===
+Description: 드라이브의 기존 파일을 새로운 버전으로 업데이트합니다. 파일 내용은 Base64로 인코딩되어야 합니다.
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "drive_id": {
+            "type": "string",
+            "description": "드라이브 ID"
+        },
+        "file_id": {
+            "type": "string",
+            "description": "업데이트할 파일 ID"
+        },
+        "file_name": {
+            "type": "string",
+            "description": "파일명 (확장자 포함)"
+        },
+        "base64_content": {
+            "type": "string",
+            "description": "Base64로 인코딩된 새 파일 내용"
+        },
+        "mime_type": {
+            "type": "string",
+            "description": "MIME 타입 (예: text/plain, image/jpeg, application/pdf)"
+        }
+    }
+}
+
+=== Tool #35: dooray_drive_move_to_trash ===
+Description: 드라이브 파일을 휴지통으로 이동합니다. 휴지통으로 이동된 파일은 나중에 복원하거나 영구 삭제할 수 있습니다.
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "drive_id": {
+            "type": "string",
+            "description": "드라이브 ID"
+        },
+        "file_id": {
+            "type": "string",
+            "description": "휴지통으로 이동할 파일 ID"
+        }
+    }
+}
+
+=== Tool #36: dooray_drive_delete_file ===
+Description: 드라이브에서 파일을 영구 삭제합니다. 휴지통에 있는 파일만 영구 삭제할 수 있습니다.
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "drive_id": {
+            "type": "string",
+            "description": "드라이브 ID"
+        },
+        "file_id": {
+            "type": "string",
+            "description": "삭제할 파일 ID"
+        }
+    }
+}
+
+=== Tool #37: dooray_drive_create_folder ===
+Description: 드라이브에 새 폴더를 생성합니다. 지정된 상위 폴더 하위에 새 폴더를 생성합니다.
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "drive_id": {
+            "type": "string",
+            "description": "드라이브 ID"
+        },
+        "parent_folder_id": {
+            "type": "string",
+            "description": "상위 폴더 ID"
+        },
+        "folder_name": {
+            "type": "string",
+            "description": "생성할 폴더명"
+        }
+    }
+}
+
+=== Tool #38: dooray_drive_copy_file ===
+Description: 드라이브 파일을 다른 폴더나 드라이브로 복사합니다. 원본 파일은 그대로 유지되고 복사본이 생성됩니다.
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "drive_id": {
+            "type": "string",
+            "description": "원본 파일이 있는 드라이브 ID"
+        },
+        "file_id": {
+            "type": "string",
+            "description": "복사할 파일 ID"
+        },
+        "destination_drive_id": {
+            "type": "string",
+            "description": "복사될 대상 드라이브 ID"
+        },
+        "destination_folder_id": {
+            "type": "string",
+            "description": "복사될 대상 폴더 ID"
+        }
+    }
+}
+
+=== Tool #39: dooray_drive_move_file ===
+Description: 드라이브 파일을 다른 폴더로 이동합니다. 원본 파일은 새 위치로 이동되며 기존 위치에서는 사라집니다.
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "drive_id": {
+            "type": "string",
+            "description": "파일이 있는 드라이브 ID"
+        },
+        "file_id": {
+            "type": "string",
+            "description": "이동할 파일 ID"
+        },
+        "destination_folder_id": {
+            "type": "string",
+            "description": "이동될 대상 폴더 ID"
+        }
+    }
+}
+
+=== Tool #40: dooray_drive_create_shared_link ===
+Description: 드라이브 파일의 공유 링크를 생성합니다.
+
+]]>&#x1f4cc;<![CDATA[ 참고:
+- 파일 공유 링크는 프로젝트 관리자와 생성자만 생성 가능합니다.
+- scope: "member" (손님 제외 조직 내 사용자), "memberAndGuest" (조직 내 모든 사용자), "memberAndGuestAndExternal" (내외부 상관없이)
+- expiredAt: 만료 날짜 (ISO 8601 형식, 필수)
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "drive_id": {
+            "type": "string",
+            "description": "드라이브 ID"
+        },
+        "file_id": {
+            "type": "string",
+            "description": "파일 ID"
+        },
+        "scope": {
+            "type": "string",
+            "description": "공유 범위 (기본값: memberAndGuest): member | memberAndGuest | memberAndGuestAndExternal",
+            "default": "memberAndGuest",
+            "enum": {
+                "member": "손님 제외 조직 내 사용자",
+                "memberAndGuest": "조직 내 모든 사용자 (기본값)",
+                "memberAndGuestAndExternal": "내외부 상관없이 (조직 정책으로 차단될 수 있음)"
+            }
+        },
+        "expired_at": {
+            "type": "string",
+            "description": "만료 날짜 (ISO 8601 형식, 예: 2025-12-31T23:59:59+09:00)"
+        }
+    },
+    "required": [
+        "drive_id",
+        "file_id",
+        "expired_at"
+    ]
+}
+
+=== Tool #41: dooray_drive_get_shared_links ===
+Description: 파일에 생성된 모든 공유 링크를 조회합니다.
+
+]]>&#x1f4cc;<![CDATA[ 참고:
+- 요청자의 권한이 project admin이면 해당 파일에 생성된 링크 전체를 응답합니다.
+- 그 외의 경우는 자신이 생성한 정보만 응답합니다.
+- valid: true (유효한 링크, 기본값), false (만료된 링크)
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "drive_id": {
+            "type": "string",
+            "description": "드라이브 ID"
+        },
+        "file_id": {
+            "type": "string",
+            "description": "파일 ID"
+        },
+        "valid": {
+            "type": "boolean",
+            "description": "true: 유효한 링크(기본값), false: 만료된 링크"
+        }
+    },
+    "required": [
+        "drive_id",
+        "file_id"
+    ]
+}
+
+=== Tool #42: dooray_drive_get_shared_link_detail ===
+Description: 특정 공유 링크의 상세 정보를 조회합니다.
+
+]]>&#x1f4cc;<![CDATA[ 조회 정보:
+- 링크 ID, 생성일시, 만료일시
+- 생성자 정보
+- 실제 공유 링크 URL
+- 공유 범위 (scope)
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "drive_id": {
+            "type": "string",
+            "description": "드라이브 ID"
+        },
+        "file_id": {
+            "type": "string",
+            "description": "파일 ID"
+        },
+        "link_id": {
+            "type": "string",
+            "description": "공유 링크 ID"
+        }
+    },
+    "required": [
+        "drive_id",
+        "file_id",
+        "link_id"
+    ]
+}
+
+=== Tool #43: dooray_drive_update_shared_link ===
+Description: 특정 공유 링크를 수정합니다.
+
+]]>&#x1f4cc;<![CDATA[ 수정 가능 항목:
+- expiredAt: 만료 날짜 (ISO 8601 형식)
+- scope: 공유 범위 (member | memberAndGuest | memberAndGuestAndExternal)
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "drive_id": {
+            "type": "string",
+            "description": "드라이브 ID"
+        },
+        "file_id": {
+            "type": "string",
+            "description": "파일 ID"
+        },
+        "link_id": {
+            "type": "string",
+            "description": "공유 링크 ID"
+        },
+        "expired_at": {
+            "type": "string",
+            "description": "만료 날짜 (ISO 8601 형식, 예: 2025-12-31T23:59:59+09:00)"
+        },
+        "scope": {
+            "type": "string",
+            "description": "공유 범위: member | memberAndGuest | memberAndGuestAndExternal"
+        }
+    },
+    "required": [
+        "drive_id",
+        "file_id",
+        "link_id",
+        "expired_at",
+        "scope"
+    ]
+}
+
+=== Tool #44: dooray_drive_delete_shared_link ===
+Description: 특정 공유 링크를 삭제합니다.
+
+]]>&#x1f4cc;<![CDATA[ 참고:
+- 공유 링크를 삭제하면 해당 링크로는 더 이상 파일에 접근할 수 없습니다.
+- 삭제 작업은 되돌릴 수 없으니 주의해주세요.
+Input Schema:
+{
+    "type": "object",
+    "properties": {
+        "drive_id": {
+            "type": "string",
+            "description": "드라이브 ID"
+        },
+        "file_id": {
+            "type": "string",
+            "description": "파일 ID"
+        },
+        "link_id": {
+            "type": "string",
+            "description": "삭제할 공유 링크 ID"
+        }
+    },
+    "required": [
+        "drive_id",
+        "file_id",
+        "link_id"
+    ]
+}
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

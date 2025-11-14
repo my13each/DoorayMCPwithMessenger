@@ -19,7 +19,12 @@ fun getCalendarsTool(): Tool {
         description = "두레이에서 접근 가능한 캘린더 목록을 조회합니다. 캘린더 ID를 찾거나 사용 가능한 캘린더를 확인할 때 사용하세요.",
         inputSchema = Tool.Input(
             properties = buildJsonObject {
+                put("type", "object")
+                putJsonObject("properties") {
+
                 // 캘린더 목록 조회는 별도 파라미터가 필요하지 않음
+            
+                }
             }
         ),
         outputSchema = null,

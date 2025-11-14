@@ -29,33 +29,37 @@ fun updateSharedLinkTool(): Tool {
         """.trimIndent(),
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-put("drive_id", buildJsonObject {
-                    put("type", "string")
-                    put("description", "드라이브 ID")
-                })
-                put("file_id", buildJsonObject {
-                    put("type", "string")
-                    put("description", "파일 ID")
-                })
-                put("link_id", buildJsonObject {
-                    put("type", "string")
-                    put("description", "공유 링크 ID")
-                })
-                put("expired_at", buildJsonObject {
-                    put("type", "string")
-                    put("description", "만료 날짜 (ISO 8601 형식, 예: 2025-12-31T23:59:59+09:00)")
-                })
-                put("scope", buildJsonObject {
-                    put("type", "string")
-                    put("description", "공유 범위: member | memberAndGuest | memberAndGuestAndExternal")
-                    put("enum", buildJsonObject {
-                        put("member", "손님 제외 조직 내 사용자")
-                        put("memberAndGuest", "조직 내 모든 사용자")
-                        put("memberAndGuestAndExternal", "내외부 상관없이")
-                    })
-                })
-            },
-            required = listOf("drive_id", "file_id", "link_id", "expired_at", "scope")
+                put("type", "object")
+                putJsonObject("properties") {
+                    putJsonObject("drive_id") {
+                        put("type", "string")
+                        put("description", "드라이브 ID")
+                    }
+                    putJsonObject("file_id") {
+                        put("type", "string")
+                        put("description", "파일 ID")
+                    }
+                    putJsonObject("link_id") {
+                        put("type", "string")
+                        put("description", "공유 링크 ID")
+                    }
+                    putJsonObject("expired_at") {
+                        put("type", "string")
+                        put("description", "만료 날짜 (ISO 8601 형식, 예: 2025-12-31T23:59:59+09:00)")
+                    }
+                    putJsonObject("scope") {
+                        put("type", "string")
+                        put("description", "공유 범위: member | memberAndGuest | memberAndGuestAndExternal")
+                    }
+                }
+                putJsonArray("required") {
+                    add("drive_id")
+                    add("file_id")
+                    add("link_id")
+                    add("expired_at")
+                    add("scope")
+                }
+            }
         ),
         outputSchema = null,
         annotations = null

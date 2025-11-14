@@ -26,6 +26,9 @@ fun createWikiPageTool(): Tool {
                     Tool.Input(
                             properties =
                                     buildJsonObject {
+                put("type", "object")
+                putJsonObject("properties") {
+
                                         putJsonObject("wiki_id") {
                                             put("type", "string")
                                             put(
@@ -48,9 +51,16 @@ fun createWikiPageTool(): Tool {
                                                     "상위 페이지 ID (필수, dooray_wiki_list_pages로 조회 가능)"
                                             )
                                         }
-                                    },
-                            required = listOf("wiki_id", "subject", "body", "parent_page_id")
-                    ),
+                                    
+                }
+                putJsonArray("required") {
+                    add("wiki_id")
+                    add("subject")
+                    add("body")
+                    add("parent_page_id")
+                }
+            }
+        ),
             outputSchema = null,
             annotations = null
     )

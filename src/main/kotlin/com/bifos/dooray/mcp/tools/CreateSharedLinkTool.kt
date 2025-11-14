@@ -30,6 +30,9 @@ fun createSharedLinkTool(): Tool {
         """.trimIndent(),
         inputSchema = Tool.Input(
             properties = buildJsonObject {
+                put("type", "object")
+                putJsonObject("properties") {
+
                 putJsonObject("drive_id") {
                     put("type", "string")
                     put("description", "드라이브 ID")
@@ -52,8 +55,14 @@ fun createSharedLinkTool(): Tool {
                     put("type", "string")
                     put("description", "만료 날짜 (ISO 8601 형식, 예: 2025-12-31T23:59:59+09:00)")
                 }
-            },
-            required = listOf("drive_id", "file_id", "expired_at")
+            
+                }
+                putJsonArray("required") {
+                    add("drive_id")
+                    add("file_id")
+                    add("expired_at")
+                }
+            }
         ),
         outputSchema = null,
         annotations = null

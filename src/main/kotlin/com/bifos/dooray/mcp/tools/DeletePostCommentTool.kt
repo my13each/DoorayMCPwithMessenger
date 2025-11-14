@@ -24,6 +24,9 @@ fun deletePostCommentTool(): Tool {
             Tool.Input(
                 properties =
                     buildJsonObject {
+                put("type", "object")
+                putJsonObject("properties") {
+
                         putJsonObject("project_id") {
                             put("type", "string")
                             put(
@@ -45,9 +48,15 @@ fun deletePostCommentTool(): Tool {
                                 "댓글 ID (dooray_project_get_post_comments로 조회 가능)"
                             )
                         }
-                    },
-                required = listOf("project_id", "post_id", "log_id")
-            ),
+                    
+                }
+                putJsonArray("required") {
+                    add("project_id")
+                    add("post_id")
+                    add("log_id")
+                }
+            }
+        ),
         outputSchema = null,
         annotations = null
     )

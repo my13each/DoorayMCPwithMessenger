@@ -24,6 +24,9 @@ fun createProjectPostTool(): Tool {
             Tool.Input(
                 properties =
                     buildJsonObject {
+                put("type", "object")
+                putJsonObject("properties") {
+
                         putJsonObject("project_id") {
                             put("type", "string")
                             put("description", "프로젝트 ID (필수)")
@@ -74,9 +77,16 @@ fun createProjectPostTool(): Tool {
                             )
                             put("default", "none")
                         }
-                    },
-                required = listOf("project_id", "subject", "body", "to_member_ids")
-            ),
+                    
+                }
+                putJsonArray("required") {
+                    add("project_id")
+                    add("subject")
+                    add("body")
+                    add("to_member_ids")
+                }
+            }
+        ),
         outputSchema = null,
         annotations = null
     )

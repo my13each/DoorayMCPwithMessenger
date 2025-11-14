@@ -12,6 +12,8 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonObject
+import kotlinx.serialization.json.putJsonArray
+import kotlinx.serialization.json.add
 
 fun moveFileToTrashTool(): Tool {
     return Tool(
@@ -19,6 +21,9 @@ fun moveFileToTrashTool(): Tool {
         description = "드라이브 파일을 휴지통으로 이동합니다. 휴지통으로 이동된 파일은 나중에 복원하거나 영구 삭제할 수 있습니다.",
         inputSchema = Tool.Input(
             properties = buildJsonObject {
+                put("type", "object")
+                putJsonObject("properties") {
+
                 putJsonObject("drive_id") {
                     put("type", "string")
                     put("description", "드라이브 ID")
@@ -27,7 +32,13 @@ fun moveFileToTrashTool(): Tool {
                     put("type", "string")
                     put("description", "휴지통으로 이동할 파일 ID")
                 }
-            }),
+                }
+                putJsonArray("required") {
+                    add("drive_id")
+                    add("file_id")
+                }
+            }
+        ),
         outputSchema = null,
         annotations = null
     )

@@ -25,6 +25,9 @@ fun getPostCommentsTool(): Tool {
                     Tool.Input(
                             properties =
                                     buildJsonObject {
+                put("type", "object")
+                putJsonObject("properties") {
+
                                         putJsonObject("project_id") {
                                             put("type", "string")
                                             put(
@@ -57,9 +60,14 @@ fun getPostCommentsTool(): Tool {
                                             )
                                             put("default", "createdAt")
                                         }
-                                    },
-                            required = listOf("project_id", "post_id")
-            ),
+                                    
+                }
+                putJsonArray("required") {
+                    add("project_id")
+                    add("post_id")
+                }
+            }
+        ),
             outputSchema = null,
             annotations = null
     )

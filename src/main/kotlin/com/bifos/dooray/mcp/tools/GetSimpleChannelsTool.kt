@@ -17,6 +17,9 @@ fun getSimpleChannelsTool(): Tool {
         description = "두레이 메신저에서 간단한 채널 목록을 조회합니다. 채널 검색용으로 ID, 제목, 타입, 상태, 업데이트 날짜, 참가자 수만 포함하여 모든 채널을 안전하게 조회할 수 있습니다.",
         inputSchema = Tool.Input(
             properties = buildJsonObject {
+                put("type", "object")
+                putJsonObject("properties") {
+
                 putJsonObject("page") {
                     put("type", "integer")
                     put("description", "페이지 번호 (0부터 시작, 기본값: 0)")
@@ -33,6 +36,8 @@ fun getSimpleChannelsTool(): Tool {
                     put("description", "선택사항: 최근 N개월 내 업데이트된 채널만 필터링 (예: 3개월=3, 기본값: 모든 채널)")
                     put("minimum", 1)
                     put("maximum", 12)
+                }
+            
                 }
             }
         ),

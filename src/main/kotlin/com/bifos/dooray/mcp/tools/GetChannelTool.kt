@@ -16,12 +16,19 @@ fun getChannelTool(): Tool {
         description = "두레이 메신저에서 특정 채널의 상세 정보를 조회합니다. 채널 ID를 통해 해당 채널의 모든 멤버, 설정 등 상세 정보를 확인할 수 있습니다.",
         inputSchema = Tool.Input(
             properties = buildJsonObject {
+                put("type", "object")
+                putJsonObject("properties") {
+
                 putJsonObject("channelId") {
                     put("type", "string")
                     put("description", "조회할 채널의 ID")
                 }
-            },
-            required = listOf("channelId")
+            
+                }
+                putJsonArray("required") {
+                    add("channelId")
+                }
+            }
         ),
         outputSchema = null,
         annotations = null

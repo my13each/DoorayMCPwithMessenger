@@ -24,6 +24,9 @@ fun getProjectPostTool(): Tool {
             Tool.Input(
                 properties =
                     buildJsonObject {
+                put("type", "object")
+                putJsonObject("properties") {
+
                         putJsonObject("project_id") {
                             put("type", "string")
                             put("description", "프로젝트 ID (필수)")
@@ -35,9 +38,14 @@ fun getProjectPostTool(): Tool {
                                 "업무 ID (dooray_project_list_posts로 조회 가능) (필수)"
                             )
                         }
-                    },
-                required = listOf("project_id", "post_id")
-            ),
+                    
+                }
+                putJsonArray("required") {
+                    add("project_id")
+                    add("post_id")
+                }
+            }
+        ),
         outputSchema = null,
         annotations = null
     )

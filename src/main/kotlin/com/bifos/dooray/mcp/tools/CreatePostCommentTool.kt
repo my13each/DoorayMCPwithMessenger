@@ -26,6 +26,9 @@ fun createPostCommentTool(): Tool {
             Tool.Input(
                 properties =
                     buildJsonObject {
+                put("type", "object")
+                putJsonObject("properties") {
+
                         putJsonObject("project_id") {
                             put("type", "string")
                             put(
@@ -52,9 +55,15 @@ fun createPostCommentTool(): Tool {
                             )
                             put("default", "text/x-markdown")
                         }
-                    },
-                required = listOf("project_id", "post_id", "content")
-            ),
+                    
+                }
+                putJsonArray("required") {
+                    add("project_id")
+                    add("post_id")
+                    add("content")
+                }
+            }
+        ),
         outputSchema = null,
         annotations = null
     )
