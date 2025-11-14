@@ -18,7 +18,8 @@ fun getCalendarsTool(): Tool {
         inputSchema = Tool.Input(
             properties = buildJsonObject {
                 // 캘린더 목록 조회는 별도 파라미터가 필요하지 않음
-            }
+            },
+            required = emptyList()
         ),
         outputSchema = null,
         annotations = null

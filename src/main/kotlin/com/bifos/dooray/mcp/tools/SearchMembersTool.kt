@@ -42,7 +42,8 @@ fun searchMembersTool(): Tool {
                     put("description", "페이지 크기 (기본값: 20, 최대: 100)")
                     put("default", 20)
                 }
-            }
+            },
+            required = emptyList()
         ),
         outputSchema = null,
         annotations = null
