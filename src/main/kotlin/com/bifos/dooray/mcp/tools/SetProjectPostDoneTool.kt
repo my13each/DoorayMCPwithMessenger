@@ -36,11 +36,9 @@ putJsonObject("project_id") {
                                 "업무 ID (dooray_project_list_posts로 조회 가능) (필수)"
                             )
                         }
-                putJsonArray("required") {
-                    add(JsonPrimitive("project_id"))
-                    add(JsonPrimitive("post_id"))
-                }
-            }),
+                    },
+                required = listOf("project_id", "post_id")
+            ),
         outputSchema = null,
         annotations = null
     )

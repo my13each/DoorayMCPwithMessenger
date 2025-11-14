@@ -74,13 +74,8 @@ fun createProjectPostTool(): Tool {
                             )
                             put("default", "none")
                         }
-                        putJsonArray("required") {
-                            add(JsonPrimitive("project_id"))
-                            add(JsonPrimitive("subject"))
-                            add(JsonPrimitive("body"))
-                            add(JsonPrimitive("to_member_ids"))
-                        }
-                    }
+                    },
+                required = listOf("project_id", "subject", "body", "to_member_ids")
             ),
         outputSchema = null,
         annotations = null

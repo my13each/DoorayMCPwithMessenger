@@ -20,10 +20,8 @@ fun getCalendarDetailTool(): Tool {
                     put("type", "string")
                     put("description", "조회할 캘린더 ID (dooray_calendar_list에서 확인 가능)")
                 }
-                putJsonArray("required") {
-                    add(JsonPrimitive("calendarId"))
-                }
-            }
+            },
+            required = listOf("calendarId")
         ),
         outputSchema = null,
         annotations = null

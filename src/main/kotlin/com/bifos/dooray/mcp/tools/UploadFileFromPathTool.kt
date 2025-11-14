@@ -48,12 +48,9 @@ putJsonObject("drive_id") {
                     put("type", "string")
                     put("description", "MIMEタイプ（例: text/plain, image/jpeg, image/png, application/pdf）省略可能")
                 }
-                putJsonArray("required") {
-                    add(JsonPrimitive("drive_id"))
-                    add(JsonPrimitive("file_path"))
-                    add(JsonPrimitive("parent_id"))
-                }
-            }),
+            },
+            required = listOf("drive_id", "file_path", "parent_id")
+        ),
         outputSchema = null,
         annotations = null
     )

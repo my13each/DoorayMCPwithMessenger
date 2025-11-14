@@ -52,11 +52,9 @@ putJsonObject("wiki_id") {
                             )
                             putJsonObject("items") { put("type", "string") }
                         }
-                putJsonArray("required") {
-                    add(JsonPrimitive("wiki_id"))
-                    add(JsonPrimitive("page_id"))
-                }
-            }),
+                    },
+                required = listOf("wiki_id", "page_id")
+            ),
         outputSchema = null,
         annotations = null
     )

@@ -57,11 +57,8 @@ fun sendChannelMessageTool(): Tool {
                     put("description", "메시지 타입 (기본값: text)")
                     put("default", "text")
                 }
-                putJsonArray("required") {
-                    add(JsonPrimitive("channel_id"))
-                    add(JsonPrimitive("text"))
-                }
-            }
+            },
+            required = listOf("channel_id", "text")
         ),
         outputSchema = null,
         annotations = null

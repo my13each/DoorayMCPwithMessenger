@@ -84,10 +84,9 @@ putJsonObject("project_id") {
                                 "정렬 조건 (postDueAt, postUpdatedAt, createdAt, 역순은 앞에 '-' 추가) (선택사항)"
                             )
                         }
-                putJsonArray("required") {
-                    add(JsonPrimitive("project_id"))
-                }
-            }),
+                    },
+                required = listOf("project_id")
+            ),
         outputSchema = null,
         annotations = null
     )

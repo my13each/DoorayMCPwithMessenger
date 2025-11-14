@@ -45,12 +45,8 @@ fun deletePostCommentTool(): Tool {
                                 "댓글 ID (dooray_project_get_post_comments로 조회 가능)"
                             )
                         }
-                        putJsonArray("required") {
-                            add(JsonPrimitive("project_id"))
-                            add(JsonPrimitive("post_id"))
-                            add(JsonPrimitive("log_id"))
-                        }
-                    }
+                    },
+                required = listOf("project_id", "post_id", "log_id")
             ),
         outputSchema = null,
         annotations = null

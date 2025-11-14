@@ -48,13 +48,8 @@ fun createWikiPageTool(): Tool {
                                                     "상위 페이지 ID (필수, dooray_wiki_list_pages로 조회 가능)"
                                             )
                                         }
-                                        putJsonArray("required") {
-                                            add(JsonPrimitive("wiki_id"))
-                                            add(JsonPrimitive("subject"))
-                                            add(JsonPrimitive("body"))
-                                            add(JsonPrimitive("parent_page_id"))
-                                        }
-                                    }
+                                    },
+                            required = listOf("wiki_id", "subject", "body", "parent_page_id")
                     ),
             outputSchema = null,
             annotations = null

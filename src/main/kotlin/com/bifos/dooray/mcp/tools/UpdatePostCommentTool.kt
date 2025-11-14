@@ -59,13 +59,9 @@ fun updatePostCommentTool(): Tool {
                                             )
                                             put("default", "text/x-markdown")
                                         }
-                                        putJsonArray("required") {
-                    add(JsonPrimitive("project_id"))
-                    add(JsonPrimitive("post_id"))
-                    add(JsonPrimitive("log_id"))
-                    add(JsonPrimitive("content"))
-                }
-            }),
+                                    },
+                            required = listOf("project_id", "post_id", "log_id", "content")
+            ),
             outputSchema = null,
             annotations = null
     )

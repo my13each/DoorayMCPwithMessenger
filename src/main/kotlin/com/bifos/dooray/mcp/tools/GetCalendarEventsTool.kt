@@ -45,11 +45,9 @@ fun getCalendarEventsTool(): Tool {
                     put("type", "string")
                     put("description", "카테고리 필터 (general: 일반 일정, post: 업무, milestone: 마일스톤, 선택사항)")
                 }
-                putJsonArray("required") {
-                    add(JsonPrimitive("timeMin"))
-                    add(JsonPrimitive("timeMax"))
-                }
-            }),
+            },
+            required = listOf("timeMin", "timeMax")
+        ),
         outputSchema = null,
         annotations = null
     )

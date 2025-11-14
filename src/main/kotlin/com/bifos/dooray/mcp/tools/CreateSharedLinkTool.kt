@@ -52,12 +52,8 @@ fun createSharedLinkTool(): Tool {
                     put("type", "string")
                     put("description", "만료 날짜 (ISO 8601 형식, 예: 2025-12-31T23:59:59+09:00)")
                 }
-                putJsonArray("required") {
-                    add(JsonPrimitive("drive_id"))
-                    add(JsonPrimitive("file_id"))
-                    add(JsonPrimitive("expired_at"))
-                }
-            }
+            },
+            required = listOf("drive_id", "file_id", "expired_at")
         ),
         outputSchema = null,
         annotations = null

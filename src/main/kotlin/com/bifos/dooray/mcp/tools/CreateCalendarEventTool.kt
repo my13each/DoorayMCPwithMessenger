@@ -53,15 +53,8 @@ fun createCalendarEventTool(): Tool {
                     put("type", "string")
                     put("description", "일정 장소 (선택사항)")
                 }
-                putJsonArray("required") {
-                    add(JsonPrimitive("calendarId"))
-                    add(JsonPrimitive("subject"))
-                    add(JsonPrimitive("content"))
-                    add(JsonPrimitive("startedAt"))
-                    add(JsonPrimitive("endedAt"))
-                    add(JsonPrimitive("toMemberIds"))
-                }
-            }
+            },
+            required = listOf("calendarId", "subject", "content", "startedAt", "endedAt", "toMemberIds")
         ),
         outputSchema = null,
         annotations = null

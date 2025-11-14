@@ -24,11 +24,9 @@ fun getCalendarEventDetailTool(): Tool {
                     put("type", "string")
                     put("description", "일정 ID (dooray_calendar_events에서 확인 가능)")
                 }
-                putJsonArray("required") {
-                    add(JsonPrimitive("calendarId"))
-                    add(JsonPrimitive("eventId"))
-                }
-            }),
+            },
+            required = listOf("calendarId", "eventId")
+        ),
         outputSchema = null,
         annotations = null
     )

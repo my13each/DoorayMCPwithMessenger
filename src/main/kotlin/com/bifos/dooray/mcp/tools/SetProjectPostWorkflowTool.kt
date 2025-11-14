@@ -39,12 +39,9 @@ putJsonObject("project_id") {
                             put("type", "string")
                             put("description", "변경할 워크플로우 ID (필수)")
                         }
-                putJsonArray("required") {
-                    add(JsonPrimitive("project_id"))
-                    add(JsonPrimitive("post_id"))
-                    add(JsonPrimitive("workflow_id"))
-                }
-            }),
+                    },
+                required = listOf("project_id", "post_id", "workflow_id")
+            ),
         outputSchema = null,
         annotations = null
     )

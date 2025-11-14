@@ -50,11 +50,8 @@ fun createChannelTool(): Tool {
                     put("description", "멤버 ID 타입 (email 또는 memberId)")
                     put("default", "memberId")
                 }
-                putJsonArray("required") {
-                    add(JsonPrimitive("type"))
-                    add(JsonPrimitive("title"))
-                }
-            }
+            },
+            required = listOf("type", "title")
         ),
         outputSchema = null,
         annotations = null

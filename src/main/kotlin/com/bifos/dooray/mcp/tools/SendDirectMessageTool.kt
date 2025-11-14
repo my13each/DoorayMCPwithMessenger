@@ -32,11 +32,9 @@ fun sendDirectMessageTool(): Tool {
                     put("type", "string")
                     put("description", "전송할 메시지 내용")
                 }
-                putJsonArray("required") {
-                    add(JsonPrimitive("organization_member_id"))
-                    add(JsonPrimitive("text"))
-                }
-            }),
+            },
+            required = listOf("organization_member_id", "text")
+        ),
         outputSchema = null,
         annotations = null
     )

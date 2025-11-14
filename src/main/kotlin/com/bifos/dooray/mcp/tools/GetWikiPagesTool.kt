@@ -35,10 +35,9 @@ putJsonObject("project_id") {
                                             put("type", "string")
                                             put("description", "상위 페이지 ID (선택사항, 없으면 루트 페이지들 조회)")
                                         }
-                putJsonArray("required") {
-                    add(JsonPrimitive("project_id"))
-                }
-            }),
+                                    },
+                            required = listOf("project_id")
+            ),
             outputSchema = null,
             annotations = null
     )

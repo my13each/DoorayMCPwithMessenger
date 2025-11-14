@@ -20,10 +20,8 @@ fun getChannelTool(): Tool {
                     put("type", "string")
                     put("description", "조회할 채널의 ID")
                 }
-                putJsonArray("required") {
-                    add(JsonPrimitive("channelId"))
-                }
-            }
+            },
+            required = listOf("channelId")
         ),
         outputSchema = null,
         annotations = null

@@ -41,11 +41,9 @@ put("drive_id", buildJsonObject {
                     put("type", "boolean")
                     put("description", "true: 유효한 링크(기본값), false: 만료된 링크")
                 })
-                putJsonArray("required") {
-                    add(JsonPrimitive("drive_id"))
-                    add(JsonPrimitive("file_id"))
-                }
-            }),
+            },
+            required = listOf("drive_id", "file_id")
+        ),
         outputSchema = null,
         annotations = null
     )

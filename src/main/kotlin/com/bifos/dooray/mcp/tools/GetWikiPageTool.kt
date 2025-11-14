@@ -39,11 +39,8 @@ fun getWikiPageTool(): Tool {
                                 "위키 페이지 ID (dooray_wiki_list_pages로 조회 가능)"
                             )
                         }
-                        putJsonArray("required") {
-                            add(JsonPrimitive("project_id"))
-                            add(JsonPrimitive("page_id"))
-                        }
-                    }
+                    },
+                required = listOf("project_id", "page_id")
             ),
         outputSchema = null,
         annotations = null

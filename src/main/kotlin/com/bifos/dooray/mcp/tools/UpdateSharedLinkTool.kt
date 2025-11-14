@@ -54,14 +54,9 @@ put("drive_id", buildJsonObject {
                         put("memberAndGuestAndExternal", "내외부 상관없이")
                     })
                 })
-                putJsonArray("required") {
-                    add(JsonPrimitive("drive_id"))
-                    add(JsonPrimitive("file_id"))
-                    add(JsonPrimitive("link_id"))
-                    add(JsonPrimitive("expired_at"))
-                    add(JsonPrimitive("scope"))
-                }
-            }),
+            },
+            required = listOf("drive_id", "file_id", "link_id", "expired_at", "scope")
+        ),
         outputSchema = null,
         annotations = null
     )

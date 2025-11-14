@@ -42,12 +42,8 @@ fun getSharedLinkDetailTool(): Tool {
                         put("type", "string")
                         put("description", "공유 링크 ID")
                     }
-                putJsonArray("required") {
-                    add(JsonPrimitive("drive_id"))
-                    add(JsonPrimitive("file_id"))
-                    add(JsonPrimitive("link_id"))
-                }
-            }
+            },
+            required = listOf("drive_id", "file_id", "link_id")
         ),
         outputSchema = null,
         annotations = null
