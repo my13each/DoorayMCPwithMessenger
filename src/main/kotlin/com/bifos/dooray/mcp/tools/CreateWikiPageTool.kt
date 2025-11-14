@@ -14,7 +14,6 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonArray
-import kotlinx.serialization.json.add
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.putJsonObject
 
@@ -22,14 +21,9 @@ fun createWikiPageTool(): Tool {
     return Tool(
             name = "dooray_wiki_create_page",
             description = "새로운 두레이 위키 페이지를 생성합니다. 제목과 내용을 입력하여 새 페이지를 만들 수 있습니다.",
-            inputSchema =
-                    Tool.Input(
-                            properties =
-                                    buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
-
-                                        putJsonObject("wiki_id") {
+            inputSchema = Tool.Input(
+            properties = buildJsonObject {
+putJsonObject("wiki_id") {
                                             put("type", "string")
                                             put(
                                                     "description",
@@ -51,16 +45,8 @@ fun createWikiPageTool(): Tool {
                                                     "상위 페이지 ID (필수, dooray_wiki_list_pages로 조회 가능)"
                                             )
                                         }
-                                    
-                }
-                putJsonArray("required") {
-                    add("wiki_id")
-                    add("subject")
-                    add("body")
-                    add("parent_page_id")
-                }
-                put("additionalProperties", false)
-            }
+            },
+            required = listOf("wiki_id", "subject", "body", "parent_page_id")
         ),
         outputSchema = null,
             annotations = null

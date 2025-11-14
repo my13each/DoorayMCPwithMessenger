@@ -14,7 +14,6 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonArray
-import kotlinx.serialization.json.add
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.putJsonObject
 
@@ -22,14 +21,9 @@ fun createPostCommentTool(): Tool {
     return Tool(
         name = "dooray_project_create_post_comment",
         description = "두레이 프로젝트 업무에 댓글을 생성합니다. 마크다운 또는 HTML 형식으로 댓글을 작성할 수 있습니다.",
-        inputSchema =
-            Tool.Input(
-                properties =
-                    buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
-
-                        putJsonObject("project_id") {
+        inputSchema = Tool.Input(
+            properties = buildJsonObject {
+putJsonObject("project_id") {
                             put("type", "string")
                             put(
                                 "description",
@@ -55,15 +49,8 @@ fun createPostCommentTool(): Tool {
                             )
                             put("default", "text/x-markdown")
                         }
-                    
-                }
-                putJsonArray("required") {
-                    add("project_id")
-                    add("post_id")
-                    add("content")
-                }
-                put("additionalProperties", false)
-            }
+            },
+            required = listOf("project_id", "post_id", "content")
         ),
         outputSchema = null,
         annotations = null

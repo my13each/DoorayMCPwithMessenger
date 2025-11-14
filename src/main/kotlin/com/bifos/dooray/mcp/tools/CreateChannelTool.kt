@@ -15,7 +15,6 @@ import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonArray
-import kotlinx.serialization.json.add
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.putJsonObject
 
@@ -25,8 +24,6 @@ fun createChannelTool(): Tool {
         description = "두레이 메신저에서 새로운 채널을 생성합니다. (private 또는 direct 타입)",
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
 putJsonObject("type") {
                     put("type", "string")
                     put("description", "채널 타입 (private 또는 direct)")
@@ -52,14 +49,8 @@ putJsonObject("type") {
                     put("description", "멤버 ID 타입 (email 또는 memberId)")
                     put("default", "memberId")
                 }
-                }
-
-                putJsonArray("required") {
-                    add("type")
-                    add("title")
-                }
-                put("additionalProperties", false)
-            }
+            },
+            required = listOf("type", "title")
         ),
         outputSchema = null,
         annotations = null

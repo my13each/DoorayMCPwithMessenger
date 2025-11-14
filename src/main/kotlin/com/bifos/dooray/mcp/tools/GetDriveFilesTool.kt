@@ -13,7 +13,6 @@ import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonObject
 import kotlinx.serialization.json.putJsonArray
-import kotlinx.serialization.json.add
 
 fun getDriveFilesTool(): Tool {
     return Tool(
@@ -21,8 +20,6 @@ fun getDriveFilesTool(): Tool {
         description = "특정 드라이브의 파일 목록을 조회합니다. 폴더 구조를 탐색할 수 있습니다.",
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
 putJsonObject("drive_id") {
                     put("type", "string")
                     put("description", "드라이브 ID")
@@ -41,13 +38,8 @@ putJsonObject("drive_id") {
                     put("description", "페이지당 항목 수 (기본값: 50)")
                     put("default", 50)
                 }
-                }
-
-                putJsonArray("required") {
-                    add("drive_id")
-                }
-                put("additionalProperties", false)
-            }
+            },
+            required = listOf("drive_id")
         ),
         outputSchema = null,
         annotations = null

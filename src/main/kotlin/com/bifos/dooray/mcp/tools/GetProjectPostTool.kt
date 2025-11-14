@@ -12,7 +12,6 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonArray
-import kotlinx.serialization.json.add
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.putJsonObject
 
@@ -20,14 +19,9 @@ fun getProjectPostTool(): Tool {
     return Tool(
         name = "dooray_project_get_post",
         description = "두레이 프로젝트의 특정 업무의 상세 정보를 조회합니다. 업무 내용, 담당자, 첨부파일 등 모든 정보를 확인할 수 있습니다.",
-        inputSchema =
-            Tool.Input(
-                properties =
-                    buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
-
-                        putJsonObject("project_id") {
+        inputSchema = Tool.Input(
+            properties = buildJsonObject {
+putJsonObject("project_id") {
                             put("type", "string")
                             put("description", "프로젝트 ID (필수)")
                         }
@@ -38,14 +32,8 @@ fun getProjectPostTool(): Tool {
                                 "업무 ID (dooray_project_list_posts로 조회 가능) (필수)"
                             )
                         }
-                    
-                }
-                putJsonArray("required") {
-                    add("project_id")
-                    add("post_id")
-                }
-                put("additionalProperties", false)
-            }
+            },
+            required = listOf("project_id", "post_id")
         ),
         outputSchema = null,
         annotations = null

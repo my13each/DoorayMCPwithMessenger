@@ -13,7 +13,6 @@ import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonObject
 import kotlinx.serialization.json.putJsonArray
-import kotlinx.serialization.json.add
 
 fun getFileMetadataTool(): Tool {
     return Tool(
@@ -21,8 +20,6 @@ fun getFileMetadataTool(): Tool {
         description = "드라이브 파일의 상세한 메타정보를 조회합니다. 파일의 버전, 생성자, 수정자, 즐겨찾기 상태 등을 확인할 수 있습니다.",
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
 putJsonObject("drive_id") {
                     put("type", "string")
                     put("description", "드라이브 ID")
@@ -31,14 +28,8 @@ putJsonObject("drive_id") {
                     put("type", "string")
                     put("description", "파일 ID")
                 }
-                }
-
-                putJsonArray("required") {
-                    add("drive_id")
-                    add("file_id")
-                }
-                put("additionalProperties", false)
-            }
+            },
+            required = listOf("drive_id", "file_id")
         ),
         outputSchema = null,
         annotations = null

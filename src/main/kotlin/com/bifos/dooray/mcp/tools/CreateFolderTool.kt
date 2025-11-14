@@ -14,7 +14,6 @@ import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonObject
 import kotlinx.serialization.json.putJsonArray
-import kotlinx.serialization.json.add
 
 fun createFolderTool(): Tool {
     return Tool(
@@ -22,8 +21,6 @@ fun createFolderTool(): Tool {
         description = "드라이브에 새 폴더를 생성합니다. 지정된 상위 폴더 하위에 새 폴더를 생성합니다.",
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
 putJsonObject("drive_id") {
                     put("type", "string")
                     put("description", "드라이브 ID")
@@ -36,15 +33,8 @@ putJsonObject("drive_id") {
                     put("type", "string")
                     put("description", "생성할 폴더명")
                 }
-                }
-
-                putJsonArray("required") {
-                    add("drive_id")
-                    add("parent_folder_id")
-                    add("folder_name")
-                }
-                put("additionalProperties", false)
-            }
+            },
+            required = listOf("drive_id", "parent_folder_id", "folder_name")
         ),
         outputSchema = null,
         annotations = null

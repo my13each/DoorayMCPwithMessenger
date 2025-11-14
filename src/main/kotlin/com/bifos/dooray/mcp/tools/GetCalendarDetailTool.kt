@@ -16,19 +16,12 @@ fun getCalendarDetailTool(): Tool {
         description = "두레이에서 특정 캘린더의 상세 정보를 조회합니다. 캘린더 멤버 목록, 권한 정보, 위임 정보 등을 확인할 수 있습니다.",
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
 putJsonObject("calendarId") {
                     put("type", "string")
                     put("description", "조회할 캘린더 ID (dooray_calendar_list에서 확인 가능)")
                 }
-                }
-
-                putJsonArray("required") {
-                    add("calendarId")
-                }
-                put("additionalProperties", false)
-            }
+            },
+            required = listOf("calendarId")
         ),
         outputSchema = null,
         annotations = null

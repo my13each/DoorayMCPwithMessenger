@@ -14,76 +14,53 @@ fun updateProjectPostTool(): Tool {
     return Tool(
         name = "dooray_project_update_post",
         description = "두레이 프로젝트의 기존 업무를 수정합니다. 제목, 내용, 담당자, 참조자, 우선순위, 마일스톤, 태그 등을 변경할 수 있습니다.",
-        inputSchema =
-            Tool.Input(
-                properties =
-                    buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
-
-putJsonObject("project_id") {
-                            put("type", "string")
-                            put(
-                                "description",
-                                "프로젝트 ID (dooray_project_list_projects로 조회 가능)"
-                            )
-                        }
-                        putJsonObject("post_id") {
-                            put("type", "string")
-                            put(
-                                "description",
-                                "수정할 업무 ID (dooray_project_list_posts로 조회 가능)"
-                            )
-                        }
-                        putJsonObject("subject") {
-                            put("type", "string")
-                            put("description", "업무 제목 (선택사항)")
-                        }
-                        putJsonObject("body") {
-                            put("type", "string")
-                            put("description", "업무 내용 (선택사항)")
-                        }
-                        putJsonObject("to_member_ids") {
-                            put("type", "array")
-                            putJsonObject("items") { put("type", "string") }
-                            put("description", "담당자 멤버 ID 목록 (선택사항)")
-                        }
-                        putJsonObject("cc_member_ids") {
-                            put("type", "array")
-                            putJsonObject("items") { put("type", "string") }
-                            put("description", "참조자 멤버 ID 목록 (선택사항)")
-                        }
-                        putJsonObject("priority") {
-                            put("type", "string")
-                            put(
-                                "description",
-                                "우선순위 (highest, high, normal, low, lowest, none) (선택사항)"
-                            )
-                        }
-                        putJsonObject("milestone_id") {
-                            put("type", "string")
-                            put("description", "마일스톤 ID (선택사항)")
-                        }
-                        putJsonObject("tag_ids") {
-                            put("type", "array")
-                            putJsonObject("items") { put("type", "string") }
-                            put("description", "태그 ID 목록 (선택사항)")
-                        }
-                        putJsonObject("due_date") {
-                            put("type", "string")
-                            put(
-                                "description",
-                                "만기일 (ISO8601 형식, 예: 2024-12-31T18:00:00+09:00) (선택사항)"
-                            )
-                        }
-                    
+        inputSchema = Tool.Input(
+            properties = buildJsonObject {
+                putJsonObject("project_id") {
+                    put("type", "string")
+                    put("description", "프로젝트 ID (dooray_project_list_projects로 조회 가능)")
                 }
-                putJsonArray("required") {
-                    add("project_id")
-                    add("post_id")
+                putJsonObject("post_id") {
+                    put("type", "string")
+                    put("description", "수정할 업무 ID (dooray_project_list_posts로 조회 가능)")
                 }
-                put("additionalProperties", false)
-            }
+                putJsonObject("subject") {
+                    put("type", "string")
+                    put("description", "업무 제목 (선택사항)")
+                }
+                putJsonObject("body") {
+                    put("type", "string")
+                    put("description", "업무 내용 (선택사항)")
+                }
+                putJsonObject("to_member_ids") {
+                    put("type", "array")
+                    putJsonObject("items") { put("type", "string") }
+                    put("description", "담당자 멤버 ID 목록 (선택사항)")
+                }
+                putJsonObject("cc_member_ids") {
+                    put("type", "array")
+                    putJsonObject("items") { put("type", "string") }
+                    put("description", "참조자 멤버 ID 목록 (선택사항)")
+                }
+                putJsonObject("priority") {
+                    put("type", "string")
+                    put("description", "우선순위 (highest, high, normal, low, lowest, none) (선택사항)")
+                }
+                putJsonObject("milestone_id") {
+                    put("type", "string")
+                    put("description", "마일스톤 ID (선택사항)")
+                }
+                putJsonObject("tag_ids") {
+                    put("type", "array")
+                    putJsonObject("items") { put("type", "string") }
+                    put("description", "태그 ID 목록 (선택사항)")
+                }
+                putJsonObject("due_date") {
+                    put("type", "string")
+                    put("description", "만기일 (ISO8601 형식, 예: 2024-12-31T18:00:00+09:00) (선택사항)")
+                }
+            },
+            required = listOf("project_id", "post_id")
         ),
         outputSchema = null,
         annotations = null

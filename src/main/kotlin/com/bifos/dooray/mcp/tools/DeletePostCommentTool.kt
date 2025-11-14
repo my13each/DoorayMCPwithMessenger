@@ -12,7 +12,6 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonArray
-import kotlinx.serialization.json.add
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.putJsonObject
 
@@ -20,14 +19,9 @@ fun deletePostCommentTool(): Tool {
     return Tool(
         name = "dooray_project_delete_post_comment",
         description = "두레이 프로젝트 업무의 댓글을 삭제합니다.",
-        inputSchema =
-            Tool.Input(
-                properties =
-                    buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
-
-                        putJsonObject("project_id") {
+        inputSchema = Tool.Input(
+            properties = buildJsonObject {
+putJsonObject("project_id") {
                             put("type", "string")
                             put(
                                 "description",
@@ -48,15 +42,8 @@ fun deletePostCommentTool(): Tool {
                                 "댓글 ID (dooray_project_get_post_comments로 조회 가능)"
                             )
                         }
-                    
-                }
-                putJsonArray("required") {
-                    add("project_id")
-                    add("post_id")
-                    add("log_id")
-                }
-                put("additionalProperties", false)
-            }
+            },
+            required = listOf("project_id", "post_id", "log_id")
         ),
         outputSchema = null,
         annotations = null

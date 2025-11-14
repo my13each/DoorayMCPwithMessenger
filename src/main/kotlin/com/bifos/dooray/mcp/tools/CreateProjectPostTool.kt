@@ -12,7 +12,6 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonArray
-import kotlinx.serialization.json.add
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.putJsonObject
 
@@ -20,14 +19,9 @@ fun createProjectPostTool(): Tool {
     return Tool(
         name = "dooray_project_create_post",
         description = "두레이 프로젝트에 새로운 업무를 생성합니다. 담당자, 참조자, 우선순위 등을 설정할 수 있습니다.",
-        inputSchema =
-            Tool.Input(
-                properties =
-                    buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
-
-                        putJsonObject("project_id") {
+        inputSchema = Tool.Input(
+            properties = buildJsonObject {
+putJsonObject("project_id") {
                             put("type", "string")
                             put("description", "프로젝트 ID (필수)")
                         }
@@ -77,16 +71,8 @@ fun createProjectPostTool(): Tool {
                             )
                             put("default", "none")
                         }
-                    
-                }
-                putJsonArray("required") {
-                    add("project_id")
-                    add("subject")
-                    add("body")
-                    add("to_member_ids")
-                }
-                put("additionalProperties", false)
-            }
+            },
+            required = listOf("project_id", "subject", "body", "to_member_ids")
         ),
         outputSchema = null,
         annotations = null

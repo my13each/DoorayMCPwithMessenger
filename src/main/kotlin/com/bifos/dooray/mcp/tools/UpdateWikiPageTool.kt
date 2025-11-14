@@ -15,54 +15,31 @@ fun updateWikiPageTool(): Tool {
         name = "dooray_wiki_update_page",
         description =
             "기존 두레이 위키 페이지를 수정합니다. 제목, 내용, 참조자 등을 변경할 수 있습니다. 변경되지 않은 필드는 기존 값을 유지합니다.",
-        inputSchema =
-            Tool.Input(
-                properties =
-                    buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
-
-putJsonObject("wiki_id") {
-                            put("type", "string")
-                            put(
-                                "description",
-                                "위키 ID (dooray_wiki_list_projects로 조회 가능)"
-                            )
-                        }
-                        putJsonObject("page_id") {
-                            put("type", "string")
-                            put(
-                                "description",
-                                "수정할 위키 페이지 ID (dooray_wiki_list_pages로 조회 가능)"
-                            )
-                        }
-                        putJsonObject("subject") {
-                            put("type", "string")
-                            put("description", "새로운 위키 페이지 제목 (선택사항)")
-                        }
-                        putJsonObject("body") {
-                            put("type", "string")
-                            put(
-                                "description",
-                                "새로운 위키 페이지 내용 (Markdown 형식 지원, 선택사항)"
-                            )
-                        }
-                        putJsonObject("referrer_member_ids") {
-                            put("type", "array")
-                            put(
-                                "description",
-                                "참조자로 설정할 조직 멤버 ID 목록 (선택사항, 빈 배열이면 모든 참조자 제거)"
-                            )
-                            putJsonObject("items") { put("type", "string") }
-                        }
-                    
+        inputSchema = Tool.Input(
+            properties = buildJsonObject {
+                putJsonObject("wiki_id") {
+                    put("type", "string")
+                    put("description", "위키 ID (dooray_wiki_list_projects로 조회 가능)")
                 }
-                putJsonArray("required") {
-                    add("wiki_id")
-                    add("page_id")
+                putJsonObject("page_id") {
+                    put("type", "string")
+                    put("description", "수정할 위키 페이지 ID (dooray_wiki_list_pages로 조회 가능)")
                 }
-                put("additionalProperties", false)
-            }
+                putJsonObject("subject") {
+                    put("type", "string")
+                    put("description", "새로운 위키 페이지 제목 (선택사항)")
+                }
+                putJsonObject("body") {
+                    put("type", "string")
+                    put("description", "새로운 위키 페이지 내용 (Markdown 형식 지원, 선택사항)")
+                }
+                putJsonObject("referrer_member_ids") {
+                    put("type", "array")
+                    put("description", "참조자로 설정할 조직 멤버 ID 목록 (선택사항, 빈 배열이면 모든 참조자 제거)")
+                    putJsonObject("items") { put("type", "string") }
+                }
+            },
+            required = listOf("wiki_id", "page_id")
         ),
         outputSchema = null,
         annotations = null

@@ -17,14 +17,9 @@ fun getWikisTool(): Tool {
     return Tool(
         name = "dooray_wiki_list_projects",
         description = "두레이에서 접근 가능한 위키 프로젝트 목록을 조회합니다. 특정 프로젝트의 이름으로 프로젝트 ID를 찾을 때 사용하세요.",
-        inputSchema =
-            Tool.Input(
-                properties =
-                    buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
-
-                        putJsonObject("page") {
+        inputSchema = Tool.Input(
+            properties = buildJsonObject {
+putJsonObject("page") {
                             put("type", "integer")
                             put("description", "조회할 페이지 번호 (0부터 시작, 기본값: 0)")
                             put("default", 0)
@@ -34,8 +29,6 @@ fun getWikisTool(): Tool {
                             put("description", "한 페이지당 결과 수 (기본값: 200)")
                             put("default", 200)
                         }
-                    
-                }
             }
         ),
         outputSchema = null,

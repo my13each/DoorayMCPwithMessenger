@@ -14,7 +14,6 @@ import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonObject
 import kotlinx.serialization.json.putJsonArray
-import kotlinx.serialization.json.add
 import kotlinx.serialization.json.JsonPrimitive
 
 fun updateSharedLinkTool(): Tool {
@@ -29,8 +28,6 @@ fun updateSharedLinkTool(): Tool {
         """.trimIndent(),
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
 putJsonObject("drive_id") {
                         put("type", "string")
                         put("description", "드라이브 ID")
@@ -51,17 +48,8 @@ putJsonObject("drive_id") {
                         put("type", "string")
                         put("description", "공유 범위: member | memberAndGuest | memberAndGuestAndExternal")
                     }
-                }
-
-                putJsonArray("required") {
-                    add("drive_id")
-                    add("file_id")
-                    add("link_id")
-                    add("expired_at")
-                    add("scope")
-                }
-                put("additionalProperties", false)
-            }
+            },
+            required = listOf("drive_id", "file_id", "link_id", "expired_at", "scope")
         ),
         outputSchema = null,
         annotations = null

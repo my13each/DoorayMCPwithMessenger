@@ -18,8 +18,6 @@ fun sendChannelMessageTool(): Tool {
         description = "두레이 메신저 채널에 메시지를 전송합니다. 멘션 기능 지원: [@사용자명](dooray://조직ID/members/멤버ID \"member\") 또는 [@Channel](dooray://조직ID/channels/채널ID \"channel\")",
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
 putJsonObject("channel_id") {
                     put("type", "string")
                     put("description", "메시지를 전송할 채널의 ID (dooray_messenger_get_channels로 조회 가능)")
@@ -59,14 +57,8 @@ putJsonObject("channel_id") {
                     put("description", "메시지 타입 (기본값: text)")
                     put("default", "text")
                 }
-                }
-
-                putJsonArray("required") {
-                    add("channel_id")
-                    add("text")
-                }
-                put("additionalProperties", false)
-            }
+            },
+            required = listOf("channel_id", "text")
         ),
         outputSchema = null,
         annotations = null

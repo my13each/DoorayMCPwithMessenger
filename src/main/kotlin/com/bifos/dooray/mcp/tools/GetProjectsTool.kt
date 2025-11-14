@@ -17,14 +17,9 @@ fun getProjectsTool(): Tool {
     return Tool(
             name = "dooray_project_list_projects",
             description = "두레이에서 접근 가능한 프로젝트 목록을 조회합니다. 다양한 필터 조건으로 원하는 프로젝트를 찾을 수 있습니다.",
-            inputSchema =
-                    Tool.Input(
-                            properties =
-                                    buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
-
-                                        putJsonObject("page") {
+            inputSchema = Tool.Input(
+            properties = buildJsonObject {
+putJsonObject("page") {
                                             put("type", "integer")
                                             put("description", "페이지 번호 (0부터 시작, 기본값: 0)")
                                             put("default", 0)
@@ -58,8 +53,6 @@ fun getProjectsTool(): Tool {
                                                     "프로젝트 상태 (active: 활성화, archived: 보관됨, deleted: 삭제됨)"
                                             )
                                         }
-                                    
-                }
             }
         ),
             outputSchema = null,

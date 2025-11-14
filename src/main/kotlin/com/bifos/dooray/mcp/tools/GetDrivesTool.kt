@@ -18,12 +18,7 @@ fun getDrivesTool(): Tool {
         description = "Dooray에서 접근 가능한 드라이브 목록을 조회합니다.",
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
-
-                // 드라이브 목록 조회는 별도 파라미터가 필요하지 않음
-            
-                }
+// 드라이브 목록 조회는 별도 파라미터가 필요하지 않음
             }
         ),
         outputSchema = null,

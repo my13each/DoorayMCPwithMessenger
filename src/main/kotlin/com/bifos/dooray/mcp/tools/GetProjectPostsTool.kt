@@ -12,7 +12,6 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonArray
-import kotlinx.serialization.json.add
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.putJsonObject
 
@@ -20,13 +19,8 @@ fun getProjectPostsTool(): Tool {
     return Tool(
         name = "dooray_project_list_posts",
         description = "두레이 프로젝트의 업무 목록을 조회합니다. 다양한 필터 조건과 정렬 옵션을 지원합니다.",
-        inputSchema =
-            Tool.Input(
-                properties =
-                    buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
-
+        inputSchema = Tool.Input(
+            properties = buildJsonObject {
 putJsonObject("project_id") {
                             put("type", "string")
                             put("description", "프로젝트 ID (필수)")
@@ -87,13 +81,8 @@ putJsonObject("project_id") {
                                 "정렬 조건 (postDueAt, postUpdatedAt, createdAt, 역순은 앞에 '-' 추가) (선택사항)"
                             )
                         }
-                    
-                }
-                putJsonArray("required") {
-                    add("project_id")
-                }
-                put("additionalProperties", false)
-            }
+            },
+            required = listOf("project_id")
         ),
         outputSchema = null,
         annotations = null

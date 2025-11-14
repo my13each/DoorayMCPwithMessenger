@@ -13,7 +13,6 @@ import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonObject
 import kotlinx.serialization.json.putJsonArray
-import kotlinx.serialization.json.add
 
 fun deleteFileTool(): Tool {
     return Tool(
@@ -21,8 +20,6 @@ fun deleteFileTool(): Tool {
         description = "드라이브에서 파일을 영구 삭제합니다. 휴지통에 있는 파일만 영구 삭제할 수 있습니다.",
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
 putJsonObject("drive_id") {
                     put("type", "string")
                     put("description", "드라이브 ID")
@@ -31,14 +28,8 @@ putJsonObject("drive_id") {
                     put("type", "string")
                     put("description", "삭제할 파일 ID")
                 }
-                }
-
-                putJsonArray("required") {
-                    add("drive_id")
-                    add("file_id")
-                }
-                put("additionalProperties", false)
-            }
+            },
+            required = listOf("drive_id", "file_id")
         ),
         outputSchema = null,
         annotations = null

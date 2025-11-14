@@ -13,7 +13,6 @@ import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonObject
 import kotlinx.serialization.json.putJsonArray
-import kotlinx.serialization.json.add
 import kotlinx.serialization.json.JsonPrimitive
 
 fun deleteSharedLinkTool(): Tool {
@@ -28,8 +27,6 @@ fun deleteSharedLinkTool(): Tool {
         """.trimIndent(),
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
 putJsonObject("drive_id") {
                     put("type", "string")
                     put("description", "드라이브 ID")
@@ -42,15 +39,8 @@ putJsonObject("drive_id") {
                     put("type", "string")
                     put("description", "삭제할 공유 링크 ID")
                 }
-                }
-
-                putJsonArray("required") {
-                    add("drive_id")
-                    add("file_id")
-                    add("link_id")
-                }
-                put("additionalProperties", false)
-            }
+            },
+            required = listOf("drive_id", "file_id", "link_id")
         ),
         outputSchema = null,
         annotations = null

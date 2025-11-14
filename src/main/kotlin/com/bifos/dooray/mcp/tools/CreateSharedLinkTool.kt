@@ -14,7 +14,6 @@ import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonObject
 import kotlinx.serialization.json.putJsonArray
-import kotlinx.serialization.json.add
 import kotlinx.serialization.json.JsonPrimitive
 
 fun createSharedLinkTool(): Tool {
@@ -30,8 +29,6 @@ fun createSharedLinkTool(): Tool {
         """.trimIndent(),
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
 putJsonObject("drive_id") {
                     put("type", "string")
                     put("description", "드라이브 ID")
@@ -54,15 +51,8 @@ putJsonObject("drive_id") {
                     put("type", "string")
                     put("description", "만료 날짜 (ISO 8601 형식, 예: 2025-12-31T23:59:59+09:00)")
                 }
-                }
-
-                putJsonArray("required") {
-                    add("drive_id")
-                    add("file_id")
-                    add("expired_at")
-                }
-                put("additionalProperties", false)
-            }
+            },
+            required = listOf("drive_id", "file_id", "expired_at")
         ),
         outputSchema = null,
         annotations = null

@@ -12,7 +12,6 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonArray
-import kotlinx.serialization.json.add
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.putJsonObject
 
@@ -20,13 +19,8 @@ fun getWikiPagesTool(): Tool {
     return Tool(
             name = "dooray_wiki_list_pages",
             description = "특정 두레이 위키 프로젝트의 페이지 목록을 조회합니다. 전체 목록 또는 특정 부모 페이지의 하위 페이지들을 조회할 수 있습니다.",
-            inputSchema =
-                    Tool.Input(
-                            properties =
-                                    buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
-
+            inputSchema = Tool.Input(
+            properties = buildJsonObject {
 putJsonObject("project_id") {
                                             put("type", "string")
                                             put(
@@ -38,13 +32,8 @@ putJsonObject("project_id") {
                                             put("type", "string")
                                             put("description", "상위 페이지 ID (선택사항, 없으면 루트 페이지들 조회)")
                                         }
-                                    
-                }
-                putJsonArray("required") {
-                    add("project_id")
-                }
-                put("additionalProperties", false)
-            }
+            },
+            required = listOf("project_id")
         ),
         outputSchema = null,
             annotations = null

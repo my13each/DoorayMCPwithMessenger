@@ -12,7 +12,6 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonArray
-import kotlinx.serialization.json.add
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.putJsonObject
 
@@ -20,13 +19,8 @@ fun setProjectPostWorkflowTool(): Tool {
     return Tool(
         name = "dooray_project_set_post_workflow",
         description = "두레이 프로젝트 업무의 상태(워크플로우)를 변경합니다. 업무 전체의 상태를 변경하며, 모든 담당자의 상태가 함께 변경됩니다.",
-        inputSchema =
-            Tool.Input(
-                properties =
-                    buildJsonObject {
-                put("type", "object")
-                putJsonObject("properties") {
-
+        inputSchema = Tool.Input(
+            properties = buildJsonObject {
 putJsonObject("project_id") {
                             put("type", "string")
                             put("description", "프로젝트 ID (필수)")
@@ -42,15 +36,8 @@ putJsonObject("project_id") {
                             put("type", "string")
                             put("description", "변경할 워크플로우 ID (필수)")
                         }
-                    
-                }
-                putJsonArray("required") {
-                    add("project_id")
-                    add("post_id")
-                    add("workflow_id")
-                }
-                put("additionalProperties", false)
-            }
+            },
+            required = listOf("project_id", "post_id", "workflow_id")
         ),
         outputSchema = null,
         annotations = null
