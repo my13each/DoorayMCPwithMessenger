@@ -34,7 +34,8 @@ fun getSimpleChannelsTool(): Tool {
                     put("minimum", JsonPrimitive(1))
                     put("maximum", JsonPrimitive(12))
                 })
-            }
+            },
+            required = emptyList()
         ),
         outputSchema = null,
         annotations = null

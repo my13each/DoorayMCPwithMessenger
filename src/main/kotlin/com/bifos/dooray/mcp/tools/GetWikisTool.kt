@@ -31,7 +31,8 @@ fun getWikisTool(): Tool {
                             put("description", "한 페이지당 결과 수 (기본값: 200)")
                             put("default", 200)
                         }
-                    }
+                    },
+                    required = emptyList()
             ),
         outputSchema = null,
         annotations = null

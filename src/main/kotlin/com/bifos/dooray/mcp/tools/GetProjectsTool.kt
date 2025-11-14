@@ -55,7 +55,8 @@ fun getProjectsTool(): Tool {
                                                     "프로젝트 상태 (active: 활성화, archived: 보관됨, deleted: 삭제됨)"
                                             )
                                         }
-                                    }
+                                    },
+                                    required = emptyList()
                     ),
             outputSchema = null,
             annotations = null
