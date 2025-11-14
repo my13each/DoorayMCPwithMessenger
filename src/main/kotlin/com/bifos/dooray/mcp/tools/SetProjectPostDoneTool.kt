@@ -45,6 +45,7 @@ putJsonObject("project_id") {
                     add("project_id")
                     add("post_id")
                 }
+                put("additionalProperties", false)
             }
         ),
         outputSchema = null,

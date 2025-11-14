@@ -85,6 +85,7 @@ fun createProjectPostTool(): Tool {
                     add("body")
                     add("to_member_ids")
                 }
+                put("additionalProperties", false)
             }
         ),
         outputSchema = null,

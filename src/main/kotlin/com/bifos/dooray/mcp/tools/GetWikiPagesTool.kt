@@ -43,9 +43,10 @@ putJsonObject("project_id") {
                 putJsonArray("required") {
                     add("project_id")
                 }
+                put("additionalProperties", false)
             }
         ),
-            outputSchema = null,
+        outputSchema = null,
             annotations = null
     )
 }

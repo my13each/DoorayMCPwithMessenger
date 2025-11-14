@@ -62,6 +62,7 @@ fun createPostCommentTool(): Tool {
                     add("post_id")
                     add("content")
                 }
+                put("additionalProperties", false)
             }
         ),
         outputSchema = null,

@@ -49,6 +49,7 @@ putJsonObject("project_id") {
                     add("post_id")
                     add("workflow_id")
                 }
+                put("additionalProperties", false)
             }
         ),
         outputSchema = null,

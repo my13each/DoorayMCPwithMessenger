@@ -14,6 +14,8 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonObject
+import kotlinx.serialization.json.putJsonArray
+import kotlinx.serialization.json.add
 
 fun sendDirectMessageTool(): Tool {
     return Tool(
@@ -21,16 +23,23 @@ fun sendDirectMessageTool(): Tool {
         description = "두레이에서 특정 멤버에게 1:1 다이렉트 메시지를 전송합니다.",
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                putJsonObject("organization_member_id") {
-                    put("type", "string")
-                    put("description", "메시지를 받을 멤버의 조직 멤버 ID (dooray_messenger_search_members로 조회 가능)")
+                put("type", "object")
+                putJsonObject("properties") {
+                    putJsonObject("organization_member_id") {
+                        put("type", "string")
+                        put("description", "메시지를 받을 멤버의 조직 멤버 ID (dooray_messenger_search_members로 조회 가능)")
+                    }
+                    putJsonObject("text") {
+                        put("type", "string")
+                        put("description", "전송할 메시지 내용")
+                    }
                 }
-                putJsonObject("text") {
-                    put("type", "string")
-                    put("description", "전송할 메시지 내용")
+                putJsonArray("required") {
+                    add("organization_member_id")
+                    add("text")
                 }
-            },
-            required = listOf("organization_member_id", "text")
+                put("additionalProperties", false)
+            }
         ),
         outputSchema = null,
         annotations = null

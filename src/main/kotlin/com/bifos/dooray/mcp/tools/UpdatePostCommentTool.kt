@@ -70,9 +70,10 @@ fun updatePostCommentTool(): Tool {
                     add("log_id")
                     add("content")
                 }
+                put("additionalProperties", false)
             }
         ),
-            outputSchema = null,
+        outputSchema = null,
             annotations = null
     )
 }

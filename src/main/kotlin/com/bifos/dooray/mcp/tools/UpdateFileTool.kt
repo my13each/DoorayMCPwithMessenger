@@ -22,9 +22,9 @@ fun updateFileTool(): Tool {
         description = "드라이브의 기존 파일을 새로운 버전으로 업데이트합니다. 파일 내용은 Base64로 인코딩되어야 합니다.",
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                
-
-                putJsonObject("drive_id") {
+                put("type", "object")
+                putJsonObject("properties") {
+putJsonObject("drive_id") {
                     put("type", "string")
                     put("description", "드라이브 ID")
                 }
@@ -44,8 +44,16 @@ fun updateFileTool(): Tool {
                     put("type", "string")
                     put("description", "MIME 타입 (예: text/plain, image/jpeg, application/pdf)")
                 }
-            },
-            required = listOf("drive_id", "file_id", "file_name", "base64_content")
+                }
+
+                putJsonArray("required") {
+                    add("drive_id")
+                    add("file_id")
+                    add("file_name")
+                    add("base64_content")
+                }
+                put("additionalProperties", false)
+            }
         ),
         outputSchema = null,
         annotations = null

@@ -32,8 +32,8 @@ fun uploadFileFromPathTool(): Tool {
         """.trimIndent(),
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                
-
+                put("type", "object")
+                putJsonObject("properties") {
 putJsonObject("drive_id") {
                     put("type", "string")
                     put("description", "ドライブID")
@@ -50,8 +50,15 @@ putJsonObject("drive_id") {
                     put("type", "string")
                     put("description", "MIMEタイプ（例: text/plain, image/jpeg, image/png, application/pdf）省略可能")
                 }
-            },
-            required = listOf("drive_id", "file_path", "parent_id")
+                }
+
+                putJsonArray("required") {
+                    add("drive_id")
+                    add("file_path")
+                    add("parent_id")
+                }
+                put("additionalProperties", false)
+            }
         ),
         outputSchema = null,
         annotations = null

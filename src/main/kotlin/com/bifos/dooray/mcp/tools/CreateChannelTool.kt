@@ -25,9 +25,9 @@ fun createChannelTool(): Tool {
         description = "두레이 메신저에서 새로운 채널을 생성합니다. (private 또는 direct 타입)",
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                
-
-                putJsonObject("type") {
+                put("type", "object")
+                putJsonObject("properties") {
+putJsonObject("type") {
                     put("type", "string")
                     put("description", "채널 타입 (private 또는 direct)")
                 }
@@ -52,8 +52,14 @@ fun createChannelTool(): Tool {
                     put("description", "멤버 ID 타입 (email 또는 memberId)")
                     put("default", "memberId")
                 }
-            },
-            required = listOf("type", "title")
+                }
+
+                putJsonArray("required") {
+                    add("type")
+                    add("title")
+                }
+                put("additionalProperties", false)
+            }
         ),
         outputSchema = null,
         annotations = null

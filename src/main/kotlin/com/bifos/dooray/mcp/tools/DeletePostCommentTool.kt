@@ -55,6 +55,7 @@ fun deletePostCommentTool(): Tool {
                     add("post_id")
                     add("log_id")
                 }
+                put("additionalProperties", false)
             }
         ),
         outputSchema = null,

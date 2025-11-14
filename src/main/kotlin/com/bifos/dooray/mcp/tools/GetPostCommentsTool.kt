@@ -66,9 +66,10 @@ fun getPostCommentsTool(): Tool {
                     add("project_id")
                     add("post_id")
                 }
+                put("additionalProperties", false)
             }
         ),
-            outputSchema = null,
+        outputSchema = null,
             annotations = null
     )
 }

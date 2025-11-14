@@ -59,9 +59,10 @@ fun createWikiPageTool(): Tool {
                     add("body")
                     add("parent_page_id")
                 }
+                put("additionalProperties", false)
             }
         ),
-            outputSchema = null,
+        outputSchema = null,
             annotations = null
     )
 }

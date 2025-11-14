@@ -33,9 +33,9 @@ fun uploadFileTool(): Tool {
         """.trimIndent(),
         inputSchema = Tool.Input(
             properties = buildJsonObject {
-                
-
-                putJsonObject("drive_id") {
+                put("type", "object")
+                putJsonObject("properties") {
+putJsonObject("drive_id") {
                     put("type", "string")
                     put("description", "드라이브 ID")
                 }
@@ -55,8 +55,16 @@ fun uploadFileTool(): Tool {
                     put("type", "string")
                     put("description", "MIME 타입 (예: text/plain, image/jpeg, application/pdf)")
                 }
-            },
-            required = listOf("drive_id", "file_name", "base64_content", "parent_id")
+                }
+
+                putJsonArray("required") {
+                    add("drive_id")
+                    add("file_name")
+                    add("base64_content")
+                    add("parent_id")
+                }
+                put("additionalProperties", false)
+            }
         ),
         outputSchema = null,
         annotations = null

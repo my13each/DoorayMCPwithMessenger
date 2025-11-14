@@ -61,6 +61,7 @@ putJsonObject("wiki_id") {
                     add("wiki_id")
                     add("page_id")
                 }
+                put("additionalProperties", false)
             }
         ),
         outputSchema = null,
