@@ -4,15 +4,31 @@ import kotlinx.serialization.Serializable
 
 // ============ Drive 관련 타입들 ============
 
+/** Drive Member 정보 */
+@Serializable
+data class DriveMember(
+    val organizationMemberId: String,
+    val role: String
+)
+
+/** Drive Project 정보 */
+@Serializable
+data class DriveProject(
+    val id: String
+)
+
 /** Drive 정보 */
 @Serializable
 data class Drive(
     val id: String,
     val name: String? = null,
+    val type: String? = null, // private, project
     val description: String? = null,
     val createdAt: String? = null,
     val updatedAt: String? = null,
-    val organizationId: String? = null
+    val organizationId: String? = null,
+    val project: DriveProject? = null,
+    val members: List<DriveMember>? = null
 )
 
 /** Drive 목록 응답 */

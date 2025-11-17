@@ -200,60 +200,63 @@ class DoorayMcpServer {
         // 29. 드라이브 목록 조회
         addTool(getDrivesTool(), getDrivesHandler(doorayHttpClient))
 
-        // 30. 드라이브 파일 목록 조회
+        // 30. 드라이브 상세 조회
+        addTool(getDriveDetailTool(), getDriveDetailHandler(doorayHttpClient))
+
+        // 31. 드라이브 파일 목록 조회
         addTool(getDriveFilesTool(), getDriveFilesHandler(doorayHttpClient))
 
-        // 31. 파일 업로드 (パスから) - 推奨方法 (優先使用)
+        // 32. 파일 업로드 (パスから) - 推奨方法 (優先使用)
         addTool(uploadFileFromPathTool(), uploadFileFromPathHandler(doorayHttpClient))
 
-        // 32. 파일 업로드 (Base64) - フォールバック用
+        // 33. 파일 업로드 (Base64) - フォールバック用
         // dooray_drive_upload_file_from_path が失敗した場合（ファイルが見つからない等）の
         // バックアップ方法として使用。小さなファイル（10KB未満推奨）に適しています。
         // ⚠️ 大きなファイルはClaudeのメッセージ長制限（200K文字）に達する可能性があります
         addTool(uploadFileTool(), uploadFileHandler(doorayHttpClient))
 
-        // 33. 파일 다운로드
+        // 34. 파일 다운로드
         addTool(downloadFileTool(), downloadFileHandler(doorayHttpClient))
 
-        // 34. 파일 메타정보 조회
+        // 35. 파일 메타정보 조회
         addTool(getFileMetadataTool(), getFileMetadataHandler(doorayHttpClient))
 
-        // 35. 파일 업데이트
+        // 36. 파일 업데이트
         addTool(updateFileTool(), updateFileHandler(doorayHttpClient))
 
-        // 36. 파일을 휴지통으로 이동
+        // 37. 파일을 휴지통으로 이동
         addTool(moveFileToTrashTool(), moveFileToTrashHandler(doorayHttpClient))
 
-        // 37. 파일 영구 삭제
+        // 38. 파일 영구 삭제
         addTool(deleteFileTool(), deleteFileHandler(doorayHttpClient))
 
-        // 38. 폴더 생성
+        // 39. 폴더 생성
         addTool(createFolderTool(), createFolderHandler(doorayHttpClient))
 
-        // 39. 파일 복사
+        // 40. 파일 복사
         addTool(copyFileTool(), copyFileHandler(doorayHttpClient))
 
-        // 40. 파일 이동
+        // 41. 파일 이동
         addTool(moveFileTool(), moveFileHandler(doorayHttpClient))
 
         // ============ Drive Shared Link 관련 도구들 ============
 
-        // 41. 공유 링크 생성
+        // 42. 공유 링크 생성
         addTool(createSharedLinkTool(), createSharedLinkHandler(doorayHttpClient))
 
-        // 42. 공유 링크 목록 조회
+        // 43. 공유 링크 목록 조회
         addTool(getSharedLinksTool(), getSharedLinksHandler(doorayHttpClient))
 
-        // 43. 공유 링크 상세 조회
+        // 44. 공유 링크 상세 조회
         addTool(getSharedLinkDetailTool(), getSharedLinkDetailHandler(doorayHttpClient))
 
-        // 44. 공유 링크 수정
+        // 45. 공유 링크 수정
         addTool(updateSharedLinkTool(), updateSharedLinkHandler(doorayHttpClient))
 
-        // 45. 공유 링크 삭제
+        // 46. 공유 링크 삭제
         addTool(deleteSharedLinkTool(), deleteSharedLinkHandler(doorayHttpClient))
 
-        // 도구 개수: 45個 (Wiki 5 + Project 7 + Comment 4 + Messenger 7 + Calendar 5 + Drive 17)
+        // 도구 개수: 46個 (Wiki 5 + Project 7 + Comment 4 + Messenger 7 + Calendar 5 + Drive 18)
 
         log.info("Successfully added $toolCount tools to MCP server")
     }
