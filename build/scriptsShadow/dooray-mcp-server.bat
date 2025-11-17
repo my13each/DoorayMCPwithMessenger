@@ -63,7 +63,7 @@ set CMD_LINE_ARGS=%*
 :execute
 @rem Setup the command line
 
-set CLASSPATH=%APP_HOME%\lib\dooray-mcp-server-0.2.14-all.jar
+set CLASSPATH=%APP_HOME%\lib\dooray-mcp-server-0.2.17-test-no-drive-all.jar
 
 @rem Execute dooray-mcp-server
 "%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %DOORAY_MCP_SERVER_OPTS%  -jar "%CLASSPATH%" %CMD_LINE_ARGS%

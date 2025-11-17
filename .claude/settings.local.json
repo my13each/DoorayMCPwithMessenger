@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(git mv:*)",
-      "Bash(/tmp/build_pr1_fix.txt)"
+      "Bash(/tmp/build_pr1_fix.txt)",
+      "Bash(do basename \"$f\" .kt)",
+      "Bash(/tmp/build_no_drive.txt)"
     ],
     "deny": [],
     "ask": [],
