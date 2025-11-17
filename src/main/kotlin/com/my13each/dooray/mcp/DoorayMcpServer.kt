@@ -221,42 +221,45 @@ class DoorayMcpServer {
         // 35. 파일 메타정보 조회
         addTool(getFileMetadataTool(), getFileMetadataHandler(doorayHttpClient))
 
-        // 36. 파일 업데이트
+        // 36. 파일 이름 변경
+        addTool(renameFileTool(), renameFileHandler(doorayHttpClient))
+
+        // 37. 파일 업데이트
         addTool(updateFileTool(), updateFileHandler(doorayHttpClient))
 
-        // 37. 파일을 휴지통으로 이동
+        // 38. 파일을 휴지통으로 이동
         addTool(moveFileToTrashTool(), moveFileToTrashHandler(doorayHttpClient))
 
-        // 38. 파일 영구 삭제
+        // 39. 파일 영구 삭제
         addTool(deleteFileTool(), deleteFileHandler(doorayHttpClient))
 
-        // 39. 폴더 생성
+        // 40. 폴더 생성
         addTool(createFolderTool(), createFolderHandler(doorayHttpClient))
 
-        // 40. 파일 복사
+        // 41. 파일 복사
         addTool(copyFileTool(), copyFileHandler(doorayHttpClient))
 
-        // 41. 파일 이동
+        // 42. 파일 이동
         addTool(moveFileTool(), moveFileHandler(doorayHttpClient))
 
         // ============ Drive Shared Link 관련 도구들 ============
 
-        // 42. 공유 링크 생성
+        // 43. 공유 링크 생성
         addTool(createSharedLinkTool(), createSharedLinkHandler(doorayHttpClient))
 
-        // 43. 공유 링크 목록 조회
+        // 44. 공유 링크 목록 조회
         addTool(getSharedLinksTool(), getSharedLinksHandler(doorayHttpClient))
 
-        // 44. 공유 링크 상세 조회
+        // 45. 공유 링크 상세 조회
         addTool(getSharedLinkDetailTool(), getSharedLinkDetailHandler(doorayHttpClient))
 
-        // 45. 공유 링크 수정
+        // 46. 공유 링크 수정
         addTool(updateSharedLinkTool(), updateSharedLinkHandler(doorayHttpClient))
 
-        // 46. 공유 링크 삭제
+        // 47. 공유 링크 삭제
         addTool(deleteSharedLinkTool(), deleteSharedLinkHandler(doorayHttpClient))
 
-        // 도구 개수: 46個 (Wiki 5 + Project 7 + Comment 4 + Messenger 7 + Calendar 5 + Drive 18)
+        // 도구 개수: 47個 (Wiki 5 + Project 7 + Comment 4 + Messenger 7 + Calendar 5 + Drive 19)
 
         log.info("Successfully added $toolCount tools to MCP server")
     }

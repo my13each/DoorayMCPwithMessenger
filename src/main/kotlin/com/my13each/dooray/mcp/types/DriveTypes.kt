@@ -181,6 +181,15 @@ data class CopyFileResponse(
 /** 파일 이동 응답 (result가 null) */
 typealias MoveFileResponse = DoorayApiUnitResponse
 
+/** 파일 이름 변경 요청 */
+@Serializable
+data class RenameFileRequest(
+    val name: String
+)
+
+/** 파일 이름 변경 응답 (result가 null) */
+typealias RenameFileResponse = DoorayApiUnitResponse
+
 /** 파일 수정 요청 */
 @Serializable
 data class UpdateFileRequest(

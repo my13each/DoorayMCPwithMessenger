@@ -970,6 +970,19 @@ class DoorayHttpClient(private val baseUrl: String, private val doorayApiKey: St
         }
     }
 
+    override suspend fun renameFile(driveId: String, fileId: String, newName: String): RenameFileResponse {
+        return executeApiCallForNullableResult(
+                operation = "PUT /drive/v1/drives/$driveId/files/$fileId?media=meta",
+                successMessage = "✅ 파일 이름 변경 성공"
+        ) {
+            httpClient.put("/drive/v1/drives/$driveId/files/$fileId") {
+                parameter("media", "meta")
+                contentType(ContentType.Application.Json)
+                setBody(RenameFileRequest(name = newName))
+            }
+        }
+    }
+
     override suspend fun updateFile(
             driveId: String,
             fileId: String,

@@ -262,6 +262,9 @@ interface DoorayClient {
     /** 파일 메타정보를 조회합니다. */
     suspend fun getFileMetadata(driveId: String, fileId: String): DriveFileMetadataResponse
 
+    /** 파일 또는 폴더의 이름을 변경합니다. */
+    suspend fun renameFile(driveId: String, fileId: String, newName: String): RenameFileResponse
+
     /** 파일을 수정합니다. (새 버전 업로드) */
     suspend fun updateFile(
         driveId: String,
