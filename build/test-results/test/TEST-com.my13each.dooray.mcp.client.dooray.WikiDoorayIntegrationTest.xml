@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.my13each.dooray.mcp.client.dooray.WikiDoorayIntegrationTest" tests="1" skipped="0" failures="1" errors="0" timestamp="2025-11-17T09:47:48.747Z" hostname="MN01609710.local" time="0.001">
+<testsuite name="com.my13each.dooray.mcp.client.dooray.WikiDoorayIntegrationTest" tests="1" skipped="0" failures="1" errors="0" timestamp="2025-11-17T09:48:51.722Z" hostname="MN01609710.local" time="0.0">
   <properties/>
-  <testcase name="initializationError" classname="com.my13each.dooray.mcp.client.dooray.WikiDoorayIntegrationTest" time="0.001">
+  <testcase name="initializationError" classname="com.my13each.dooray.mcp.client.dooray.WikiDoorayIntegrationTest" time="0.0">
     <failure message="java.lang.IllegalStateException: DOORAY_BASE_URL 환경변수가 설정되지 않았습니다." type="java.lang.IllegalStateException">java.lang.IllegalStateException: DOORAY_BASE_URL 환경변수가 설정되지 않았습니다.
 	at com.my13each.dooray.mcp.client.dooray.BaseDoorayIntegrationTest.setup(BaseDoorayIntegrationTest.kt:30)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
