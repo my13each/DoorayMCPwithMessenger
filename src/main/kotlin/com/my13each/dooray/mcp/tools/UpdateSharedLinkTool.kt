@@ -9,6 +9,8 @@ import io.modelcontextprotocol.kotlin.sdk.CallToolRequest
 import io.modelcontextprotocol.kotlin.sdk.CallToolResult
 import io.modelcontextprotocol.kotlin.sdk.TextContent
 import io.modelcontextprotocol.kotlin.sdk.Tool
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.buildJsonArray
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
@@ -44,10 +46,10 @@ fun updateSharedLinkTool(): Tool {
                 put("scope", buildJsonObject {
                     put("type", "string")
                     put("description", "공유 범위: member | memberAndGuest | memberAndGuestAndExternal")
-                    put("enum", buildJsonObject {
-                        put("member", "손님 제외 조직 내 사용자")
-                        put("memberAndGuest", "조직 내 모든 사용자")
-                        put("memberAndGuestAndExternal", "내외부 상관없이")
+                    put("enum", buildJsonArray {
+                        add(JsonPrimitive("member"))
+                        add(JsonPrimitive("memberAndGuest"))
+                        add(JsonPrimitive("memberAndGuestAndExternal"))
                     })
                 })
             },

@@ -196,9 +196,8 @@ class DoorayMcpServer {
         addTool(createCalendarEventTool(), createCalendarEventHandler(doorayHttpClient))
 
         // ============ Drive 관련 도구들 ============
-        // ⚠️ TESTING: 파일 관련 12개 툴은 비활성화, 공유링크 5개 툴만 활성화
+        // ⚠️ TESTING: 파일 관련 12개 툴 활성화, 공유링크 5개 툴 비활성화
 
-        /*
         // 29. 드라이브 목록 조회
         addTool(getDrivesTool(), getDrivesHandler(doorayHttpClient))
 
@@ -237,10 +236,10 @@ class DoorayMcpServer {
 
         // 40. 파일 이동
         addTool(moveFileTool(), moveFileHandler(doorayHttpClient))
-        */
 
         // ============ Drive Shared Link 관련 도구들 ============
 
+        /*
         // 41. 공유 링크 생성
         addTool(createSharedLinkTool(), createSharedLinkHandler(doorayHttpClient))
 
@@ -255,8 +254,9 @@ class DoorayMcpServer {
 
         // 45. 공유 링크 삭제
         addTool(deleteSharedLinkTool(), deleteSharedLinkHandler(doorayHttpClient))
+        */
 
-        // 도구 개수: 33個 (파일 관련 12개 비활성화, 공유링크 5개 활성화)
+        // 도구 개수: 40個 (파일 관련 12개 활성화, 공유링크 5개 비활성화)
 
         log.info("Successfully added $toolCount tools to MCP server")
     }

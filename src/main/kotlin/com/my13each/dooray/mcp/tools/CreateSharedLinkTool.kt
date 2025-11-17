@@ -9,6 +9,8 @@ import io.modelcontextprotocol.kotlin.sdk.CallToolRequest
 import io.modelcontextprotocol.kotlin.sdk.CallToolResult
 import io.modelcontextprotocol.kotlin.sdk.TextContent
 import io.modelcontextprotocol.kotlin.sdk.Tool
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.buildJsonArray
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
@@ -38,10 +40,10 @@ fun createSharedLinkTool(): Tool {
                     put("type", "string")
                     put("description", "공유 범위 (기본값: memberAndGuest): member | memberAndGuest | memberAndGuestAndExternal")
                     put("default", "memberAndGuest")
-                    put("enum", buildJsonObject {
-                        put("member", "손님 제외 조직 내 사용자")
-                        put("memberAndGuest", "조직 내 모든 사용자 (기본값)")
-                        put("memberAndGuestAndExternal", "내외부 상관없이 (조직 정책으로 차단될 수 있음)")
+                    put("enum", buildJsonArray {
+                        add(JsonPrimitive("member"))
+                        add(JsonPrimitive("memberAndGuest"))
+                        add(JsonPrimitive("memberAndGuestAndExternal"))
                     })
                 })
                 put("expired_at", buildJsonObject {
