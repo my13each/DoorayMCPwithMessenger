@@ -791,6 +791,8 @@ class DoorayHttpClient(private val baseUrl: String, private val doorayApiKey: St
 
     override suspend fun getDriveFiles(
             driveId: String,
+            type: String?,
+            subTypes: String?,
             parentId: String?,
             page: Int?,
             size: Int?
@@ -800,6 +802,8 @@ class DoorayHttpClient(private val baseUrl: String, private val doorayApiKey: St
                 successMessage = "✅ 드라이브 파일 목록 조회 성공"
         ) {
             httpClient.get("/drive/v1/drives/$driveId/files") {
+                type?.let { parameter("type", it) }
+                subTypes?.let { parameter("subTypes", it) }
                 parentId?.let { parameter("parentId", it) }
                 page?.let { parameter("page", it) }
                 size?.let { parameter("size", it) }

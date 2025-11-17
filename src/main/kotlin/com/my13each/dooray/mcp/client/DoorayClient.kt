@@ -234,6 +234,8 @@ interface DoorayClient {
     /** 드라이브의 파일 목록을 조회합니다. */
     suspend fun getDriveFiles(
         driveId: String,
+        type: String? = null,
+        subTypes: String? = null,
         parentId: String? = null,
         page: Int? = null,
         size: Int? = null
