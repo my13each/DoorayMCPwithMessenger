@@ -14,7 +14,7 @@ NC='\033[0m' # No Color
 cd "$(dirname "$0")/.."
 
 # 변수 설정
-IMAGE_NAME="bifos/dooray-mcp"
+IMAGE_NAME="my13each/dooray-mcp"
 # Gradle에서 버전 추출
 VERSION=$(./gradlew properties --no-daemon --console=plain -q | grep "^version:" | awk '{print $2}')
 LATEST_TAG="latest"

@@ -63,12 +63,12 @@ java -jar build/libs/dooray-mcp-server-0.2.1-all.jar
 
 ```bash
 # Docker Hubからイメージを取得
-docker pull bifos/dooray-mcp:latest
+docker pull my13each/dooray-mcp:latest
 
 # 環境変数と一緒に実行
 docker run -e DOORAY_API_KEY="your_api_key" \
            -e DOORAY_BASE_URL="https://api.dooray.com" \
-           bifos/dooray-mcp:latest
+           my13each/dooray-mcp:latest
 ```
 
 ## Claude Desktopでの使用方法
