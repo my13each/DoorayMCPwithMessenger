@@ -4,7 +4,8 @@
       "Bash(git mv:*)",
       "Bash(/tmp/build_pr1_fix.txt)",
       "Bash(do basename \"$f\" .kt)",
-      "Bash(/tmp/build_no_drive.txt)"
+      "Bash(/tmp/build_no_drive.txt)",
+      "Bash(/tmp/build_sharedlink_only.txt)"
     ],
     "deny": [],
     "ask": [],
