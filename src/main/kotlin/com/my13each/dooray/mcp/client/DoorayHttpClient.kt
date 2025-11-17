@@ -761,12 +761,22 @@ class DoorayHttpClient(private val baseUrl: String, private val doorayApiKey: St
 
     // ============ Drive 관련 API 구현 ============
 
-    override suspend fun getDrives(): DriveListResponse {
+    override suspend fun getDrives(
+        projectId: String?,
+        type: String?,
+        scope: String?,
+        state: String?
+    ): DriveListResponse {
         return executeApiCall(
                 operation = "GET /drive/v1/drives",
                 successMessage = "✅ 드라이브 목록 조회 성공"
         ) {
-            httpClient.get("/drive/v1/drives")
+            httpClient.get("/drive/v1/drives") {
+                projectId?.let { parameter("projectId", it) }
+                type?.let { parameter("type", it) }
+                scope?.let { parameter("scope", it) }
+                state?.let { parameter("state", it) }
+            }
         }
     }
 

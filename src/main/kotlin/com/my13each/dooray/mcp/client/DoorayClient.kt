@@ -221,7 +221,12 @@ interface DoorayClient {
     // ============ Drive 관련 API ============
 
     /** 접근 가능한 드라이브 목록을 조회합니다. */
-    suspend fun getDrives(): DriveListResponse
+    suspend fun getDrives(
+        projectId: String? = null,
+        type: String? = null,
+        scope: String? = null,
+        state: String? = null
+    ): DriveListResponse
 
     /** 특정 드라이브의 상세 정보를 조회합니다. */
     suspend fun getDriveDetail(driveId: String): DriveDetailResponse
