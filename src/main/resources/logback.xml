@@ -17,7 +17,7 @@
     </root>
 
     <!-- 애플리케이션 로깅 -->
-    <logger name="com.bifos.dooray.mcp" level="INFO" />
+    <logger name="com.my13each.dooray.mcp" level="INFO" />
 
     <!-- kotlin-mcp-sdk 로깅 제어 -->
     <logger name="io.modelcontextprotocol" level="WARN" />

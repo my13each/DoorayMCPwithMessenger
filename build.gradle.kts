@@ -6,10 +6,10 @@ plugins {
 }
 
 application {
-    mainClass.set("com.bifos.dooray.mcp.MainKt")
+    mainClass.set("com.my13each.dooray.mcp.MainKt")
 }
 
-group = "com.bifos.dooray.mcp"
+group = "com.my13each.dooray.mcp"
 version = project.findProperty("project.version") as String? ?: "0.1.5"
 
 repositories {
@@ -84,7 +84,7 @@ tasks.register<JavaExec>("runLocal") {
 
     // 빌드된 JAR 파일 실행 (동적 버전 사용)
     classpath = files("build/libs/dooray-mcp-server-${version}-all.jar")
-    mainClass.set("com.bifos.dooray.mcp.MainKt")
+    mainClass.set("com.my13each.dooray.mcp.MainKt")
 
     // 표준 입출력 연결 (MCP 통신용)
     standardInput = System.`in`
@@ -95,6 +95,6 @@ tasks.register<JavaExec>("runLocal") {
 tasks.register<JavaExec>("validateSchemas") {
     description = "Validate all tool JSON schemas"
     group = "verification"
-    mainClass.set("com.bifos.dooray.mcp.ValidateToolSchemasKt")
+    mainClass.set("com.my13each.dooray.mcp.ValidateToolSchemasKt")
     classpath = sourceSets["main"].runtimeClasspath
 }

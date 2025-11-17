@@ -1,0 +1,260 @@
+package com.my13each.dooray.mcp
+
+import com.my13each.dooray.mcp.client.DoorayHttpClient
+import com.my13each.dooray.mcp.constants.EnvVariableConst.DOORAY_API_KEY
+import com.my13each.dooray.mcp.constants.EnvVariableConst.DOORAY_BASE_URL
+import com.my13each.dooray.mcp.constants.VersionConst
+import com.my13each.dooray.mcp.tools.*
+import io.ktor.utils.io.streams.*
+import io.modelcontextprotocol.kotlin.sdk.*
+import io.modelcontextprotocol.kotlin.sdk.server.Server
+import io.modelcontextprotocol.kotlin.sdk.server.ServerOptions
+import io.modelcontextprotocol.kotlin.sdk.server.StdioServerTransport
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.runBlocking
+import kotlinx.io.asSink
+import kotlinx.io.buffered
+import org.slf4j.LoggerFactory
+
+class DoorayMcpServer {
+
+    private val log = LoggerFactory.getLogger(DoorayMcpServer::class.java)
+
+    fun initServer() {
+        log.info("Dooray MCP Server starting...")
+
+        val env = getEnv()
+
+        log.info("DOORAY_API_KEY, DOORAY_BASE_URL found, initializing HTTP client...")
+        val doorayHttpClient =
+            DoorayHttpClient(
+                baseUrl = env[DOORAY_BASE_URL]!!,
+                doorayApiKey = env[DOORAY_API_KEY]!!
+            )
+
+        val server =
+            Server(
+                Implementation(
+                    name = "dooray-mcp-server",
+                    version = VersionConst.VERSION
+                ),
+                ServerOptions(
+                    capabilities =
+                        ServerCapabilities(
+                            tools =
+                                ServerCapabilities.Tools(
+                                    listChanged = true
+                                )
+                        )
+                )
+            )
+
+        registerTool(server, doorayHttpClient)
+
+        // Create a transport using standard IO for server communication
+        val transport =
+            StdioServerTransport(System.`in`.asInput(), System.out.asSink().buffered())
+
+        log.info("Starting MCP server on STDIO transport...")
+
+        runBlocking {
+            server.connect(transport)
+            log.info("MCP server connected and ready!")
+
+            val done = Job()
+            server.onClose {
+                log.info("MCP server closing...")
+                done.complete()
+            }
+            done.join()
+        }
+    }
+
+    fun getEnv(): Map<String, String> {
+        val baseUrl =
+            System.getenv(DOORAY_BASE_URL)
+                ?: throw IllegalArgumentException("DOORAY_BASE_URL is required.")
+        val apiKey =
+            System.getenv(DOORAY_API_KEY)
+                ?: throw IllegalArgumentException("DOORAY_API_KEY is required.")
+
+        return mapOf(
+            DOORAY_BASE_URL to baseUrl,
+            DOORAY_API_KEY to apiKey,
+        )
+    }
+
+    fun registerTool(server: Server, doorayHttpClient: DoorayHttpClient) {
+        log.info("Adding tools...")
+
+        var toolCount = 0
+
+        fun addTool(tool: Tool, handler: suspend (CallToolRequest) -> CallToolResult) {
+            server.addTool(
+                name = tool.name,
+                description = tool.description ?: "",
+                inputSchema = tool.inputSchema,
+                handler = handler
+            )
+            toolCount++
+        }
+
+        // 1. 위키 프로젝트 목록 조회
+        addTool(getWikisTool(), getWikisHandler(doorayHttpClient))
+
+        // 2. 위키 페이지 목록 조회
+        addTool(getWikiPagesTool(), getWikiPagesHandler(doorayHttpClient))
+
+        // 3. 위키 페이지 상세 조회
+        addTool(getWikiPageTool(), getWikiPageHandler(doorayHttpClient))
+
+        // 4. 위키 페이지 생성
+        addTool(createWikiPageTool(), createWikiPageHandler(doorayHttpClient))
+
+        // 5. 위키 페이지 수정
+        addTool(updateWikiPageTool(), updateWikiPageHandler(doorayHttpClient))
+
+        // ============ 프로젝트 업무 관련 도구들 ============
+
+        // 6. 프로젝트 업무 목록 조회
+        addTool(getProjectPostsTool(), getProjectPostsHandler(doorayHttpClient))
+
+        // 7. 프로젝트 업무 상세 조회
+        addTool(getProjectPostTool(), getProjectPostHandler(doorayHttpClient))
+
+        // 8. 프로젝트 업무 생성
+        addTool(createProjectPostTool(), createProjectPostHandler(doorayHttpClient))
+
+        // 9. 프로젝트 업무 상태 변경
+        addTool(
+            setProjectPostWorkflowTool(),
+            setProjectPostWorkflowHandler(doorayHttpClient)
+        )
+
+        // 10. 프로젝트 업무 완료 처리
+        addTool(setProjectPostDoneTool(), setProjectPostDoneHandler(doorayHttpClient))
+
+        // 11. 프로젝트 목록 조회
+        addTool(getProjectsTool(), getProjectsHandler(doorayHttpClient))
+
+        // 12. 프로젝트 업무 수정
+        addTool(updateProjectPostTool(), updateProjectPostHandler(doorayHttpClient))
+
+        // ============ 업무 댓글 관련 도구들 ============
+
+        // 13. 업무 댓글 생성
+        addTool(createPostCommentTool(), createPostCommentHandler(doorayHttpClient))
+
+        // 14. 업무 댓글 목록 조회
+        addTool(getPostCommentsTool(), getPostCommentsHandler(doorayHttpClient))
+
+        // 15. 업무 댓글 수정
+        addTool(updatePostCommentTool(), updatePostCommentHandler(doorayHttpClient))
+
+        // 16. 업무 댓글 삭제
+        addTool(deletePostCommentTool(), deletePostCommentHandler(doorayHttpClient))
+
+        // ============ 메신저 관련 도구들 ============
+
+        // 17. 멤버 검색
+        addTool(searchMembersTool(), searchMembersHandler(doorayHttpClient))
+
+        // 18. 다이렉트 메시지 전송
+        addTool(sendDirectMessageTool(), sendDirectMessageHandler(doorayHttpClient))
+
+        // 19. 채널 목록 조회
+        addTool(getChannelsTool(), getChannelsHandler(doorayHttpClient))
+
+        // 20. 간단한 채널 목록 조회 (검색용)
+        addTool(getSimpleChannelsTool(), getSimpleChannelsHandler(doorayHttpClient))
+
+        // 21. 특정 채널 상세 조회
+        addTool(getChannelTool(), getChannelHandler(doorayHttpClient))
+
+        // ⚠️ 채널 로그 조회는 Dooray API에서 지원하지 않음 (보안상 제한)
+        // 22. 채널 메시지 전송
+        addTool(sendChannelMessageTool(), sendChannelMessageHandler(doorayHttpClient))
+
+        // 23. 채널 생성
+        addTool(createChannelTool(), createChannelHandler(doorayHttpClient))
+
+        // ============ 캘린더 관련 도구들 ============
+
+        // 24. 캘린더 목록 조회
+        addTool(getCalendarsTool(), getCalendarsHandler(doorayHttpClient))
+
+        // 25. 캘린더 상세 조회
+        addTool(getCalendarDetailTool(), getCalendarDetailHandler(doorayHttpClient))
+
+        // 26. 캘린더 일정 조회 (기간별)
+        addTool(getCalendarEventsTool(), getCalendarEventsHandler(doorayHttpClient))
+
+        // 27. 캘린더 일정 상세 조회
+        addTool(getCalendarEventDetailTool(), getCalendarEventDetailHandler(doorayHttpClient))
+
+        // 28. 캘린더 일정 등록
+        addTool(createCalendarEventTool(), createCalendarEventHandler(doorayHttpClient))
+
+        // ============ Drive 관련 도구들 ============
+
+        // 29. 드라이브 목록 조회
+        addTool(getDrivesTool(), getDrivesHandler(doorayHttpClient))
+
+        // 30. 드라이브 파일 목록 조회
+        addTool(getDriveFilesTool(), getDriveFilesHandler(doorayHttpClient))
+
+        // 31. 파일 업로드 (パスから) - 推奨方法 (優先使用)
+        addTool(uploadFileFromPathTool(), uploadFileFromPathHandler(doorayHttpClient))
+
+        // 32. 파일 업로드 (Base64) - フォールバック用
+        // dooray_drive_upload_file_from_path が失敗した場合（ファイルが見つからない等）の
+        // バックアップ方法として使用。小さなファイル（10KB未満推奨）に適しています。
+        // ⚠️ 大きなファイルはClaudeのメッセージ長制限（200K文字）に達する可能性があります
+        addTool(uploadFileTool(), uploadFileHandler(doorayHttpClient))
+
+        // 33. 파일 다운로드
+        addTool(downloadFileTool(), downloadFileHandler(doorayHttpClient))
+
+        // 34. 파일 메타정보 조회
+        addTool(getFileMetadataTool(), getFileMetadataHandler(doorayHttpClient))
+
+        // 35. 파일 업데이트
+        addTool(updateFileTool(), updateFileHandler(doorayHttpClient))
+
+        // 36. 파일을 휴지통으로 이동
+        addTool(moveFileToTrashTool(), moveFileToTrashHandler(doorayHttpClient))
+
+        // 37. 파일 영구 삭제
+        addTool(deleteFileTool(), deleteFileHandler(doorayHttpClient))
+
+        // 38. 폴더 생성
+        addTool(createFolderTool(), createFolderHandler(doorayHttpClient))
+
+        // 39. 파일 복사
+        addTool(copyFileTool(), copyFileHandler(doorayHttpClient))
+
+        // 40. 파일 이동
+        addTool(moveFileTool(), moveFileHandler(doorayHttpClient))
+
+        // ============ Drive Shared Link 관련 도구들 ============
+
+        // 41. 공유 링크 생성
+        addTool(createSharedLinkTool(), createSharedLinkHandler(doorayHttpClient))
+
+        // 42. 공유 링크 목록 조회
+        addTool(getSharedLinksTool(), getSharedLinksHandler(doorayHttpClient))
+
+        // 43. 공유 링크 상세 조회
+        addTool(getSharedLinkDetailTool(), getSharedLinkDetailHandler(doorayHttpClient))
+
+        // 44. 공유 링크 수정
+        addTool(updateSharedLinkTool(), updateSharedLinkHandler(doorayHttpClient))
+
+        // 45. 공유 링크 삭제
+        addTool(deleteSharedLinkTool(), deleteSharedLinkHandler(doorayHttpClient))
+
+        // 도구 개수: 45個 (パスベースのアップロードを優先、Base64はフォールバック)
+
+        log.info("Successfully added $toolCount tools to MCP server")
+    }
+}

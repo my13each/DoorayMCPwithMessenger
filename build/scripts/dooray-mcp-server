@@ -212,7 +212,7 @@ DEFAULT_JVM_OPTS=""
 
 set -- \
         -classpath "$CLASSPATH" \
-        com.bifos.dooray.mcp.MainKt \
+        com.my13each.dooray.mcp.MainKt \
         "$@"
 
 # Stop when "xargs" is not available.

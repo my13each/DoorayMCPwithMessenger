@@ -1,140 +1,112 @@
 #!/usr/bin/env python3
-import os
-import re
-import glob
+"""
+Fix all MCP tools to use JSON Schema draft 2020-12 format (PR #1 approach)
+Add 'required' parameter to Tool.Input constructor
+"""
 
-def fix_tool_schema(file_path):
-    """Fix the JSON schema structure in a Tool file"""
+import re
+from pathlib import Path
+from typing import Tuple
+
+def fix_tool_file(file_path: Path) -> Tuple[bool, str]:
+    """Fix a single tool file to add required parameter to Tool.Input"""
+
     with open(file_path, 'r', encoding='utf-8') as f:
         content = f.read()
 
-    original_content = content
+    # Pattern to match Tool.Input(...) with properties = buildJsonObject { }
+    # We need to handle multiline carefully
+    pattern = r'(inputSchema\s*=\s*Tool\.Input\(\s*properties\s*=\s*buildJsonObject\s*\{)'
 
-    # Skip if already fixed (check for the pattern that shouldn't exist)
-    if 'put("type", "object")' not in content:
-        print(f"Skipping {os.path.basename(file_path)} - already fixed")
-        return False
+    if not re.search(pattern, content):
+        return False, "No Tool.Input with buildJsonObject found"
 
-    # Find the inputSchema section
-    # Pattern: inputSchema = Tool.Input( properties = buildJsonObject { put("type", "object") putJsonObject("properties") {
-    pattern = r'(inputSchema\s*=\s*Tool\.Input\(\s*properties\s*=\s*buildJsonObject\s*\{\s*)put\("type",\s*"object"\)\s*putJsonObject\("properties"\)\s*\{'
+    # Check if already has required parameter
+    if re.search(r'Tool\.Input\([^)]*required\s*=', content):
+        return False, "Already has required parameter"
 
-    if re.search(pattern, content):
-        # Remove put("type", "object") and putJsonObject("properties") {
-        new_content = re.sub(pattern, r'\1', content)
-
-        # Now we need to find and remove the closing } for putJsonObject("properties")
-        # This is tricky because we need to find the right closing brace
-
-        # Find all positions where we have the pattern
-        matches = list(re.finditer(pattern, content))
-        if matches:
-            # Process from the end to maintain correct positions
-            for match in reversed(matches):
-                start_pos = match.end()
-
-                # Find the matching closing brace for putJsonObject("properties")
-                # We need to count braces after putJsonObject("properties") {
-                brace_count = 1
-                i = start_pos
-                while i < len(content) and brace_count > 0:
-                    if content[i] == '{':
-                        brace_count += 1
-                    elif content[i] == '}':
-                        brace_count -= 1
-                    i += 1
-
-                # Now we're at the position after the closing }, we need to remove it
-                # But we need to be careful - there might be more content after
-                # Let's look for the pattern: } followed by optional whitespace and }
-                # Actually, let's look for: }\n followed by optional whitespace and }
-                end_pattern_start = i
-
-                # Look for the next non-whitespace/newline character
-                while i < len(content) and content[i] in ' \n\t':
-                    i += 1
-
-                # Check if it's a closing brace (closing putJsonObject("properties"))
-                if i < len(content) and content[i] == '}':
-                    # This is the closing brace we want to remove
-                    # Remove from end_pattern_start-1 (the }) to i (inclusive)
-                    # But let's be more careful and only remove one }
-                    pass
-
-        # Let's try a different approach - use a more specific regex
-        # Look for the pattern where we have properties closing followed by buildJsonObject closing
-        pattern2 = r'(\s+)\}\s*\}\s*\)\s*,'
-
-        # First let's count how many such patterns we have
-        matches2 = list(re.finditer(pattern2, content))
-
-        # Actually, let's be smarter - let's parse properly
-        # Find inputSchema = Tool.Input(
-        # Then find buildJsonObject {
-        # Then remove put("type", "object") and putJsonObject("properties") {
-        # And the corresponding }
-
-    # Actually, let's use a simpler line-by-line approach
+    # Find the closing of buildJsonObject and add required parameter
+    # This is complex because of nested braces
     lines = content.split('\n')
     new_lines = []
-    skip_next_properties_close = False
-    inside_input_schema = False
-    brace_depth = 0
-    removed_properties = False
+    in_input_schema = False
+    brace_count = 0
+    input_start_line = -1
 
     for i, line in enumerate(lines):
-        # Track if we're inside inputSchema
-        if 'inputSchema' in line and 'Tool.Input' in line:
-            inside_input_schema = True
-            brace_depth = 0
+        if 'inputSchema = Tool.Input(' in line:
+            in_input_schema = True
+            input_start_line = i
 
-        if inside_input_schema:
-            # Count braces to track depth
-            brace_depth += line.count('{') - line.count('}')
+        if in_input_schema:
+            # Count braces
+            brace_count += line.count('{') - line.count('}')
 
-            # Skip the line with put("type", "object")
-            if 'put("type", "object")' in line:
+            # Check if this is the closing line of buildJsonObject
+            if brace_count == 0 and 'properties = buildJsonObject' in content[content.find('inputSchema = Tool.Input('):content.find('inputSchema = Tool.Input(') + content[content.find('inputSchema = Tool.Input('):].find(line) + len(line)]:
+                # This is the closing brace of buildJsonObject
+                new_lines.append(line.rstrip())
+
+                # Add required parameter
+                indent = ' ' * (len(line) - len(line.lstrip()))
+                new_lines.append(indent[:-4] + '},')
+                new_lines.append(indent[:-4] + 'required = emptyList()')
+
+                in_input_schema = False
                 continue
-
-            # Skip the line with putJsonObject("properties") {
-            if 'putJsonObject("properties")' in line and not removed_properties:
-                removed_properties = True
-                skip_next_properties_close = True
-                continue
-
-            # Skip one closing } after we removed putJsonObject("properties")
-            if skip_next_properties_close and line.strip() == '}':
-                skip_next_properties_close = False
-                continue
-
-            if brace_depth <= 0:
-                inside_input_schema = False
-                removed_properties = False
 
         new_lines.append(line)
 
-    new_content = '\n'.join(new_lines)
+    # Simpler approach: use regex with careful pattern
+    # Find: Tool.Input(\n            properties = buildJsonObject { ... }
+    # Replace with: Tool.Input(\n            properties = buildJsonObject { ... }\n        },\n        required = emptyList()
 
-    # Write back if changed
-    if new_content != content:
-        with open(file_path, 'w', encoding='utf-8') as f:
-            f.write(new_content)
-        print(f"Fixed {os.path.basename(file_path)}")
-        return True
-    else:
-        print(f"No changes needed for {os.path.basename(file_path)}")
-        return False
+    # Let's use a different approach
+    # Find the pattern and replace the closing ) with },\n required = emptyList()\n)
+
+    original_pattern = r'(inputSchema\s*=\s*Tool\.Input\(\s*properties\s*=\s*buildJsonObject\s*\{(?:[^{}]|\{[^{}]*\})*\})\s*\)'
+
+    def replace_func(match):
+        inner_content = match.group(1)
+        return inner_content + '\n        },\n        required = emptyList()\n    )'
+
+    new_content = re.sub(original_pattern, replace_func, content)
+
+    if new_content == content:
+        return False, "Pattern not matched correctly"
+
+    with open(file_path, 'w', encoding='utf-8') as f:
+        f.write(new_content)
+
+    return True, "Fixed"
 
 def main():
-    tools_dir = '/Users/jp17463/DoorayMCP/src/main/kotlin/com/bifos/dooray/mcp/tools'
-    tool_files = glob.glob(os.path.join(tools_dir, '*Tool.kt'))
+    tools_dir = Path("/Users/jp17463/DoorayMCP/src/main/kotlin/com/bifos/dooray/mcp/tools")
+
+    if not tools_dir.exists():
+        print(f"Error: Tools directory not found: {tools_dir}")
+        return
+
+    tool_files = list(tools_dir.glob("*.kt"))
+    print(f"Found {len(tool_files)} tool files")
 
     fixed_count = 0
-    for file_path in sorted(tool_files):
-        if fix_tool_schema(file_path):
+    skipped_count = 0
+
+    for tool_file in sorted(tool_files):
+        fixed, message = fix_tool_file(tool_file)
+
+        if fixed:
+            print(f"✅ {tool_file.name}: {message}")
             fixed_count += 1
+        else:
+            print(f"⏭️  {tool_file.name}: {message}")
+            skipped_count += 1
 
-    print(f"\nFixed {fixed_count} files")
+    print(f"\n📊 Summary:")
+    print(f"   Fixed: {fixed_count}")
+    print(f"   Skipped: {skipped_count}")
+    print(f"   Total: {len(tool_files)}")
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

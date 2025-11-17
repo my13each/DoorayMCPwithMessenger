@@ -74,7 +74,7 @@ set CLASSPATH=%APP_HOME%\lib\dooray-mcp-server-0.2.14.jar;%APP_HOME%\lib\kotlin-
 
 
 @rem Execute dooray-mcp-server
-"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %DOORAY_MCP_SERVER_OPTS%  -classpath "%CLASSPATH%" com.bifos.dooray.mcp.MainKt %*
+"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %DOORAY_MCP_SERVER_OPTS%  -classpath "%CLASSPATH%" com.my13each.dooray.mcp.MainKt %*
 
 :end
 @rem End local scope for the variables with windows NT shell
