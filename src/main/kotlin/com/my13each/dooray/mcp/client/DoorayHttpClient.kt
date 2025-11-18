@@ -1141,6 +1141,24 @@ class DoorayHttpClient(private val baseUrl: String, private val doorayApiKey: St
         }
     }
 
+    override suspend fun getDriveChanges(
+        driveId: String,
+        latestRevision: String?,
+        fileId: String?,
+        size: Int?
+    ): DriveChangesResponse {
+        return executeApiCall(
+            operation = "GET /drive/v1/drives/$driveId/changes",
+            successMessage = "✅ 드라이브 변경사항 조회 성공"
+        ) {
+            httpClient.get("/drive/v1/drives/$driveId/changes") {
+                parameter("revision", latestRevision ?: "0")
+                fileId?.let { parameter("fileId", it) }
+                parameter("size", size ?: 20)
+            }
+        }
+    }
+
     // ============ Drive Shared Link 관련 API 구현 ============
 
     override suspend fun createSharedLink(

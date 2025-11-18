@@ -306,6 +306,14 @@ interface DoorayClient {
     /** 파일을 휴지통으로 이동합니다. */
     suspend fun moveFileToTrash(driveId: String, fileId: String): MoveFileResponse
 
+    /** 드라이브 내 변경사항을 조회합니다. */
+    suspend fun getDriveChanges(
+        driveId: String,
+        latestRevision: String? = null,
+        fileId: String? = null,
+        size: Int? = null
+    ): DriveChangesResponse
+
     // ============ Drive Shared Link 관련 API ============
 
     /** 파일의 공유 링크를 생성합니다. */

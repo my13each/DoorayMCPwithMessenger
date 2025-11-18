@@ -243,7 +243,7 @@ export PATH=$JAVA_HOME/bin:$PATH
 4. 必要な権限を設定後、作成
 5. 生成されたAPI Keyを設定ファイルの`{Your Dooray API Key}`部分に入力
 
-## 使用可能なツール（合計47個）
+## 使用可能なツール（合計48個）
 
 ### Wiki関連ツール（8個）
 
@@ -387,7 +387,7 @@ Doorayでアクセス可能なカレンダー一覧を取得します。カレ�
 
 新しいカレンダーイベント（予定）を作成します。会議、約束などの予定を登録する際に使用します。タイトル、内容、開始時間、終了時間、場所、参加者、参照者などを設定でき、終日予定オプションにも対応しています。
 
-### 💾 ドライブ関連ツール（19個）
+### 💾 ドライブ関連ツール（20個）
 
 #### 30. dooray_drive_list
 
@@ -415,7 +415,21 @@ Doorayでアクセス可能なドライブ一覧を取得します。利用可�
   - フォルダ: `root`, `trash`, `users`
   - ファイル: `etc`, `doc`, `photo`, `movie`, `music`, `zip`
 
-#### 33. dooray_drive_upload_file_from_path ⭐**優先使用**
+#### 33. dooray_drive_get_changes
+
+**ドライブ内の変更履歴を取得**します。ファイル/フォルダの作成、更新、削除の履歴を追跡できます。変更タイプ（updated/deleted）、リビジョン番号、ファイル情報を確認できます。
+
+**🆕 新機能（v0.2.25）:**
+- `latest_revision`: 変更履歴の基準点（デフォルト: 0）
+- `file_id`: 特定ファイル以降の変更のみ取得
+- `size`: 取得件数（デフォルト: 20、最大: 200）
+
+**📌 使用例:**
+- リビジョン管理: 最後に確認したリビジョン以降の変更のみ取得
+- 同期機能: 変更内容を追跡してファイル同期実装
+- 監査ログ: ドライブ内のすべての変更履歴を記録
+
+#### 34. dooray_drive_upload_file_from_path ⭐**優先使用**
 
 **ローカルファイルパスから直接ファイルをアップロード**します。すべてのファイルアップロードに推奨される方法です。
 
@@ -431,7 +445,7 @@ Doorayでアクセス可能なドライブ一覧を取得します。利用可�
 /Users/username/Downloads/report.xlsx をDoorayドライブにアップロードしてください
 ```
 
-#### 34. dooray_drive_upload_file 🔄**フォールバック**
+#### 35. dooray_drive_upload_file 🔄**フォールバック**
 
 Base64エンコードされたファイルをアップロードします。**`dooray_drive_upload_file_from_path`が失敗した場合のバックアップ方法です。**
 
@@ -444,15 +458,15 @@ Base64エンコードされたファイルをアップロードします。**`do
 - 既にBase64エンコード済みのデータがある場合
 - ファイルパスが利用できない特殊なケース
 
-#### 35. dooray_drive_download_file
+#### 36. dooray_drive_download_file
 
 ドライブから**ファイルをダウンロード**します。指定したファイルの内容をBase64でエンコードして返します。テキストファイル、画像、PDF等あらゆる形式のファイルをダウンロードできます。
 
-#### 36. dooray_drive_get_file_metadata
+#### 37. dooray_drive_get_file_metadata
 
 ドライブ **ファイルの詳細メタ情報**を取得します。ファイルのバージョン、リビジョン、作成者、最終更新者、注釈情報、親フォルダ経路、お気に入り状態などを確認できます。
 
-#### 37. dooray_drive_rename_file
+#### 38. dooray_drive_rename_file
 
 ドライブ内の**ファイルまたはフォルダの名前を変更**します。ファイルの拡張子変更やフォルダ名の修正が可能です。
 
@@ -462,33 +476,33 @@ Base64エンコードされたファイルをアップロードします。**`do
 - 拡張子変更: `image.png` → `image.jpg`
 - フォルダ名変更: `old_folder` → `new_folder`
 
-#### 38. dooray_drive_update_file
+#### 39. dooray_drive_update_file
 
 既存ドライブファイルを**新しいバージョンで更新**します。Base64でエンコードされた新しい内容で既存ファイルを上書きし、バージョン管理機能を利用できます。
 
-#### 39. dooray_drive_move_file_to_trash
+#### 40. dooray_drive_move_file_to_trash
 
 ドライブファイルを**ゴミ箱に移動**します。ゴミ箱に移動されたファイルは復元または永久削除が可能です。
 
-#### 40. dooray_drive_delete_file
+#### 41. dooray_drive_delete_file
 
 **ゴミ箱にあるファイルを永久削除**します。永久削除されたファイルは復元不可能です。
 
-#### 41. dooray_drive_create_folder
+#### 42. dooray_drive_create_folder
 
 **ドライブに新しいフォルダを作成**します。親フォルダID、フォルダ名を指定してフォルダを作成できます。
 
-#### 42. dooray_drive_copy_file
+#### 43. dooray_drive_copy_file
 
 **ドライブファイルを別の場所にコピー**します。同じドライブ内または別のドライブへのコピーをサポートします。
 
-#### 43. dooray_drive_move_file
+#### 44. dooray_drive_move_file
 
 **ドライブファイルを別のフォルダに移動**します。ファイルの場所を変更する際に使用します。
 
 ### 🔗 ドライブ共有リンク関連ツール（5個）
 
-#### 44. dooray_drive_create_shared_link
+#### 45. dooray_drive_create_shared_link
 
 **ファイルの共有リンクを作成**します。共有範囲（組織内/外部含む）と有効期限を指定できます。
 
@@ -499,19 +513,19 @@ Base64エンコードされたファイルをアップロードします。**`do
 
 📌 **権限**: プロジェクト管理者と作成者のみ作成可能
 
-#### 45. dooray_drive_get_shared_links
+#### 46. dooray_drive_get_shared_links
 
 **ファイルに作成されたすべての共有リンクを取得**します。管理者はすべてのリンクを、一般ユーザーは自分が作成したリンクのみ確認できます。有効なリンクまたは期限切れリンクをフィルタリングして取得可能です。
 
-#### 46. dooray_drive_get_shared_link_detail
+#### 47. dooray_drive_get_shared_link_detail
 
 **特定の共有リンクの詳細情報を取得**します。リンクID、作成日時、有効期限、作成者情報、実際の共有リンクURL、共有範囲を確認できます。
 
-#### 47. dooray_drive_update_shared_link
+#### 48. dooray_drive_update_shared_link
 
 **特定の共有リンクを更新**します。有効期限と共有範囲を変更できます。
 
-#### 48. dooray_drive_delete_shared_link
+#### 49. dooray_drive_delete_shared_link
 
 **特定の共有リンクを削除**します。削除されたリンクではファイルにアクセスできなくなり、削除操作は元に戻せません。
 
@@ -793,6 +807,19 @@ Base64エンコードされたファイルをアップロードします。**`do
     "type": "file",
     "sub_types": "doc,photo",
     "parent_id": "folder_id_here",
+    "size": 50
+  }
+}
+```
+
+### 💾 ドライブ変更履歴取得 🆕
+
+```json
+{
+  "name": "dooray_drive_get_changes",
+  "arguments": {
+    "drive_id": "drive_id_here",
+    "latest_revision": "100",
     "size": 50
   }
 }

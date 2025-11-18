@@ -348,3 +348,33 @@ data class UpdateSharedLinkRequest(
 /** 공유 링크 수정/삭제 응답 */
 typealias SharedLinkUpdateResponse = DoorayApiUnitResponse
 typealias SharedLinkDeleteResponse = DoorayApiUnitResponse
+
+// ============ Drive Changes 관련 타입들 ============
+
+/** 드라이브 변경사항의 파일 정보 */
+@Serializable
+data class DriveChangeFile(
+    val id: String,
+    val type: String? = null, // "folder" | "file"
+    val revision: String? = null,
+    val version: Int? = null, // changeType이 deleted인 경우 null
+    val size: Long? = null, // changeType이 deleted인 경우 null
+    val name: String? = null, // changeType이 deleted인 경우 null
+    val path: String? = null, // changeType이 deleted인 경우 null
+    val hash: String? = null // changeType이 deleted인 경우 null
+)
+
+/** 드라이브 변경사항 */
+@Serializable
+data class DriveChange(
+    val revision: String,
+    val changeType: String, // "updated" | "deleted"
+    val file: DriveChangeFile
+)
+
+/** 드라이브 변경사항 목록 응답 */
+@Serializable
+data class DriveChangesResponse(
+    val header: DoorayApiHeader,
+    val result: List<DriveChange>
+)
