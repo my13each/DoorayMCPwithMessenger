@@ -28,6 +28,9 @@ export DOORAY_BASE_URL="https://api.dooray.com"
 # オプション: ログレベル制御
 export DOORAY_LOG_LEVEL="WARN"         # DEBUG, INFO, WARN, ERROR (デフォルト: WARN)
 export DOORAY_HTTP_LOG_LEVEL="WARN"    # HTTPクライアントログ (デフォルト: WARN)
+
+# オプション: ツールカテゴリフィルタリング 🆕
+export DOORAY_ENABLED_CATEGORIES="wiki,project"  # 有効にするカテゴリをカンマ区切りで指定
 ```
 
 #### ログ設定
@@ -45,6 +48,37 @@ export DOORAY_HTTP_LOG_LEVEL="WARN"    # HTTPクライアントログ (デフォ
 - `DEBUG`: 詳細なHTTP情報をログ出力
 
 > ⚠️ **重要**: MCPサーバーはstdin/stdoutを通じて通信するため、すべてのログは**stderr**に出力されます。ログレベルを上げてもプロトコル通信に影響はありませんが、パフォーマンスに影響する可能性があります。
+
+#### ツールカテゴリフィルタリング 🆕
+
+`DOORAY_ENABLED_CATEGORIES`環境変数で、使用するツールのカテゴリを制限できます。
+
+**利用可能なカテゴリ:**
+
+- `wiki` - Wiki関連ツール (5個)
+- `project` - プロジェクト・タスク・コメント関連ツール (11個)
+- `messenger` - メッセンジャー関連ツール (7個)
+- `calendar` - カレンダー関連ツール (5個)
+- `drive` - ドライブ・ファイル・共有リンク関連ツール (19個)
+
+**使用例:**
+
+```bash
+# Wikiとプロジェクトツールのみ有効化
+export DOORAY_ENABLED_CATEGORIES="wiki,project"
+
+# メッセンジャーのみ有効化
+export DOORAY_ENABLED_CATEGORIES="messenger"
+
+# すべてのツールを有効化（デフォルト）
+export DOORAY_ENABLED_CATEGORIES=""  # または変数を設定しない
+```
+
+**メリット:**
+
+- 不要なツールを非表示にして、Claudeの応答精度を向上
+- 使用するツールを限定してMCPサーバーの起動を高速化
+- 複数のプロファイルを使い分けて効率的に作業
 
 ### ローカル実行
 
@@ -109,6 +143,49 @@ Claude Desktop（Claude Code）でMCPサーバーを使用するには、設定�
   }
 }
 ```
+
+### カテゴリフィルタリング設定例 🆕
+
+特定のツールカテゴリのみを使用したい場合：
+
+```json
+{
+  "mcpServers": {
+    "dooray-wiki": {
+      "command": "docker",
+      "args": [
+        "run", "--platform", "linux/amd64", "-i", "--rm",
+        "-e", "DOORAY_API_KEY",
+        "-e", "DOORAY_BASE_URL",
+        "-e", "DOORAY_ENABLED_CATEGORIES",
+        "my13each/dooray-mcp:latest"
+      ],
+      "env": {
+        "DOORAY_API_KEY": "{Your Dooray API Key}",
+        "DOORAY_BASE_URL": "https://api.dooray.com",
+        "DOORAY_ENABLED_CATEGORIES": "wiki,project"
+      }
+    },
+    "dooray-messenger": {
+      "command": "docker",
+      "args": [
+        "run", "--platform", "linux/amd64", "-i", "--rm",
+        "-e", "DOORAY_API_KEY",
+        "-e", "DOORAY_BASE_URL",
+        "-e", "DOORAY_ENABLED_CATEGORIES",
+        "my13each/dooray-mcp:latest"
+      ],
+      "env": {
+        "DOORAY_API_KEY": "{Your Dooray API Key}",
+        "DOORAY_BASE_URL": "https://api.dooray.com",
+        "DOORAY_ENABLED_CATEGORIES": "messenger"
+      }
+    }
+  }
+}
+```
+
+> 💡 **ヒント**: 複数のMCPサーバーを登録することで、用途に応じて使い分けることができます。
 
 > 📁 **ファイルアップロード機能**: `-v`オプションでDesktopとDownloadsフォルダをマウントすることで、`dooray_drive_upload_file_from_path`ツールを使用してローカルファイルをDoorayドライブにアップロードできます。
 >
@@ -1101,10 +1178,13 @@ env:
 
 ## 環境変数
 
-| 変数名          | 説明                | 必須 |
-| --------------- | ------------------- | ---- |
-| DOORAY_API_KEY  | Dooray API キー     | 必須 |
-| DOORAY_BASE_URL | Dooray API Base URL | 必須 |
+| 変数名                      | 説明                                                               | 必須       | デフォルト |
+| --------------------------- | ------------------------------------------------------------------ | ---------- | ---------- |
+| DOORAY_API_KEY              | Dooray API キー                                                    | 必須       | -          |
+| DOORAY_BASE_URL             | Dooray API Base URL                                                | 必須       | -          |
+| DOORAY_ENABLED_CATEGORIES   | 有効にするツールカテゴリ (wiki,project,messenger,calendar,drive) | オプション | すべて     |
+| DOORAY_LOG_LEVEL            | 一般ログレベル (DEBUG,INFO,WARN,ERROR)                            | オプション | WARN       |
+| DOORAY_HTTP_LOG_LEVEL       | HTTPログレベル (DEBUG,INFO,WARN,ERROR)                            | オプション | WARN       |
 
 ## ライセンス
 
