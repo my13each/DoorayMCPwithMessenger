@@ -686,6 +686,44 @@ Base64エンコードされたファイルをアップロードします。**`do
 }
 ```
 
+**ページング例（追加データ取得）:**
+
+APIは1回あたり最大100件まで取得可能です。それ以上のデータが必要な場合は`page`パラメータを使用してください。
+
+```json
+// 1ページ目（0〜99件目）
+{
+  "name": "dooray_project_list_posts",
+  "arguments": {
+    "project_id": "your_project_id",
+    "page": 0,
+    "size": 100
+  }
+}
+
+// 2ページ目（100〜199件目）
+{
+  "name": "dooray_project_list_posts",
+  "arguments": {
+    "project_id": "your_project_id",
+    "page": 1,
+    "size": 100
+  }
+}
+
+// 3ページ目（200〜299件目）
+{
+  "name": "dooray_project_list_posts",
+  "arguments": {
+    "project_id": "your_project_id",
+    "page": 2,
+    "size": 100
+  }
+}
+```
+
+> 💡 **ヒント**: `page`を0から順に増やしながら、データが返されなくなるまで繰り返し取得できます。
+
 ### タスク作成
 
 ```json
