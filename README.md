@@ -248,8 +248,8 @@ Dockerを使用せずに直接ローカルでMCPサーバーを実行したい�
 
 ```bash
 # 1. リポジトリのクローン
-git clone https://github.com/sungmin-koo-ai/DoorayMCP.git
-cd DoorayMCP
+git clone https://github.com/my13each/DoorayMCPwithMessenger.git
+cd DoorayMCPwithMessenger
 
 # 2. 環境変数ファイルの作成
 cat > .env << EOF
