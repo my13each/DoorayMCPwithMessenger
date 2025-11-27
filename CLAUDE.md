@@ -211,7 +211,7 @@ Drive operations require following 307 redirects:
 ## Version History
 
 Check `git log` for detailed changelog. Recent versions focus on:
-- v0.2.27: Task list optimization (lightweight response, max 250 items)
+- v0.2.27: Task list optimization (lightweight response)
 - v0.2.26: Tool category filtering
 - v0.2.25: Drive change history API
 - v0.2.24: File rename API
