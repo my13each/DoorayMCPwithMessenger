@@ -16,7 +16,15 @@ import kotlinx.serialization.json.putJsonObject
 fun getProjectPostsTool(): Tool {
     return Tool(
         name = "dooray_project_list_posts",
-        description = "두레이 프로젝트의 업무 목록을 조회합니다. 다양한 필터 조건과 정렬 옵션을 지원합니다.",
+        description = """
+            두레이 프로젝트의 업무 목록을 조회합니다.
+
+            📋 반환 정보 (경량화):
+            - 기본 정보: ID, 제목, 업무번호, 상태, 우선순위, 마감일
+            - 담당자(assignees) 정보만 포함 (참조자/작성자 제외)
+
+            💡 상세 정보가 필요한 경우 dooray_project_get_post를 사용하세요.
+        """.trimIndent(),
         inputSchema =
             Tool.Input(
                 properties =
@@ -32,7 +40,7 @@ fun getProjectPostsTool(): Tool {
                         }
                         putJsonObject("size") {
                             put("type", "integer")
-                            put("description", "페이지 크기 (기본값: 20, 최대: 100)")
+                            put("description", "페이지 크기 (기본값: 20, 최대: 250)")
                             put("default", 20)
                         }
                         putJsonObject("to_member_ids") {
@@ -153,10 +161,26 @@ fun getProjectPostsHandler(
                     )
 
                 if (response.header.isSuccessful) {
+                    // Post를 PostSummary로 변환 (경량화)
+                    val summaries = response.result.map { post ->
+                        com.my13each.dooray.mcp.types.PostSummary(
+                            id = post.id,
+                            subject = post.subject,
+                            taskNumber = post.taskNumber,
+                            workflowClass = post.workflowClass,
+                            workflow = post.workflow,
+                            assignees = post.users.to, // 담당자만 포함
+                            priority = post.priority,
+                            dueDate = post.dueDate,
+                            createdAt = post.createdAt,
+                            updatedAt = post.updatedAt
+                        )
+                    }
+
                     val pageInfo = if (page == 0) "첫 번째 페이지" else "${page + 1}번째 페이지"
 
                     val nextStepHint =
-                        if (response.result.isNotEmpty()) {
+                        if (summaries.isNotEmpty()) {
                             "\n\n💡 다음 단계: 특정 업무의 상세 정보를 보려면 dooray_project_get_post를 사용하세요."
                         } else {
                             if (page == 0) "\n\n📋 조회 결과가 없습니다. 필터 조건을 확인해주세요."
@@ -165,9 +189,9 @@ fun getProjectPostsHandler(
 
                     val successResponse =
                         ToolSuccessResponse(
-                            data = response.result,
+                            data = summaries,
                             message =
-                                "📋 프로젝트 업무 목록을 성공적으로 조회했습니다 ($pageInfo, 총 ${response.result.size}개)$nextStepHint"
+                                "📋 프로젝트 업무 목록을 성공적으로 조회했습니다 ($pageInfo, 총 ${summaries.size}개)$nextStepHint"
                         )
 
                     CallToolResult(

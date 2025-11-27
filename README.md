@@ -368,6 +368,17 @@ Wikiページの参照者を編集します。
 
 プロジェクトのタスク一覧を取得します。
 
+**🚀 v0.2.27の最適化:**
+- **経量化された応答**: 担当者(assignees)情報のみ含む（参照者/作成者は除外）
+- **取得上限増加**: 最大250件まで取得可能（従来100件）
+- **高速レスポンス**: 出力トークン制限を回避し、大量データにも対応
+
+**📋 返却される情報:**
+- 基本情報: ID、タイトル、タスク番号、ステータス、優先度、期限
+- 担当者情報のみ（参照者と作成者は含まれません）
+
+**💡 詳細情報が必要な場合は `dooray_project_get_post` を使用してください。**
+
 #### 11. dooray_project_get_post
 
 特定タスクの詳細情報を取得します。
@@ -619,6 +630,46 @@ Base64エンコードされたファイルをアップロードします。**`do
     "page": 0,
     "size": 20
   }
+}
+```
+
+### タスク一覧取得 🆕
+
+```json
+{
+  "name": "dooray_project_list_posts",
+  "arguments": {
+    "project_id": "your_project_id",
+    "size": 100,
+    "post_workflow_classes": ["working", "registered"]
+  }
+}
+```
+
+**応答例（経量化）:**
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "123456789",
+      "subject": "バグ修正: ログイン処理の改善",
+      "taskNumber": "PROJ-456",
+      "workflowClass": "working",
+      "workflow": { "id": "workflow_id", "name": "進行中" },
+      "assignees": [
+        {
+          "type": "member",
+          "member": { "id": "member_id", "name": "田中太郎" }
+        }
+      ],
+      "priority": "high",
+      "dueDate": "2025-12-01T09:00:00+09:00",
+      "createdAt": "2025-11-20T10:00:00+09:00",
+      "updatedAt": "2025-11-27T15:30:00+09:00"
+    }
+  ],
+  "message": "📋 プロジェクト業務一覧を正常に照会しました"
 }
 ```
 

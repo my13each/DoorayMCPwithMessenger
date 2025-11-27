@@ -70,6 +70,21 @@ data class Post(
         val fileIdList: List<String> = emptyList()
 )
 
+/** 업무 요약 정보 (경량화된 목록용) - 담당자만 포함 */
+@Serializable
+data class PostSummary(
+        val id: String,
+        val subject: String,
+        val taskNumber: String,
+        val workflowClass: String, // "registered", "working", "closed"
+        val workflow: Workflow,
+        val assignees: List<PostUser>, // users.to만 포함
+        val priority: String,
+        val dueDate: String? = null,
+        val createdAt: String,
+        val updatedAt: String
+)
+
 /** 업무 상세 정보 */
 @Serializable
 data class PostDetail(
