@@ -21,7 +21,7 @@ fun getProjectPostsTool(): Tool {
 
             📋 반환 정보 (경량화):
             - 기본 정보: ID, 제목, 업무번호, 상태, 우선순위, 마감일
-            - 담당자(assignees) 정보만 포함 (참조자/작성자 제외)
+            - 담당자: 이름과 ID만 포함 (참조자/작성자/워크플로우 제외)
 
             💡 상세 정보가 필요한 경우 dooray_project_get_post를 사용하세요.
         """.trimIndent(),
@@ -169,7 +169,7 @@ fun getProjectPostsHandler(
                             taskNumber = post.taskNumber,
                             workflowClass = post.workflowClass,
                             workflow = post.workflow,
-                            assignees = post.users.to, // 담당자만 포함
+                            assignees = post.users.to.mapNotNull { it.member }, // Member (이름/ID)만 추출
                             priority = post.priority,
                             dueDate = post.dueDate,
                             createdAt = post.createdAt,
