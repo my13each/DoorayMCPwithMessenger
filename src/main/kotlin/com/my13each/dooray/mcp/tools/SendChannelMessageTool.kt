@@ -100,31 +100,10 @@ fun sendChannelMessageHandler(doorayClient: DoorayClient): suspend (CallToolRequ
                 else -> {
                     // 멘션 기능 처리
                     var finalText = text
-                    
+
                     // 텍스트에 이미 Dooray 멘션 형식이 포함되어 있는지 확인
                     val hasDoorayMention = finalText.contains("[@") && finalText.contains("](dooray://")
-                    
-                    // Claude가 생성한 멘션 텍스트를 이상적인 형식으로 재구성
-                    if (hasDoorayMention) {
-                        // 멘션 패턴을 찾아서 분리
-                        val mentionRegex = Regex("""\[@[^\]]+\]\(dooray://[^\)]+\)""")
-                        val mentions = mentionRegex.findAll(finalText).map { it.value }.toList()
-                        
-                        if (mentions.isNotEmpty()) {
-                            // 멘션을 제거한 텍스트
-                            var cleanText = finalText
-                            mentions.forEach { mention ->
-                                cleanText = cleanText?.replace(mention, "")?.trim() ?: ""
-                            }
-                            
-                            // "さん、" 패턴 제거 (멘션 직후에 나오는 경우)
-                            cleanText = cleanText?.replace(Regex("""^\s*さん、?\s*"""), "") ?: ""
-                            
-                            // 멘션들을 첫 줄에, 그 다음 줄부터 메시지
-                            finalText = mentions.joinToString("\n") + "\n" + cleanText
-                        }
-                    }
-                    
+
                     // 채널 전체 멘션 처리 (이미 멘션이 있지 않을 때만)
                     if (mentionAll && !hasDoorayMention) {
                         // 조직 ID를 얻기 위해 채널 정보 조회 (간단하게 하드코딩으로 처리 - 실제로는 채널 정보에서 가져와야 함)
