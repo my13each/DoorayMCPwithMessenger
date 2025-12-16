@@ -57,9 +57,9 @@ export DOORAY_ENABLED_CATEGORIES="wiki,project"  # 有効にするカテゴリ�
 
 - `wiki` - Wiki関連ツール (5個)
 - `project` - プロジェクト・タスク・コメント関連ツール (11個)
-- `messenger` - メッセンジャー関連ツール (7個)
+- `messenger` - メッセンジャー関連ツール (12個)
 - `calendar` - カレンダー関連ツール (5個)
-- `drive` - ドライブ・ファイル・共有リンク関連ツール (19個)
+- `drive` - ドライブ・ファイル・共有リンク関連ツール (20個)
 
 **使用例:**
 
@@ -320,7 +320,7 @@ export PATH=$JAVA_HOME/bin:$PATH
 4. 必要な権限を設定後、作成
 5. 生成されたAPI Keyを設定ファイルの`{Your Dooray API Key}`部分に入力
 
-## 使用可能なツール（合計48個）
+## 使用可能なツール（合計53個）
 
 ### Wiki関連ツール（8個）
 
@@ -430,7 +430,7 @@ Wikiページの参照者を編集します。
 
 タスクコメントを削除します。
 
-### メッセンジャー関連ツール（7個）
+### メッセンジャー関連ツール（12個）
 
 #### 20. dooray_messenger_search_members
 
@@ -462,17 +462,64 @@ Dooray組織のメンバーを検索します。名前、メール、ユーザ�
 
 > ⚠️ **注意**: チャンネルメッセージの取得は、Dooray APIでセキュリティ上の理由により対応していません。
 
+#### 27. dooray_messenger_join_channel
+
+メッセンジャーチャンネルに**メンバーを追加**します。既存のチャンネルに新しいメンバーを招待する際に使用します。複数のメンバーを一度に追加することが可能です。
+
+**パラメータ:**
+- `channel_id`: メンバーを追加するチャンネルのID（必須）
+- `member_ids`: 追加するメンバーIDの配列（必須）
+
+#### 28. dooray_messenger_leave_channel
+
+メッセンジャーチャンネルから**メンバーを削除**します。チャンネルからメンバーを退出させる際に使用します。複数のメンバーを一度に削除することが可能です。
+
+**パラメータ:**
+- `channel_id`: メンバーを削除するチャンネルのID（必須）
+- `member_ids`: 削除するメンバーIDの配列（必須）
+
+#### 29. dooray_messenger_create_thread
+
+メッセンジャーチャンネルに**スレッドを作成し、最初のメッセージを送信**します。特定のメッセージに対する返信や関連する会話を整理する際に便利です。スレッド機能により、チャンネル内の会話を構造化して管理できます。
+
+**パラメータ:**
+- `channel_id`: スレッドを作成するチャンネルのID（必須）
+- `text`: スレッドの最初のメッセージ内容（必須）
+- `message_type`: メッセージタイプ（オプション、デフォルト: "text"）
+
+**応答:**
+- `threadId`: 作成されたスレッドのID
+- `logId`: 送信されたメッセージのログID
+
+#### 30. dooray_messenger_update_message
+
+既存のメッセンジャーメッセージを**編集**します。送信済みのメッセージの内容を修正する際に使用します。メッセージの履歴は保持され、編集されたことが記録されます。
+
+**パラメータ:**
+- `channel_id`: メッセージがあるチャンネルのID（必須）
+- `log_id`: 編集するメッセージのログID（必須）
+- `text`: 新しいメッセージ内容（必須）
+- `message_type`: メッセージタイプ（オプション、デフォルト: "text"）
+
+#### 31. dooray_messenger_delete_message
+
+メッセンジャーメッセージを**削除**します。不要なメッセージや誤って送信したメッセージを削除する際に使用します。削除されたメッセージは復元できません。
+
+**パラメータ:**
+- `channel_id`: メッセージがあるチャンネルのID（必須）
+- `log_id`: 削除するメッセージのログID（必須）
+
 ### 📅 カレンダー関連ツール（5個）
 
-#### 25. dooray_calendar_list
+#### 32. dooray_calendar_list
 
 Doorayでアクセス可能なカレンダー一覧を取得します。カレンダーIDを確認したり、使用可能なカレンダーを確認する際に使用します。
 
-#### 26. dooray_calendar_detail
+#### 33. dooray_calendar_detail
 
 特定のカレンダーの詳細情報を取得します。カレンダーメンバー一覧、権限情報（👑所有者、🤝委任者、✏️編集者など）、委任情報を確認できます。
 
-#### 27. dooray_calendar_events
+#### 34. dooray_calendar_events
 
 指定された期間のカレンダーイベント（予定）一覧を取得します。特定の日付や期間の予定を確認する際に使用します。timeMin、timeMaxパラメータでISO 8601形式の日時を指定し、特定のカレンダーのみをフィルタリングすることも可能です。
 
@@ -480,17 +527,17 @@ Doorayでアクセス可能なカレンダー一覧を取得します。カレ�
 - postType: `toMe`（自分宛て）、`toCcMe`（自分宛て+参照）、`fromToCcMe`（すべて関連）
 - category: `general`（一般予定）、`post`（タスク）、`milestone`（マイルストーン）
 
-#### 28. dooray_calendar_event_detail
+#### 35. dooray_calendar_event_detail
 
 特定のカレンダーイベント（予定）の詳細情報を取得します。👑主催者、✅参加者、📋参照者の詳細情報と参加状況（参加/不参加/未定/未確認）を確認できます。会議の参加者を詳しく確認する際に役立ちます。
 
-#### 29. dooray_calendar_create_event
+#### 36. dooray_calendar_create_event
 
 新しいカレンダーイベント（予定）を作成します。会議、約束などの予定を登録する際に使用します。タイトル、内容、開始時間、終了時間、場所、参加者、参照者などを設定でき、終日予定オプションにも対応しています。
 
 ### 💾 ドライブ関連ツール（20個）
 
-#### 30. dooray_drive_list
+#### 37. dooray_drive_list
 
 Doorayでアクセス可能なドライブ一覧を取得します。利用可能なドライブのIDと名前、権限情報を確認できます。
 
@@ -500,13 +547,13 @@ Doorayでアクセス可能なドライブ一覧を取得します。利用可�
 - `scope`: `own`（自分のドライブ）または `all`（すべてのドライブ）
 - `state`: `active`（アクティブ）または `inactive`（非アクティブ）
 
-#### 31. dooray_drive_get_detail
+#### 38. dooray_drive_get_detail
 
 特定のドライブの詳細情報を取得します。ドライブタイプ（個人/プロジェクト）、メンバー一覧、役割などを確認できます。
 
 **🆕 新機能（v0.2.22）:** ドライブメンバー管理と権限確認が可能になりました。
 
-#### 32. dooray_drive_list_files
+#### 39. dooray_drive_list_files
 
 特定のドライブの**ファイルとフォルダ一覧**を取得します。parent_idを指定してフォルダを階層別に探索することができます。各ファイルの詳細情報（サイズ、作成日時、更新日時、MIME タイプ、作成者など）を含んでいます。
 
@@ -516,7 +563,7 @@ Doorayでアクセス可能なドライブ一覧を取得します。利用可�
   - フォルダ: `root`, `trash`, `users`
   - ファイル: `etc`, `doc`, `photo`, `movie`, `music`, `zip`
 
-#### 33. dooray_drive_get_changes
+#### 40. dooray_drive_get_changes
 
 **ドライブ内の変更履歴を取得**します。ファイル/フォルダの作成、更新、削除の履歴を追跡できます。変更タイプ（updated/deleted）、リビジョン番号、ファイル情報を確認できます。
 
@@ -530,7 +577,7 @@ Doorayでアクセス可能なドライブ一覧を取得します。利用可�
 - 同期機能: 変更内容を追跡してファイル同期実装
 - 監査ログ: ドライブ内のすべての変更履歴を記録
 
-#### 34. dooray_drive_upload_file_from_path ⭐**優先使用**
+#### 41. dooray_drive_upload_file_from_path ⭐**優先使用**
 
 **ローカルファイルパスから直接ファイルをアップロード**します。すべてのファイルアップロードに推奨される方法です。
 
@@ -546,7 +593,7 @@ Doorayでアクセス可能なドライブ一覧を取得します。利用可�
 /Users/username/Downloads/report.xlsx をDoorayドライブにアップロードしてください
 ```
 
-#### 35. dooray_drive_upload_file 🔄**フォールバック**
+#### 42. dooray_drive_upload_file 🔄**フォールバック**
 
 Base64エンコードされたファイルをアップロードします。**`dooray_drive_upload_file_from_path`が失敗した場合のバックアップ方法です。**
 
@@ -559,15 +606,15 @@ Base64エンコードされたファイルをアップロードします。**`do
 - 既にBase64エンコード済みのデータがある場合
 - ファイルパスが利用できない特殊なケース
 
-#### 36. dooray_drive_download_file
+#### 43. dooray_drive_download_file
 
 ドライブから**ファイルをダウンロード**します。指定したファイルの内容をBase64でエンコードして返します。テキストファイル、画像、PDF等あらゆる形式のファイルをダウンロードできます。
 
-#### 37. dooray_drive_get_file_metadata
+#### 44. dooray_drive_get_file_metadata
 
 ドライブ **ファイルの詳細メタ情報**を取得します。ファイルのバージョン、リビジョン、作成者、最終更新者、注釈情報、親フォルダ経路、お気に入り状態などを確認できます。
 
-#### 38. dooray_drive_rename_file
+#### 45. dooray_drive_rename_file
 
 ドライブ内の**ファイルまたはフォルダの名前を変更**します。ファイルの拡張子変更やフォルダ名の修正が可能です。
 
@@ -577,33 +624,33 @@ Base64エンコードされたファイルをアップロードします。**`do
 - 拡張子変更: `image.png` → `image.jpg`
 - フォルダ名変更: `old_folder` → `new_folder`
 
-#### 39. dooray_drive_update_file
+#### 46. dooray_drive_update_file
 
 既存ドライブファイルを**新しいバージョンで更新**します。Base64でエンコードされた新しい内容で既存ファイルを上書きし、バージョン管理機能を利用できます。
 
-#### 40. dooray_drive_move_file_to_trash
+#### 47. dooray_drive_move_file_to_trash
 
 ドライブファイルを**ゴミ箱に移動**します。ゴミ箱に移動されたファイルは復元または永久削除が可能です。
 
-#### 41. dooray_drive_delete_file
+#### 48. dooray_drive_delete_file
 
 **ゴミ箱にあるファイルを永久削除**します。永久削除されたファイルは復元不可能です。
 
-#### 42. dooray_drive_create_folder
+#### 49. dooray_drive_create_folder
 
 **ドライブに新しいフォルダを作成**します。親フォルダID、フォルダ名を指定してフォルダを作成できます。
 
-#### 43. dooray_drive_copy_file
+#### 50. dooray_drive_copy_file
 
 **ドライブファイルを別の場所にコピー**します。同じドライブ内または別のドライブへのコピーをサポートします。
 
-#### 44. dooray_drive_move_file
+#### 51. dooray_drive_move_file
 
 **ドライブファイルを別のフォルダに移動**します。ファイルの場所を変更する際に使用します。
 
 ### 🔗 ドライブ共有リンク関連ツール（5個）
 
-#### 45. dooray_drive_create_shared_link
+#### 52. dooray_drive_create_shared_link
 
 **ファイルの共有リンクを作成**します。共有範囲（組織内/外部含む）と有効期限を指定できます。
 
@@ -614,19 +661,19 @@ Base64エンコードされたファイルをアップロードします。**`do
 
 📌 **権限**: プロジェクト管理者と作成者のみ作成可能
 
-#### 46. dooray_drive_get_shared_links
+#### 53. dooray_drive_get_shared_links
 
 **ファイルに作成されたすべての共有リンクを取得**します。管理者はすべてのリンクを、一般ユーザーは自分が作成したリンクのみ確認できます。有効なリンクまたは期限切れリンクをフィルタリングして取得可能です。
 
-#### 47. dooray_drive_get_shared_link_detail
+#### 54. dooray_drive_get_shared_link_detail
 
 **特定の共有リンクの詳細情報を取得**します。リンクID、作成日時、有効期限、作成者情報、実際の共有リンクURL、共有範囲を確認できます。
 
-#### 48. dooray_drive_update_shared_link
+#### 55. dooray_drive_update_shared_link
 
 **特定の共有リンクを更新**します。有効期限と共有範囲を変更できます。
 
-#### 49. dooray_drive_delete_shared_link
+#### 56. dooray_drive_delete_shared_link
 
 **特定の共有リンクを削除**します。削除されたリンクではファイルにアクセスできなくなり、削除操作は元に戻せません。
 
@@ -858,9 +905,87 @@ APIは1回あたり最大100件まで取得可能です。それ以上のデー�
 {
   "name": "dooray_messenger_send_channel_message",
   "arguments": {
-    "channel_id": "channel_id_here", 
+    "channel_id": "channel_id_here",
     "text": "重要なお知らせです。",
     "mention_all": true
+  }
+}
+```
+
+### チャンネルメンバー追加
+
+```json
+{
+  "name": "dooray_messenger_join_channel",
+  "arguments": {
+    "channel_id": "channel_id_here",
+    "member_ids": ["member_id_1", "member_id_2", "member_id_3"]
+  }
+}
+```
+
+### チャンネルメンバー削除
+
+```json
+{
+  "name": "dooray_messenger_leave_channel",
+  "arguments": {
+    "channel_id": "channel_id_here",
+    "member_ids": ["member_id_to_remove"]
+  }
+}
+```
+
+### スレッド作成とメッセージ送信
+
+```json
+{
+  "name": "dooray_messenger_create_thread",
+  "arguments": {
+    "channel_id": "channel_id_here",
+    "text": "新しいスレッドを開始します。\nこのトピックについて話し合いましょう。",
+    "message_type": "text"
+  }
+}
+```
+
+**応答例:**
+```json
+{
+  "success": true,
+  "data": {
+    "channelId": "channel_id_here",
+    "threadId": "thread_12345",
+    "logId": "log_67890",
+    "sentText": "新しいスレッドを開始します。\nこのトピックについて話し合いましょう。",
+    "timestamp": 1703145600000
+  },
+  "message": "スレッドが成功的に生成され、メッセージが送信されました。"
+}
+```
+
+### メッセージ編集
+
+```json
+{
+  "name": "dooray_messenger_update_message",
+  "arguments": {
+    "channel_id": "channel_id_here",
+    "log_id": "log_id_here",
+    "text": "訂正: 正しい内容はこちらです。",
+    "message_type": "text"
+  }
+}
+```
+
+### メッセージ削除
+
+```json
+{
+  "name": "dooray_messenger_delete_message",
+  "arguments": {
+    "channel_id": "channel_id_here",
+    "log_id": "log_id_here"
   }
 }
 ```

@@ -189,6 +189,25 @@ interface DoorayClient {
         request: SendChannelMessageRequest
     ): SendChannelMessageResponse
 
+    /** 채널에 스레드를 생성하고 메시지를 전송합니다. */
+    suspend fun createThreadAndSend(
+        channelId: String,
+        request: CreateThreadRequest
+    ): CreateThreadResponse
+
+    /** 채널 메시지를 수정합니다. */
+    suspend fun updateChannelMessage(
+        channelId: String,
+        logId: String,
+        request: UpdateMessageRequest
+    ): UpdateMessageResponse
+
+    /** 채널 메시지를 삭제합니다. */
+    suspend fun deleteChannelMessage(
+        channelId: String,
+        logId: String
+    ): DeleteMessageResponse
+
     // ============ 캘린더 관련 API ============
 
     /** 접근 가능한 캘린더 목록을 조회합니다. */

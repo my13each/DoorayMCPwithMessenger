@@ -71,6 +71,49 @@ data class CreateChannelResponseData(
         val timestamp: Long
 )
 
+/** 스레드 생성 응답 데이터 */
+@Serializable
+data class CreateThreadResponseData(
+        val channelId: String,
+        val threadId: String,
+        val logId: String,
+        val sentText: String,
+        val timestamp: Long
+)
+
+/** 메시지 수정 응답 데이터 */
+@Serializable
+data class UpdateMessageResponseData(
+        val channelId: String,
+        val logId: String,
+        val updatedText: String,
+        val timestamp: Long
+)
+
+/** 메시지 삭제 응답 데이터 */
+@Serializable
+data class DeleteMessageResponseData(
+        val channelId: String,
+        val logId: String,
+        val timestamp: Long
+)
+
+/** 채널 가입 응답 데이터 */
+@Serializable
+data class JoinChannelResponseData(
+        val channelId: String,
+        val memberIds: List<String>,
+        val timestamp: Long
+)
+
+/** 채널 탈퇴 응답 데이터 */
+@Serializable
+data class LeaveChannelResponseData(
+        val channelId: String,
+        val memberIds: List<String>,
+        val timestamp: Long
+)
+
 /** MCP Tool 에러 응답 */
 @Serializable
 data class ToolErrorResponse(

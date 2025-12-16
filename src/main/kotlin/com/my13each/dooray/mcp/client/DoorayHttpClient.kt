@@ -691,6 +691,50 @@ class DoorayHttpClient(private val baseUrl: String, private val doorayApiKey: St
         }
     }
 
+    override suspend fun createThreadAndSend(
+        channelId: String,
+        request: CreateThreadRequest
+    ): CreateThreadResponse {
+        return executeApiCall(
+            operation = "POST /messenger/v1/channels/$channelId/threads/create-and-send",
+            expectedStatusCode = HttpStatusCode.OK,
+            successMessage = "✅ 스레드 생성 및 메시지 전송 성공"
+        ) {
+            httpClient.post("/messenger/v1/channels/$channelId/threads/create-and-send") {
+                setBody(request)
+            }
+        }
+    }
+
+    override suspend fun updateChannelMessage(
+        channelId: String,
+        logId: String,
+        request: UpdateMessageRequest
+    ): UpdateMessageResponse {
+        return executeApiCallForNullableResult(
+            operation = "PUT /messenger/v1/channels/$channelId/logs/$logId",
+            expectedStatusCode = HttpStatusCode.OK,
+            successMessage = "✅ 채널 메시지 수정 성공"
+        ) {
+            httpClient.put("/messenger/v1/channels/$channelId/logs/$logId") {
+                setBody(request)
+            }
+        }
+    }
+
+    override suspend fun deleteChannelMessage(
+        channelId: String,
+        logId: String
+    ): DeleteMessageResponse {
+        return executeApiCallForNullableResult(
+            operation = "DELETE /messenger/v1/channels/$channelId/logs/$logId",
+            expectedStatusCode = HttpStatusCode.OK,
+            successMessage = "✅ 채널 메시지 삭제 성공"
+        ) {
+            httpClient.delete("/messenger/v1/channels/$channelId/logs/$logId")
+        }
+    }
+
     // ============ 캘린더 관련 API ============
 
     override suspend fun getCalendars(): CalendarListResponse {

@@ -197,89 +197,104 @@ class DoorayMcpServer {
         // 23. 채널 생성
         addTool(ToolCategory.MESSENGER, createChannelTool(), createChannelHandler(doorayHttpClient))
 
+        // 24. 채널 가입 (멤버 추가)
+        addTool(ToolCategory.MESSENGER, joinChannelTool(), joinChannelHandler(doorayHttpClient))
+
+        // 25. 채널 탈퇴 (멤버 제거)
+        addTool(ToolCategory.MESSENGER, leaveChannelTool(), leaveChannelHandler(doorayHttpClient))
+
+        // 26. 스레드 생성 및 메시지 전송
+        addTool(ToolCategory.MESSENGER, createThreadTool(), createThreadHandler(doorayHttpClient))
+
+        // 27. 메시지 수정
+        addTool(ToolCategory.MESSENGER, updateMessageTool(), updateMessageHandler(doorayHttpClient))
+
+        // 28. 메시지 삭제
+        addTool(ToolCategory.MESSENGER, deleteMessageTool(), deleteMessageHandler(doorayHttpClient))
+
         // ============ 캘린더 관련 도구들 (5개) ============
 
-        // 24. 캘린더 목록 조회
+        // 29. 캘린더 목록 조회
         addTool(ToolCategory.CALENDAR, getCalendarsTool(), getCalendarsHandler(doorayHttpClient))
 
-        // 25. 캘린더 상세 조회
+        // 30. 캘린더 상세 조회
         addTool(ToolCategory.CALENDAR, getCalendarDetailTool(), getCalendarDetailHandler(doorayHttpClient))
 
-        // 26. 캘린더 일정 조회 (기간별)
+        // 31. 캘린더 일정 조회 (기간별)
         addTool(ToolCategory.CALENDAR, getCalendarEventsTool(), getCalendarEventsHandler(doorayHttpClient))
 
-        // 27. 캘린더 일정 상세 조회
+        // 32. 캘린더 일정 상세 조회
         addTool(ToolCategory.CALENDAR, getCalendarEventDetailTool(), getCalendarEventDetailHandler(doorayHttpClient))
 
-        // 28. 캘린더 일정 등록
+        // 33. 캘린더 일정 등록
         addTool(ToolCategory.CALENDAR, createCalendarEventTool(), createCalendarEventHandler(doorayHttpClient))
 
-        // ============ Drive 및 공유링크 관련 도구들 (19개) ============
+        // ============ Drive 및 공유링크 관련 도구들 (20개) ============
 
-        // 29. 드라이브 목록 조회
+        // 34. 드라이브 목록 조회
         addTool(ToolCategory.DRIVE, getDrivesTool(), getDrivesHandler(doorayHttpClient))
 
-        // 30. 드라이브 상세 조회
+        // 35. 드라이브 상세 조회
         addTool(ToolCategory.DRIVE, getDriveDetailTool(), getDriveDetailHandler(doorayHttpClient))
 
-        // 31. 드라이브 파일 목록 조회
+        // 36. 드라이브 파일 목록 조회
         addTool(ToolCategory.DRIVE, getDriveFilesTool(), getDriveFilesHandler(doorayHttpClient))
 
-        // 32. 드라이브 변경사항 조회
+        // 37. 드라이브 변경사항 조회
         addTool(ToolCategory.DRIVE, getDriveChangesTool(), getDriveChangesHandler(doorayHttpClient))
 
-        // 33. 파일 업로드 (パスから) - 推奨方法 (優先使用)
+        // 38. 파일 업로드 (パスから) - 推奨方法 (優先使用)
         addTool(ToolCategory.DRIVE, uploadFileFromPathTool(), uploadFileFromPathHandler(doorayHttpClient))
 
-        // 34. 파일 업로드 (Base64) - フォールバック用
+        // 39. 파일 업로드 (Base64) - フォールバック用
         // dooray_drive_upload_file_from_path が失敗した場合（ファイルが見つからない等）の
         // バックアップ方法として使用。小さなファイル（10KB未満推奨）に適しています。
         // ⚠️ 大きなファイルはClaudeのメッセージ長制限（200K文字）に達する可能性があります
         addTool(ToolCategory.DRIVE, uploadFileTool(), uploadFileHandler(doorayHttpClient))
 
-        // 35. 파일 다운로드
+        // 40. 파일 다운로드
         addTool(ToolCategory.DRIVE, downloadFileTool(), downloadFileHandler(doorayHttpClient))
 
-        // 36. 파일 메타정보 조회
+        // 41. 파일 메타정보 조회
         addTool(ToolCategory.DRIVE, getFileMetadataTool(), getFileMetadataHandler(doorayHttpClient))
 
-        // 37. 파일 이름 변경
+        // 42. 파일 이름 변경
         addTool(ToolCategory.DRIVE, renameFileTool(), renameFileHandler(doorayHttpClient))
 
-        // 38. 파일 업데이트
+        // 43. 파일 업데이트
         addTool(ToolCategory.DRIVE, updateFileTool(), updateFileHandler(doorayHttpClient))
 
-        // 39. 파일을 휴지통으로 이동
+        // 44. 파일을 휴지통으로 이동
         addTool(ToolCategory.DRIVE, moveFileToTrashTool(), moveFileToTrashHandler(doorayHttpClient))
 
-        // 40. 파일 영구 삭제
+        // 45. 파일 영구 삭제
         addTool(ToolCategory.DRIVE, deleteFileTool(), deleteFileHandler(doorayHttpClient))
 
-        // 41. 폴더 생성
+        // 46. 폴더 생성
         addTool(ToolCategory.DRIVE, createFolderTool(), createFolderHandler(doorayHttpClient))
 
-        // 42. 파일 복사
+        // 47. 파일 복사
         addTool(ToolCategory.DRIVE, copyFileTool(), copyFileHandler(doorayHttpClient))
 
-        // 43. 파일 이동
+        // 48. 파일 이동
         addTool(ToolCategory.DRIVE, moveFileTool(), moveFileHandler(doorayHttpClient))
 
-        // 44. 공유 링크 생성
+        // 49. 공유 링크 생성
         addTool(ToolCategory.DRIVE, createSharedLinkTool(), createSharedLinkHandler(doorayHttpClient))
 
-        // 45. 공유 링크 목록 조회
+        // 50. 공유 링크 목록 조회
         addTool(ToolCategory.DRIVE, getSharedLinksTool(), getSharedLinksHandler(doorayHttpClient))
 
-        // 46. 공유 링크 상세 조회
+        // 51. 공유 링크 상세 조회
         addTool(ToolCategory.DRIVE, getSharedLinkDetailTool(), getSharedLinkDetailHandler(doorayHttpClient))
 
-        // 47. 공유 링크 수정
+        // 52. 공유 링크 수정
         addTool(ToolCategory.DRIVE, updateSharedLinkTool(), updateSharedLinkHandler(doorayHttpClient))
 
-        // 48. 공유 링크 삭제
+        // 53. 공유 링크 삭제
         addTool(ToolCategory.DRIVE, deleteSharedLinkTool(), deleteSharedLinkHandler(doorayHttpClient))
 
-        // 도구 개수: 48個 (Wiki 5 + Project 11 + Messenger 7 + Calendar 5 + Drive 19)
+        // 도구 개수: 53개 (Wiki 5 + Project 11 + Messenger 12 + Calendar 5 + Drive 20)
         // 카테고리: WIKI, PROJECT, MESSENGER, CALENDAR, DRIVE
 
         log.info("Successfully added $toolCount tools to MCP server (enabled categories: ${enabledCategories.joinToString(", ")})")

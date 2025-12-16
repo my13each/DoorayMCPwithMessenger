@@ -202,6 +202,44 @@ data class SendChannelMessageRequest(
 /** 채널 메시지 전송 응답 */
 typealias SendChannelMessageResponse = DoorayApiUnitResponse
 
+// ============ 스레드 관련 타입들 ============
+
+/** 스레드 생성 및 메시지 전송 요청 */
+@Serializable
+data class CreateThreadRequest(
+    val text: String,
+    val messageType: String? = "text"
+)
+
+/** 스레드 생성 결과 */
+@Serializable
+data class CreateThreadResult(
+    val threadId: String,
+    val logId: String
+)
+
+/** 스레드 생성 응답 */
+@Serializable
+data class CreateThreadResponse(
+    val header: DoorayApiHeader,
+    val result: CreateThreadResult?
+)
+
+// ============ 메시지 수정/삭제 관련 타입들 ============
+
+/** 메시지 수정 요청 */
+@Serializable
+data class UpdateMessageRequest(
+    val text: String,
+    val messageType: String? = "text"
+)
+
+/** 메시지 수정 응답 */
+typealias UpdateMessageResponse = DoorayApiUnitResponse
+
+/** 메시지 삭제 응답 */
+typealias DeleteMessageResponse = DoorayApiUnitResponse
+
 // ============ 도구 응답용 데이터 타입들 ============
 
 /** 간단한 채널 목록 응답 데이터 (도구용) */
