@@ -54,7 +54,7 @@
 ### ツール登録の確認
 - [ ] `DoorayMcpServer.kt` の `registerTool()` で登録済み
 - [ ] 適切な `ToolCategory` を指定
-- [ ] ツール数のコメントを更新（現在: 48個）
+- [ ] ツール数のコメントを更新（現在: 71個 / wiki 18, project 11, messenger 17, calendar 5, drive 20）
 
 ### ツール実装の確認
 - [ ] `Tool` オブジェクトを定義（name、description、inputSchema）

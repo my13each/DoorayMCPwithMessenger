@@ -4,16 +4,16 @@ NHN Doorayサービス用のMCP（Model Context Protocol）サーバーです。
 
 ## 主要機能
 
-- **Wikiの管理**: Wiki閲覧、作成、編集、参照者管理
+- **Wikiの管理**: Wiki閲覧、作成、編集（タイトル/本文/参照者の個別編集）、移動、削除、コメント管理、添付ファイルのアップロード/ダウンロード
 - **タスク管理**: タスク閲覧、作成、編集、ステータス変更
 - **コメント管理**: タスクコメントの作成、閲覧、編集、削除
-- **メッセンジャー管理**: メンバー検索、ダイレクトメッセージ、チャンネル管理、チャンネルメッセージ送信
+- **メッセンジャー管理**: メンバー検索、ダイレクトメッセージ、チャンネル管理、メッセージ取得・送信・編集・削除・返信、スレッド、添付ファイルのダウンロード
 - **📅 カレンダー管理**: カレンダー閲覧、カレンダー詳細、イベント照会、イベント詳細、新しいイベント作成
 - **💾 ドライブ管理**: ドライブ一覧取得、ファイル/フォルダ一覧取得、ファイルアップロード/ダウンロード、フォルダ作成、ファイルコピー/移動
 - **🔗 ドライブ共有リンク**: 共有リンク作成、取得、更新、削除 - 組織内外のユーザーと安全にファイル共有
 - **JSON応答**: 規格化されたJSON形式の応答
 - **例外処理**: 一貫したエラー応答の提供
-- **Docker対応**: マルチプラットフォームDockerイメージの提供
+- **Docker対応**: Dockerイメージの提供（現在はAMD64のみ。Apple SiliconのMacでも `--platform linux/amd64` で動作）
 
 ## クイックスタート
 
@@ -831,6 +831,59 @@ Base64エンコードされたファイルをアップロードします。**`do
 }
 ```
 
+### Wikiコメント作成・一覧 🆕
+
+```json
+{
+  "name": "dooray_wiki_create_comment",
+  "arguments": {
+    "wiki_id": "wiki_id_here",
+    "page_id": "page_id_here",
+    "content": "確認しました。**OK**です。"
+  }
+}
+```
+
+```json
+{
+  "name": "dooray_wiki_list_comments",
+  "arguments": {
+    "wiki_id": "wiki_id_here",
+    "page_id": "page_id_here",
+    "size": 20
+  }
+}
+```
+
+### Wikiページに画像を入れる 🆕
+
+1. 画像をアップロード（`type: inline_image`）
+
+```json
+{
+  "name": "dooray_wiki_upload_file",
+  "arguments": {
+    "wiki_id": "wiki_id_here",
+    "page_id": "page_id_here",
+    "file_path": "/Users/{user}/Downloads/diagram.png",
+    "type": "inline_image"
+  }
+}
+```
+
+2. 応答の `markdown`（例: `![diagram.png](/wikis/{wiki_id}/files/{attach_file_id})`）を本文に入れる
+
+```json
+{
+  "name": "dooray_wiki_update_page_content",
+  "arguments": {
+    "wiki_id": "wiki_id_here",
+    "page_id": "page_id_here",
+    "body": "# 構成図\n\n![diagram.png](/wikis/{wiki_id}/files/{attach_file_id})"
+  }
+}
+```
+
 ### タスク一覧取得 🆕
 
 ```json
@@ -1103,7 +1156,7 @@ Claudeに自然な文章でメンションを含めるよう依頼すると、�
   "arguments": {
     "channel_id": "channel_id_here",
     "text": "新しいスレッドを開始します。\nこのトピックについて話し合いましょう。",
-    "message_type": "text"
+    "thread_text": "スレッドの最初のメッセージです"
   }
 }
 ```
@@ -1114,12 +1167,76 @@ Claudeに自然な文章でメンションを含めるよう依頼すると、�
   "success": true,
   "data": {
     "channelId": "channel_id_here",
-    "threadId": "thread_12345",
-    "logId": "log_67890",
+    "threadId": "4433674925112348295",
+    "logId": "4433674926046516433",
     "sentText": "新しいスレッドを開始します。\nこのトピックについて話し合いましょう。",
     "timestamp": 1703145600000
   },
   "message": "スレッドが成功的に生成され、メッセージが送信されました。"
+}
+```
+
+> 💡 `threadId` はスレッドチャンネルのIDです。`dooray_messenger_send_channel_message` の `channel_id` に渡すと同じスレッドに続けて送信でき、`dooray_messenger_get_channel_logs` の `channelId` に渡すとスレッドの中身を読めます。
+
+### チャンネルメッセージ取得 🆕
+
+```json
+{
+  "name": "dooray_messenger_get_channel_logs",
+  "arguments": {
+    "channelId": "channel_id_here",
+    "size": 50
+  }
+}
+```
+
+**応答例（抜粋）:**
+```json
+{
+  "success": true,
+  "data": {
+    "channelId": "channel_id_here",
+    "messages": [
+      {
+        "id": "4433674545480380268",
+        "seq": 844,
+        "type": "REPLY",
+        "sender": { "type": "member", "member": { "organizationMemberId": "3926605175248762314" } },
+        "sentAt": "2026-10-01T16:19:30+09:00",
+        "text": "返信の本文",
+        "rawText": "{\"type\":0,\"text\":\"返信の本文\"}",
+        "senderName": "具成珉"
+      }
+    ],
+    "count": 1,
+    "requestedSize": 50
+  }
+}
+```
+
+### メッセージへの返信 🆕
+
+```json
+{
+  "name": "dooray_messenger_reply_message",
+  "arguments": {
+    "channel_id": "channel_id_here",
+    "log_id": "返信先メッセージのid",
+    "text": "了解です！"
+  }
+}
+```
+
+### メッセージ添付ファイルのダウンロード 🆕
+
+```json
+{
+  "name": "dooray_messenger_download_file",
+  "arguments": {
+    "channel_id": "channel_id_here",
+    "file_id": "メッセージの file.id",
+    "save_dir": "/Users/{user}/Downloads/dooray"
+  }
 }
 ```
 

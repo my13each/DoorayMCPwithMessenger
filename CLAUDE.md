@@ -95,7 +95,7 @@ Main.kt
 - Default log levels: `DOORAY_LOG_LEVEL=WARN`, `DOORAY_HTTP_LOG_LEVEL=WARN`
 
 **HTTP Client architecture** (`DoorayHttpClient.kt`):
-- Implements `DoorayClient` interface with 50+ Dooray API methods
+- Implements `DoorayClient` interface with 70+ Dooray API methods
 - Uses Ktor's ContentNegotiation + kotlinx.serialization for JSON
 - Supports 307 redirects for Drive API (`api.dooray.com` → `file-api.dooray.com`)
 - Base64 encoding/decoding for file upload/download
@@ -108,7 +108,7 @@ Main.kt
 ## Key Files
 
 - `Main.kt` - Entry point with logging configuration
-- `DoorayMcpServer.kt` - Server initialization and tool registration (lines 89-286)
+- `DoorayMcpServer.kt` - Server initialization and tool registration (`registerTool()`, grouped by category comments)
 - `client/DoorayClient.kt` - Interface defining all Dooray API methods
 - `client/DoorayHttpClient.kt` - Ktor-based HTTP client implementation
 - `tools/*.kt` - 71 tool definitions and handlers
@@ -154,7 +154,7 @@ Main.kt
 3. Add corresponding method to `DoorayClient` interface
 4. Implement HTTP call in `DoorayHttpClient`
 5. Register tool in `DoorayMcpServer.registerTool()` with appropriate `ToolCategory`
-6. Update tool count in comments (line 282)
+6. Update the category header count in `registerTool()` comments, the tool counts in README (category list + per-section headers + 合計) and this file
 
 ### Modifying API client
 
@@ -218,10 +218,11 @@ Channels support user mentions and @channel:
 
 ### Drive API 307 Redirect Handling
 
-Drive operations require following 307 redirects:
+File operations (Drive, Messenger, Wiki) answer with 307:
 - Initial request: `api.dooray.com`
 - Redirected to: `file-api.dooray.com`
-- Implemented in `DoorayHttpClient` with Ktor's `followRedirects`
+- Handled **manually**: read the `Location` header and re-request with `fileHttpClient` (which carries `Authorization`).
+  Ktor's automatic redirect drops `Authorization` across hosts → 401. Messenger/Wiki downloads and Wiki upload use `noRedirectHttpClient` + shared `downloadWithRedirect()`.
 
 ## Version History
 

@@ -12,7 +12,7 @@ DoorayMCP/
 │   │   │   ├── client/
 │   │   │   │   ├── DoorayClient.kt         # Dooray APIインターフェース
 │   │   │   │   └── DoorayHttpClient.kt     # Ktor HTTP実装
-│   │   │   ├── tools/                      # 48個のツール実装
+│   │   │   ├── tools/                      # 71個のツール実装
 │   │   │   │   ├── *WikiTool.kt            # Wiki関連ツール
 │   │   │   │   ├── *ProjectPostTool.kt     # Project関連ツール
 │   │   │   │   ├── *MessengerTool.kt       # Messenger関連ツール
@@ -61,7 +61,7 @@ Main.kt
           ├─ getEnv()                       # 環境変数検証（DOORAY_API_KEY, DOORAY_BASE_URL）
           ├─ DoorayHttpClient 作成          # Ktorベース HTTPクライアント（リトライロジック付き）
           ├─ Server (MCP SDK)               # プロトコル通信ハンドラー
-          ├─ registerTool() (48回)          # DOORAY_ENABLED_CATEGORIES に基づき条件付き登録
+          ├─ registerTool() (71回)          # DOORAY_ENABLED_CATEGORIES に基づき条件付き登録
           └─ StdioServerTransport           # stdin/stdoutトランスポート（blocking runBlocking）
 ```
 
@@ -90,7 +90,7 @@ Main.kt
 ### HTTP クライアント階層
 
 ```
-Tools (48個)
+Tools (71個)
   ↓ 呼び出し
 DoorayClient (インターフェース)
   ↓ 実装
@@ -111,7 +111,7 @@ DoorayHttpClient (Ktor実装)
 ### 2. カテゴリベースのツールフィルタリング
 - ツールは5つのカテゴリに分類: `WIKI`, `PROJECT`, `MESSENGER`, `CALENDAR`, `DRIVE`
 - 環境変数 `DOORAY_ENABLED_CATEGORIES` で有効化するツールを制御
-- 未設定の場合: 全48ツールが登録される
+- 未設定の場合: 全71ツールが登録される
 
 ### 3. エラーハンドリング
 - カスタム例外: `ToolException`, `CustomException`
@@ -145,7 +145,7 @@ DoorayHttpClient (Ktor実装)
 | `DoorayMcpServer.kt` | サーバー初期化、ツール登録（89-286行目） | ★★★ |
 | `client/DoorayClient.kt` | 全Dooray APIメソッドのインターフェース | ★★★ |
 | `client/DoorayHttpClient.kt` | Ktor HTTPクライアント実装 | ★★★ |
-| `tools/*.kt` | 48個のツール定義とハンドラー | ★★★ |
+| `tools/*.kt` | 71個のツール定義とハンドラー | ★★★ |
 | `types/*.kt` | リクエスト/レスポンスデータクラス（kotlinx.serialization） | ★★ |
 | `constants/ToolCategory.kt` | ツールカテゴリEnum、パースロジック | ★★ |
 

@@ -117,7 +117,7 @@ class DoorayMcpServer {
             toolCount++
         }
 
-        // ============ Wiki 관련 도구들 (5개) ============
+        // ============ Wiki 관련 도구들 (18개) ============
 
         // 1. 위키 프로젝트 목록 조회
         addTool(ToolCategory.WIKI, getWikisTool(), getWikisHandler(doorayHttpClient))
@@ -192,7 +192,7 @@ class DoorayMcpServer {
         // 16. 업무 댓글 삭제
         addTool(ToolCategory.PROJECT, deletePostCommentTool(), deletePostCommentHandler(doorayHttpClient))
 
-        // ============ 메신저 관련 도구들 (7개) ============
+        // ============ 메신저 관련 도구들 (17개) ============
 
         // 17. 멤버 검색
         addTool(ToolCategory.MESSENGER, searchMembersTool(), searchMembersHandler(doorayHttpClient))
