@@ -3,11 +3,13 @@ package com.my13each.dooray.mcp.constants
 /** 프로젝트 버전 상수 */
 object VersionConst {
     /** 현재 프로젝트 버전 (gradle.properties의 project.version과 동일하게 유지) */
-    const val VERSION = "0.2.28"
+    const val VERSION = "0.2.31"
 
     /** 버전 히스토리 및 변경사항 */
     const val CHANGELOG =
             """
+        0.2.31 - 메신저 메시지 조회/답장/기존 메시지 스레드/멤버 상세/첨부 파일 다운로드 추가, create_thread 응답 파싱 수정 및 thread_text 추가
+        0.2.29~0.2.30 - 메신저 툴 5종 추가(스레드, 메시지 수정/삭제, 채널 가입/탈퇴), 인라인 멘션 위치 보존 (당시 VERSION 미반영)
         0.2.28 - 업무 목록 담당자 정보 추가 경량화 (이름/ID만 포함)
         0.2.27 - 업무 목록 조회 최적화 (경량화 응답)
         0.2.26 - 환경변수 기반 툴 카테고리 필터링 추가 (DOORAY_ENABLED_CATEGORIES)

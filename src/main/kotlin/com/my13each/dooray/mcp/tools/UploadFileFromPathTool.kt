@@ -172,7 +172,7 @@ fun uploadFileFromPathHandler(doorayClient: DoorayClient): suspend (CallToolRequ
  * - /tmp/file.txt → /tmp/file.txt (変換不要、tmpディレクトリ)
  * - /host/Downloads/file.txt → /host/Downloads/file.txt (変換不要)
  */
-private fun convertHostPathToContainerPath(hostPath: String): String {
+internal fun convertHostPathToContainerPath(hostPath: String): String {
     // すでにコンテナパス、Claude作業ディレクトリ、または /tmp の場合はそのまま返す
     if (hostPath.startsWith("/host/") ||
         hostPath.startsWith("/home/claude") ||
@@ -184,7 +184,10 @@ private fun convertHostPathToContainerPath(hostPath: String): String {
     val desktopPattern = Regex("^(/Users/[^/]+/Desktop)(/.*)?$")
     val downloadsPattern = Regex("^(/Users/[^/]+/Downloads)(/.*)?$")
 
+    // ローカル実行（Docker外）では /host マウントが存在しないため変換しない
     return when {
+        desktopPattern.matches(hostPath) && !java.io.File("/host/Desktop").isDirectory -> hostPath
+        downloadsPattern.matches(hostPath) && !java.io.File("/host/Downloads").isDirectory -> hostPath
         desktopPattern.matches(hostPath) -> {
             hostPath.replaceFirst(Regex("^/Users/[^/]+/Desktop"), "/host/Desktop")
         }

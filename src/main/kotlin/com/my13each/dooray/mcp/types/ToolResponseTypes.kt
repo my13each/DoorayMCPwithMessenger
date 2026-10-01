@@ -31,9 +31,8 @@ data class ChannelListResponseData(
 data class ChannelLogsResponseData(
         val channelId: String,
         val messages: List<ChannelMessage>,
-        val totalCount: Int,
-        val currentPage: Int,
-        val pageSize: Int
+        val count: Int,
+        val requestedSize: Int
 )
 
 /** 멤버 검색 응답 데이터 */
@@ -75,7 +74,8 @@ data class CreateChannelResponseData(
 @Serializable
 data class CreateThreadResponseData(
         val channelId: String,
-        val threadId: String,
+        /** 스레드 채널 ID (이 ID로 send_channel_message 하면 같은 스레드에 이어서 전송) */
+        val threadId: String?,
         val logId: String,
         val sentText: String,
         val timestamp: Long
@@ -96,6 +96,31 @@ data class DeleteMessageResponseData(
         val channelId: String,
         val logId: String,
         val timestamp: Long
+)
+
+/** 답장 · 기존 메시지 스레드 전송 응답 데이터 */
+@Serializable
+data class MessageSendResponseData(
+        val channelId: String,
+        val targetLogId: String,
+        val logId: String?,
+        val sentChannelId: String?,
+        val sentText: String
+)
+
+/** 메신저 첨부 파일 다운로드 응답 데이터 */
+@Serializable
+data class MessengerFileDownloadResponseData(
+        val channelId: String,
+        val fileId: String,
+        val fileName: String,
+        val savedPath: String,
+        /** Docker 실행 시 호스트에서의 경로 힌트 (예: ~/Downloads/a.pdf) */
+        val hostPathHint: String?,
+        val size: Long,
+        val contentType: String?,
+        /** 텍스트 파일(50KB 이하)인 경우 내용 */
+        val textContent: String?
 )
 
 /** 채널 가입 응답 데이터 */

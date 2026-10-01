@@ -17,7 +17,7 @@ import kotlinx.serialization.json.putJsonObject
 fun searchMembersTool(): Tool {
     return Tool(
         name = "dooray_messenger_search_members",
-        description = "두레이 조직의 멤버를 검색합니다. 이름, 이메일, 사용자 코드 등으로 검색할 수 있습니다.",
+        description = "두레이 조직의 멤버를 검색합니다. 이름, 이메일, 사용자 코드, ID Provider 사용자 ID(사번 등) 등으로 검색할 수 있습니다.",
         inputSchema = Tool.Input(
             properties = buildJsonObject {
                 putJsonObject("name") {
@@ -26,11 +26,15 @@ fun searchMembersTool(): Tool {
                 }
                 putJsonObject("email") {
                     put("type", "string")
-                    put("description", "검색할 멤버 이메일 주소")
+                    put("description", "검색할 멤버 이메일 주소 (쉼표로 구분해 최대 10개)")
                 }
                 putJsonObject("user_code") {
                     put("type", "string")
                     put("description", "검색할 사용자 코드")
+                }
+                putJsonObject("id_provider_user_id") {
+                    put("type", "string")
+                    put("description", "ID Provider가 제공하는 사용자 ID (SSO의 경우 사번 등, IAM의 경우 UUID)")
                 }
                 putJsonObject("page") {
                     put("type", "integer")
@@ -56,15 +60,22 @@ fun searchMembersHandler(doorayClient: DoorayClient): suspend (CallToolRequest) 
             val name = request.arguments["name"]?.jsonPrimitive?.content
             val email = request.arguments["email"]?.jsonPrimitive?.content
             val userCode = request.arguments["user_code"]?.jsonPrimitive?.content
+            val idProviderUserId = request.arguments["id_provider_user_id"]?.jsonPrimitive?.content
             val page = request.arguments["page"]?.jsonPrimitive?.content?.toIntOrNull() ?: 0
             val size = request.arguments["size"]?.jsonPrimitive?.content?.toIntOrNull() ?: 20
 
-            val emailList = email?.let { listOf(it) }
+            val emailList = email
+                ?.split(",")
+                ?.map { it.trim() }
+                ?.filter { it.isNotEmpty() }
+                ?.take(10)
+                ?.takeIf { it.isNotEmpty() }
 
             val response = doorayClient.searchMembers(
                 name = name,
                 externalEmailAddresses = emailList,
                 userCode = userCode,
+                idProviderUserId = idProviderUserId,
                 page = page,
                 size = size
             )

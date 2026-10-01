@@ -24,6 +24,21 @@ class DoorayHttpClient(private val baseUrl: String, private val doorayApiKey: St
     private val httpClient: HttpClient
     private val fileHttpClient: HttpClient // 파일 API 전용 클라이언트
 
+    /**
+     * 리다이렉트를 자동으로 따라가지 않는 클라이언트.
+     * Ktor 기본 클라이언트는 307을 따라가면서 Authorization 헤더를 버려 file-api에서 401이 나므로,
+     * 307을 직접 받아 fileHttpClient(인증 헤더 포함)로 재요청할 때 사용합니다.
+     */
+    private val noRedirectHttpClient: HttpClient by lazy {
+        HttpClient {
+            followRedirects = false
+            defaultRequest {
+                url(baseUrl)
+                header("Authorization", "dooray-api $doorayApiKey")
+            }
+        }
+    }
+
     init {
         httpClient = initHttpClient()
         fileHttpClient = initFileHttpClient()
@@ -677,8 +692,16 @@ class DoorayHttpClient(private val baseUrl: String, private val doorayApiKey: St
         }
     }
 
-    // ⚠️ 채널 로그 조회는 Dooray API에서 지원하지 않음 (보안상 제한)
-    // override suspend fun getChannelLogs(...): ChannelLogsResponse {...}
+    override suspend fun getChannelLogs(channelId: String, size: Int?): ChannelLogsResponse {
+        return executeApiCall(
+            operation = "GET /messenger/v1/channels/$channelId/logs",
+            successMessage = "✅ 채널 메시지 조회 성공"
+        ) {
+            httpClient.get("/messenger/v1/channels/$channelId/logs") {
+                size?.let { parameter("size", it) }
+            }
+        }
+    }
 
     override suspend fun sendChannelMessage(
             channelId: String,
@@ -736,6 +759,85 @@ class DoorayHttpClient(private val baseUrl: String, private val doorayApiKey: St
             successMessage = "✅ 채널 메시지 삭제 성공"
         ) {
             httpClient.delete("/messenger/v1/channels/$channelId/logs/$logId")
+        }
+    }
+
+    override suspend fun getMember(memberId: String): MemberDetailResponse {
+        return executeApiCall(
+            operation = "GET /common/v1/members/$memberId",
+            successMessage = "✅ 멤버 상세 조회 성공"
+        ) {
+            httpClient.get("/common/v1/members/$memberId")
+        }
+    }
+
+    override suspend fun downloadMessengerFile(channelId: String, fileId: String): MessengerFileDownload {
+        val path = "/messenger/v1/channels/$channelId/files/$fileId"
+        return try {
+            log.info("🔗 메신저 파일 다운로드 요청: $path")
+            val initialResponse = noRedirectHttpClient.get(path)
+            log.info("📡 초기 응답: ${initialResponse.status}")
+
+            val fileResponse = when (initialResponse.status) {
+                HttpStatusCode.OK -> initialResponse
+                HttpStatusCode.TemporaryRedirect, HttpStatusCode.Found -> {
+                    val locationUrl = initialResponse.headers["Location"]
+                        ?: throw CustomException("307 응답에 Location 헤더가 없습니다", 307)
+                    log.info("🔄 리다이렉트 - 실제 다운로드 URL: $locationUrl")
+                    fileHttpClient.get(locationUrl)
+                }
+                else -> throw CustomException("메신저 파일 다운로드 실패: ${initialResponse.status}", initialResponse.status.value)
+            }
+
+            if (fileResponse.status != HttpStatusCode.OK) {
+                throw CustomException("메신저 파일 다운로드 실패: ${fileResponse.status}", fileResponse.status.value)
+            }
+
+            val fileName = fileResponse.headers[HttpHeaders.ContentDisposition]
+                ?.let { ContentDisposition.parse(it) }
+                ?.let { it.parameter("filename*")?.substringAfter("''")?.decodeURLQueryComponent() ?: it.parameter("filename") }
+            val bytes = fileResponse.readRawBytes()
+            log.info("✅ 메신저 파일 다운로드 성공 (${bytes.size} bytes)")
+            MessengerFileDownload(
+                bytes = bytes,
+                fileName = fileName,
+                contentType = fileResponse.headers[HttpHeaders.ContentType]
+            )
+        } catch (e: CustomException) {
+            throw e
+        } catch (e: Exception) {
+            log.error("❌ 메신저 파일 다운로드 중 오류 발생", e)
+            throw CustomException("메신저 파일 다운로드 중 오류 발생: ${e.message}", 500)
+        }
+    }
+
+    override suspend fun replyToMessage(
+        channelId: String,
+        logId: String,
+        request: MessageTextRequest
+    ): MessageSendResponse {
+        return executeApiCall(
+            operation = "POST /messenger/v1/channels/$channelId/logs/$logId/reply",
+            successMessage = "✅ 메시지 답장 전송 성공"
+        ) {
+            httpClient.post("/messenger/v1/channels/$channelId/logs/$logId/reply") {
+                setBody(request)
+            }
+        }
+    }
+
+    override suspend fun createThreadFromMessage(
+        channelId: String,
+        logId: String,
+        request: MessageTextRequest
+    ): MessageSendResponse {
+        return executeApiCall(
+            operation = "POST /messenger/v1/channels/$channelId/logs/$logId/threads/create-and-send",
+            successMessage = "✅ 기존 메시지 스레드 생성 및 전송 성공"
+        ) {
+            httpClient.post("/messenger/v1/channels/$channelId/logs/$logId/threads/create-and-send") {
+                setBody(request)
+            }
         }
     }
 

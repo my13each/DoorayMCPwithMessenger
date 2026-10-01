@@ -18,7 +18,7 @@ import kotlinx.serialization.json.putJsonObject
 fun createThreadTool(): Tool {
     return Tool(
         name = "dooray_messenger_create_thread",
-        description = "두레이 메신저 채널에 스레드를 생성하고 첫 메시지를 전송합니다.",
+        description = "두레이 메신저 채널에 스레드를 생성하고 첫 메시지를 전송합니다. 응답의 threadId(스레드 채널 ID)로 dooray_messenger_send_channel_message를 호출하면 같은 스레드에 이어서 보낼 수 있습니다. 기존 메시지에 스레드를 달려면 dooray_messenger_create_thread_from_message를 사용하세요.",
         inputSchema = Tool.Input(
             properties = buildJsonObject {
                 putJsonObject("channel_id") {
@@ -27,7 +27,11 @@ fun createThreadTool(): Tool {
                 }
                 putJsonObject("text") {
                     put("type", "string")
-                    put("description", "스레드의 첫 메시지 내용")
+                    put("description", "대화방(채널)에 보낼 메시지 내용. 이 메시지에 스레드가 달립니다.")
+                }
+                putJsonObject("thread_text") {
+                    put("type", "string")
+                    put("description", "스레드(글타래)에 보낼 첫 메시지 (선택). 생략하면 스레드 첫 메시지가 \"#\"으로 들어갑니다.")
                 }
                 putJsonObject("message_type") {
                     put("type", "string")
@@ -47,6 +51,7 @@ fun createThreadHandler(doorayClient: DoorayClient): suspend (CallToolRequest) -
         try {
             val channelId = request.arguments["channel_id"]?.jsonPrimitive?.content
             val text = request.arguments["text"]?.jsonPrimitive?.content
+            val threadText = request.arguments["thread_text"]?.jsonPrimitive?.content?.takeIf { it.isNotBlank() }
             val messageType = request.arguments["message_type"]?.jsonPrimitive?.content ?: "text"
 
             when {
@@ -75,6 +80,7 @@ fun createThreadHandler(doorayClient: DoorayClient): suspend (CallToolRequest) -
                 else -> {
                     val createThreadRequest = CreateThreadRequest(
                         text = text,
+                        threadText = threadText,
                         messageType = messageType
                     )
 
@@ -83,8 +89,8 @@ fun createThreadHandler(doorayClient: DoorayClient): suspend (CallToolRequest) -
                     if (response.header.isSuccessful && response.result != null) {
                         val data = CreateThreadResponseData(
                             channelId = channelId,
-                            threadId = response.result.threadId,
-                            logId = response.result.logId,
+                            threadId = response.result.channelId,
+                            logId = response.result.id,
                             sentText = text,
                             timestamp = System.currentTimeMillis()
                         )

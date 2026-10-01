@@ -190,7 +190,9 @@ class DoorayMcpServer {
         // 21. 특정 채널 상세 조회
         addTool(ToolCategory.MESSENGER, getChannelTool(), getChannelHandler(doorayHttpClient))
 
-        // ⚠️ 채널 로그 조회는 Dooray API에서 지원하지 않음 (보안상 제한)
+        // 21-1. 채널 메시지(로그) 조회 (최신 N개, 최대 1000)
+        addTool(ToolCategory.MESSENGER, getChannelLogsTool(), getChannelLogsHandler(doorayHttpClient))
+
         // 22. 채널 메시지 전송
         addTool(ToolCategory.MESSENGER, sendChannelMessageTool(), sendChannelMessageHandler(doorayHttpClient))
 
@@ -211,6 +213,18 @@ class DoorayMcpServer {
 
         // 28. 메시지 삭제
         addTool(ToolCategory.MESSENGER, deleteMessageTool(), deleteMessageHandler(doorayHttpClient))
+
+        // 28-1. 특정 메시지에 답장
+        addTool(ToolCategory.MESSENGER, replyMessageTool(), replyMessageHandler(doorayHttpClient))
+
+        // 28-2. 기존 메시지 기반 스레드 생성 및 전송
+        addTool(ToolCategory.MESSENGER, createThreadFromMessageTool(), createThreadFromMessageHandler(doorayHttpClient))
+
+        // 28-3. 멤버 상세 조회 (ID → 이름)
+        addTool(ToolCategory.MESSENGER, getMemberTool(), getMemberHandler(doorayHttpClient))
+
+        // 28-4. 메신저 첨부 파일 다운로드
+        addTool(ToolCategory.MESSENGER, downloadMessengerFileTool(), downloadMessengerFileHandler(doorayHttpClient))
 
         // ============ 캘린더 관련 도구들 (5개) ============
 

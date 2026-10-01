@@ -1,6 +1,7 @@
 package com.my13each.dooray.mcp.types
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonObject
 
 // ============ 멤버 검색 관련 타입들 ============
 
@@ -172,22 +173,53 @@ typealias LeaveChannelResponse = DoorayApiUnitResponse
 
 // ============ 채널 로그(메시지) 관련 타입들 ============
 
-/** 채널 메시지 */
+/** 채널 메시지 발신자 멤버 */
+@Serializable
+data class ChannelMessageSenderMember(
+    val organizationMemberId: String? = null
+)
+
+/** 채널 메시지 발신자 (type: member, app 등) */
+@Serializable
+data class ChannelMessageSender(
+    val type: String? = null,
+    val member: ChannelMessageSenderMember? = null,
+    /** 봇(앱) 발신자 정보 (type=app일 때, appId 포함) */
+    val app: JsonObject? = null
+)
+
+/** 채널 메시지 (GET /messenger/v1/channels/{channel-id}/logs 응답 항목) */
 @Serializable
 data class ChannelMessage(
     val id: String,
+    val seq: Long? = null,
+    val type: String? = null,
+    val sender: ChannelMessageSender? = null,
+    val sentAt: String? = null,
     val text: String? = null,
-    val createdAt: String? = null,
-    val updatedAt: String? = null,
-    val senderId: String? = null,
+    val flags: String? = null,
+    /** 번역 등 부가 정보 (type별 구조가 달라 원본 유지) */
+    val attachments: List<JsonObject>? = null,
+    /** 첨부 파일 정보 (file.id로 파일 다운로드 가능) */
+    val file: JsonObject? = null,
+    /** 발신자 이름 (도구에서 멤버 조회로 채움, API 원본에는 없음) */
     val senderName: String? = null,
-    val messageType: String? = null
+    /** REPLY 메시지의 원본 text (JSON 문자열). text에는 답장 본문만 풀어서 넣음 */
+    val rawText: String? = null
+)
+
+/** resultMessage가 null로 올 수 있는 메신저 API용 응답 헤더 */
+@Serializable
+data class LenientApiHeader(
+    val isSuccessful: Boolean,
+    val resultCode: Int,
+    val resultMessage: String? = null
 )
 
 /** 채널 로그 조회 응답 */
 @Serializable
 data class ChannelLogsResponse(
-    val header: DoorayApiHeader,
+    val header: LenientApiHeader,
     val result: List<ChannelMessage>,
     val totalCount: Int? = null
 )
@@ -207,22 +239,81 @@ typealias SendChannelMessageResponse = DoorayApiUnitResponse
 /** 스레드 생성 및 메시지 전송 요청 */
 @Serializable
 data class CreateThreadRequest(
+    /** 대화방에 보낼 메시지 */
     val text: String,
+    /** 글타래(스레드)에 보낼 첫 메시지 (생략 시 Dooray가 "#"을 넣음) */
+    val threadText: String? = null,
     val messageType: String? = "text"
 )
 
-/** 스레드 생성 결과 */
+/** 스레드 생성 결과 (id: 스레드 채널의 log-id, channelId: 스레드 채널 ID) */
 @Serializable
 data class CreateThreadResult(
-    val threadId: String,
-    val logId: String
+    val id: String,
+    val channelId: String? = null
 )
 
 /** 스레드 생성 응답 */
 @Serializable
 data class CreateThreadResponse(
-    val header: DoorayApiHeader,
-    val result: CreateThreadResult?
+    val header: LenientApiHeader,
+    val result: CreateThreadResult? = null
+)
+
+// ============ 답장 / 기존 메시지 스레드 관련 타입들 ============
+
+/** 메시지 답장 · 기존 메시지 스레드 전송 요청 */
+@Serializable
+data class MessageTextRequest(
+    val text: String
+)
+
+/** 메시지 전송 결과 (log-id + 전송된 채널 ID) */
+@Serializable
+data class MessageSendResult(
+    val id: String,
+    val channelId: String? = null
+)
+
+/** 메시지 답장 · 기존 메시지 스레드 전송 응답 */
+@Serializable
+data class MessageSendResponse(
+    val header: LenientApiHeader,
+    val result: MessageSendResult? = null
+)
+
+// ============ 멤버 상세 관련 타입들 ============
+
+/** 멤버 상세 정보 (GET /common/v1/members/{member-id}) */
+@Serializable
+data class MemberDetail(
+    val id: String,
+    val name: String? = null,
+    val englishName: String? = null,
+    val nativeName: String? = null,
+    val nickname: String? = null,
+    val userCode: String? = null,
+    val externalEmailAddress: String? = null,
+    val idProviderType: String? = null,
+    val idProviderUserId: String? = null,
+    val locale: String? = null,
+    val timezoneName: String? = null
+)
+
+/** 멤버 상세 조회 응답 */
+@Serializable
+data class MemberDetailResponse(
+    val header: LenientApiHeader,
+    val result: MemberDetail? = null
+)
+
+// ============ 메신저 파일 관련 타입들 ============
+
+/** 메신저 첨부 파일 다운로드 결과 (바이너리) */
+class MessengerFileDownload(
+    val bytes: ByteArray,
+    val fileName: String?,
+    val contentType: String?
 )
 
 // ============ 메시지 수정/삭제 관련 타입들 ============

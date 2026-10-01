@@ -182,8 +182,11 @@ interface DoorayClient {
     /** 채널에서 멤버를 제거합니다. */
     suspend fun leaveChannel(channelId: String, request: LeaveChannelRequest): LeaveChannelResponse
 
-    // ⚠️ 채널 로그 조회는 Dooray API에서 지원하지 않음 (보안상 제한)
-    // suspend fun getChannelLogs(...): ChannelLogsResponse
+    /**
+     * 채널 메시지(로그)를 조회합니다. 공식 문서 미기재 엔드포인트.
+     * 최신 N개만 반환 (size 최대 1000, 페이지네이션 미지원).
+     */
+    suspend fun getChannelLogs(channelId: String, size: Int? = null): ChannelLogsResponse
 
     /** 채널에 메시지를 전송합니다. */
     suspend fun sendChannelMessage(
@@ -209,6 +212,29 @@ interface DoorayClient {
         channelId: String,
         logId: String
     ): DeleteMessageResponse
+
+    /** 멤버 상세 정보를 조회합니다. (GET /common/v1/members/{member-id}) */
+    suspend fun getMember(memberId: String): MemberDetailResponse
+
+    /**
+     * 메신저 첨부 파일을 다운로드합니다. (GET /messenger/v1/channels/{channel-id}/files/{file-id})
+     * file-api.dooray.com으로 307 리다이렉트됩니다.
+     */
+    suspend fun downloadMessengerFile(channelId: String, fileId: String): MessengerFileDownload
+
+    /** 채널의 특정 메시지(log-id)에 답장을 보냅니다. */
+    suspend fun replyToMessage(
+        channelId: String,
+        logId: String,
+        request: MessageTextRequest
+    ): MessageSendResponse
+
+    /** 채널의 특정 메시지(log-id)를 기반으로 스레드를 생성하고 메시지를 전송합니다. */
+    suspend fun createThreadFromMessage(
+        channelId: String,
+        logId: String,
+        request: MessageTextRequest
+    ): MessageSendResponse
 
     // ============ 캘린더 관련 API ============
 
