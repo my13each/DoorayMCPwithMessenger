@@ -29,6 +29,57 @@ interface DoorayClient {
         request: UpdateWikiPageRequest
     ): DoorayApiUnitResponse
 
+    // ============ 위키 페이지 관리 / 댓글 / 파일 API ============
+
+    /** 위키 페이지를 삭제합니다. */
+    suspend fun deleteWikiPage(wikiId: String, pageId: String): LenientUnitResponse
+
+    /** 위키 페이지를 이동하거나 순서를 변경합니다. */
+    suspend fun moveWikiPage(wikiId: String, pageId: String, request: MoveWikiPageRequest): LenientUnitResponse
+
+    /** 위키 페이지 제목만 수정합니다. */
+    suspend fun updateWikiPageTitle(wikiId: String, pageId: String, request: UpdateWikiPageTitleRequest): LenientUnitResponse
+
+    /** 위키 페이지 본문만 수정합니다. */
+    suspend fun updateWikiPageContent(wikiId: String, pageId: String, request: UpdateWikiPageContentRequest): LenientUnitResponse
+
+    /** 위키 페이지 참조자만 수정합니다 (기존 참조자를 덮어씀). */
+    suspend fun updateWikiPageReferrers(wikiId: String, pageId: String, request: UpdateWikiPageReferrersRequest): LenientUnitResponse
+
+    /** 위키 페이지에 댓글을 작성합니다. */
+    suspend fun createWikiComment(wikiId: String, pageId: String, request: WikiCommentRequest): LenientApiResponse<IdResult>
+
+    /** 위키 페이지 댓글 목록을 조회합니다 (최신순). */
+    suspend fun getWikiComments(wikiId: String, pageId: String, page: Int? = null, size: Int? = null): WikiCommentListResponse
+
+    /** 위키 댓글 1건을 조회합니다. */
+    suspend fun getWikiComment(wikiId: String, pageId: String, commentId: String): LenientApiResponse<WikiComment>
+
+    /** 위키 댓글을 수정합니다. */
+    suspend fun updateWikiComment(wikiId: String, pageId: String, commentId: String, request: WikiCommentRequest): LenientUnitResponse
+
+    /** 위키 댓글을 삭제합니다. */
+    suspend fun deleteWikiComment(wikiId: String, pageId: String, commentId: String): LenientUnitResponse
+
+    /** 위키 페이지 첨부 파일(files[].id / images[].id)을 다운로드합니다. */
+    suspend fun downloadWikiPageFile(wikiId: String, pageId: String, fileId: String): MessengerFileDownload
+
+    /** 위키 첨부 파일(attachFileId)을 다운로드합니다. */
+    suspend fun downloadWikiAttachFile(wikiId: String, attachFileId: String): MessengerFileDownload
+
+    /** 기존 위키 페이지에 파일 1개를 업로드합니다. type: general | inline_image */
+    suspend fun uploadWikiPageFile(
+        wikiId: String,
+        pageId: String,
+        type: String,
+        fileName: String,
+        fileContent: ByteArray,
+        mimeType: String?
+    ): LenientApiResponse<WikiUploadedFile>
+
+    /** 위키 페이지 첨부 파일을 삭제합니다. */
+    suspend fun deleteWikiPageFile(wikiId: String, pageId: String, fileId: String): LenientUnitResponse
+
     // ============ 프로젝트 업무 관련 API ============
 
     /** 프로젝트 내에 업무를 생성합니다. */

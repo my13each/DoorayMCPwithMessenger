@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-DoorayMCP is an MCP (Model Context Protocol) server implementation for NHN Dooray integration, written in Kotlin. It provides 58 tools across 5 categories (Wiki, Project, Messenger, Calendar, Drive) that enable Claude to interact with Dooray services via standardized MCP protocol over stdin/stdout.
+DoorayMCP is an MCP (Model Context Protocol) server implementation for NHN Dooray integration, written in Kotlin. It provides 71 tools across 5 categories (Wiki, Project, Messenger, Calendar, Drive) that enable Claude to interact with Dooray services via standardized MCP protocol over stdin/stdout.
 
 @README for complete feature documentation and API examples.
 
@@ -68,7 +68,7 @@ Main.kt
        ├─ getEnv() - Validates DOORAY_API_KEY, DOORAY_BASE_URL
        ├─ DoorayHttpClient - Ktor-based HTTP client with retry logic
        ├─ Server (MCP SDK) - Handles protocol communication
-       ├─ registerTool() - Conditionally registers 58 tools based on DOORAY_ENABLED_CATEGORIES
+       ├─ registerTool() - Conditionally registers 71 tools based on DOORAY_ENABLED_CATEGORIES
        └─ StdioServerTransport - stdin/stdout transport (blocking runBlocking)
 ```
 
@@ -78,7 +78,7 @@ Main.kt
 - Tools are grouped into 5 categories: WIKI, PROJECT, MESSENGER, CALENDAR, DRIVE
 - Environment variable `DOORAY_ENABLED_CATEGORIES` controls which tools are registered
 - Format: comma-separated list (e.g., `"wiki,project"`)
-- If unset/empty: all 58 tools are registered
+- If unset/empty: all 71 tools are registered
 
 **Tool implementation pattern**:
 1. Each tool has two components in `src/main/kotlin/com/my13each/dooray/mcp/tools/`:
@@ -111,7 +111,7 @@ Main.kt
 - `DoorayMcpServer.kt` - Server initialization and tool registration (lines 89-286)
 - `client/DoorayClient.kt` - Interface defining all Dooray API methods
 - `client/DoorayHttpClient.kt` - Ktor-based HTTP client implementation
-- `tools/*.kt` - 58 tool definitions and handlers
+- `tools/*.kt` - 71 tool definitions and handlers
 - `types/*.kt` - Request/response data classes with kotlinx.serialization
 - `constants/ToolCategory.kt` - Tool category enum with parsing logic
 - `constants/EnvVariableConst.kt` - Environment variable names
@@ -208,6 +208,14 @@ Channels support user mentions and @channel:
 - `type=me` (self chat room) is not returned by `GET /channels`; get its ID from a `direct-send` to yourself (`result.channelId`).
 - Messenger file download returns 307 to `file-api.dooray.com`. Ktor's default client follows it and drops `Authorization` → 401. Use the `followRedirects = false` client and re-request with `fileHttpClient`.
 
+### Wiki API Notes (verified 2026-10-01)
+
+- `WikiReferrer.type` must be serialized: it has a default value and the HTTP client uses `encodeDefaults = false`, so it is marked `@EncodeDefault`. Without `type` the API returns 400.
+- `PUT /pages/{id}` wipes all referrers when `referrers` is null → `update_page` carries over current referrers when not specified.
+- `POST .../comments` returns **201** (docs say 200).
+- File upload multipart: send `type` field **before** `file`. Downloads go through 307 → shared `downloadWithRedirect()`.
+- Test in the personal wiki `@sungmin.koo` (id `3926605180155360543`).
+
 ### Drive API 307 Redirect Handling
 
 Drive operations require following 307 redirects:
@@ -218,6 +226,7 @@ Drive operations require following 307 redirects:
 ## Version History
 
 Check `git log` for detailed changelog. Recent versions focus on:
+- v0.2.32: Wiki comments CRUD, page delete/move/partial update, file upload/download/delete; referrer `type` serialization fix
 - v0.2.31: Messenger read/reply/thread-from-message/member detail/file download, create_thread fix
 - v0.2.29-30: 5 messenger tools (thread, edit/delete, join/leave), inline mention position
 - v0.2.28: Task assignee info slimming

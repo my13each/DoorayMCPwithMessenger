@@ -2,6 +2,7 @@ package com.my13each.dooray.mcp.tools
 
 import com.my13each.dooray.mcp.client.DoorayClient
 import com.my13each.dooray.mcp.exception.ToolException
+import com.my13each.dooray.mcp.types.MessengerFileDownload
 import com.my13each.dooray.mcp.types.MessengerFileDownloadResponseData
 import com.my13each.dooray.mcp.types.ToolSuccessResponse
 import com.my13each.dooray.mcp.utils.JsonUtils
@@ -74,31 +75,20 @@ fun downloadMessengerFileHandler(doorayClient: DoorayClient): suspend (CallToolR
                 CallToolResult(content = listOf(TextContent(JsonUtils.toJsonString(errorResponse))))
             } else {
                 val download = doorayClient.downloadMessengerFile(channelId!!, fileId!!)
-
-                val saveDir = File(saveDirArg?.let { convertHostPathToContainerPath(it) } ?: defaultDownloadDir())
-                saveDir.mkdirs()
-                val target = uniqueFile(saveDir, sanitizeFileName(download.fileName ?: "dooray_file_$fileId"))
-                target.writeBytes(download.bytes)
-
-                val isText = download.contentType?.let {
-                    it.startsWith("text/") || it.contains("json") || it.contains("xml")
-                } ?: false
-                val inlineText = if (isText && download.bytes.size <= INLINE_TEXT_MAX_BYTES) {
-                    download.bytes.toString(Charsets.UTF_8)
-                } else null
+                val saved = saveDownloadedFile(download, saveDirArg, "dooray_file_$fileId")
 
                 val successResponse = ToolSuccessResponse(
                     data = MessengerFileDownloadResponseData(
                         channelId = channelId,
                         fileId = fileId,
-                        fileName = target.name,
-                        savedPath = target.absolutePath,
-                        hostPathHint = containerPathToHostHint(target.absolutePath),
-                        size = download.bytes.size.toLong(),
+                        fileName = saved.fileName,
+                        savedPath = saved.savedPath,
+                        hostPathHint = saved.hostPathHint,
+                        size = saved.size,
                         contentType = download.contentType,
-                        textContent = inlineText
+                        textContent = saved.textContent
                     ),
-                    message = "📥 파일을 저장했습니다: ${target.absolutePath} (${download.bytes.size} bytes)"
+                    message = "📥 파일을 저장했습니다: ${saved.savedPath} (${saved.size} bytes)"
                 )
                 CallToolResult(content = listOf(TextContent(JsonUtils.toJsonString(successResponse))))
             }
@@ -114,6 +104,38 @@ fun downloadMessengerFileHandler(doorayClient: DoorayClient): suspend (CallToolR
             CallToolResult(content = listOf(TextContent(JsonUtils.toJsonString(errorResponse))))
         }
     }
+}
+
+/** 다운로드한 파일을 저장한 결과 */
+internal class SavedFile(
+    val fileName: String,
+    val savedPath: String,
+    val hostPathHint: String?,
+    val size: Long,
+    val textContent: String?
+)
+
+/** 다운로드 결과를 save_dir(생략 시 Downloads)에 저장. 텍스트 파일(50KB 이하)은 내용도 반환 */
+internal fun saveDownloadedFile(download: MessengerFileDownload, saveDirArg: String?, fallbackName: String): SavedFile {
+    val saveDir = File(saveDirArg?.let { convertHostPathToContainerPath(it) } ?: defaultDownloadDir())
+    saveDir.mkdirs()
+    val target = uniqueFile(saveDir, sanitizeFileName(download.fileName ?: fallbackName))
+    target.writeBytes(download.bytes)
+
+    val isText = download.contentType?.let {
+        it.startsWith("text/") || it.contains("json") || it.contains("xml")
+    } ?: false
+    val inlineText = if (isText && download.bytes.size <= INLINE_TEXT_MAX_BYTES) {
+        download.bytes.toString(Charsets.UTF_8)
+    } else null
+
+    return SavedFile(
+        fileName = target.name,
+        savedPath = target.absolutePath,
+        hostPathHint = containerPathToHostHint(target.absolutePath),
+        size = download.bytes.size.toLong(),
+        textContent = inlineText
+    )
 }
 
 /** Docker 실행 시 /host/Downloads, 로컬 실행 시 ~/Downloads */

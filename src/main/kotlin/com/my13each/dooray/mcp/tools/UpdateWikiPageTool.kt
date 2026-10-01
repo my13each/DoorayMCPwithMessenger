@@ -196,11 +196,11 @@ private suspend fun performUpdateWikiPage(
             else -> currentPage.body
         }
 
-    // 3. 참조자 처리
+    // 3. 참조자 처리 (PUT은 referrers가 null이면 기존 참조자를 모두 지우므로, 미지정 시 기존 값 유지)
     val finalReferrers =
         params.referrerMemberIds?.map { memberId ->
             WikiReferrer(type = "member", member = Member(organizationMemberId = memberId))
-        }
+        } ?: currentPage.referrers?.map { WikiReferrer(type = "member", member = Member(organizationMemberId = it.member.organizationMemberId)) }
 
     // 4. 업데이트 요청 생성
     val updateRequest =

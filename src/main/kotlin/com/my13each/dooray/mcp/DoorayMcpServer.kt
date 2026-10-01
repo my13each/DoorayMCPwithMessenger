@@ -134,6 +134,25 @@ class DoorayMcpServer {
         // 5. 위키 페이지 수정
         addTool(ToolCategory.WIKI, updateWikiPageTool(), updateWikiPageHandler(doorayHttpClient))
 
+        // 위키 페이지 관리 (삭제 / 이동 / 제목·본문·참조자 개별 수정)
+        addTool(ToolCategory.WIKI, deleteWikiPageTool(), deleteWikiPageHandler(doorayHttpClient))
+        addTool(ToolCategory.WIKI, moveWikiPageTool(), moveWikiPageHandler(doorayHttpClient))
+        addTool(ToolCategory.WIKI, updateWikiPageTitleTool(), updateWikiPageTitleHandler(doorayHttpClient))
+        addTool(ToolCategory.WIKI, updateWikiPageContentTool(), updateWikiPageContentHandler(doorayHttpClient))
+        addTool(ToolCategory.WIKI, updateWikiPageReferrersTool(), updateWikiPageReferrersHandler(doorayHttpClient))
+
+        // 위키 댓글
+        addTool(ToolCategory.WIKI, createWikiCommentTool(), createWikiCommentHandler(doorayHttpClient))
+        addTool(ToolCategory.WIKI, getWikiCommentsTool(), getWikiCommentsHandler(doorayHttpClient))
+        addTool(ToolCategory.WIKI, getWikiCommentTool(), getWikiCommentHandler(doorayHttpClient))
+        addTool(ToolCategory.WIKI, updateWikiCommentTool(), updateWikiCommentHandler(doorayHttpClient))
+        addTool(ToolCategory.WIKI, deleteWikiCommentTool(), deleteWikiCommentHandler(doorayHttpClient))
+
+        // 위키 첨부 파일
+        addTool(ToolCategory.WIKI, downloadWikiFileTool(), downloadWikiFileHandler(doorayHttpClient))
+        addTool(ToolCategory.WIKI, uploadWikiFileTool(), uploadWikiFileHandler(doorayHttpClient))
+        addTool(ToolCategory.WIKI, deleteWikiFileTool(), deleteWikiFileHandler(doorayHttpClient))
+
         // ============ 프로젝트 업무 및 댓글 관련 도구들 (11개) ============
 
         // 6. 프로젝트 업무 목록 조회

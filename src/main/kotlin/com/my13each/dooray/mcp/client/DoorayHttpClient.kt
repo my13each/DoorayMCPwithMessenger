@@ -282,6 +282,133 @@ class DoorayHttpClient(private val baseUrl: String, private val doorayApiKey: St
         ) { httpClient.put("/wiki/v1/wikis/$wikiId/pages/$pageId") { setBody(request) } }
     }
 
+    // ============ 위키 페이지 관리 / 댓글 / 파일 API 구현 ============
+
+    private fun wikiPagePath(wikiId: String, pageId: String) = "/wiki/v1/wikis/$wikiId/pages/$pageId"
+
+    override suspend fun deleteWikiPage(wikiId: String, pageId: String): LenientUnitResponse =
+        executeApiCall(
+            operation = "DELETE ${wikiPagePath(wikiId, pageId)}",
+            successMessage = "✅ 위키 페이지 삭제 성공"
+        ) { httpClient.delete(wikiPagePath(wikiId, pageId)) }
+
+    override suspend fun moveWikiPage(wikiId: String, pageId: String, request: MoveWikiPageRequest): LenientUnitResponse =
+        executeApiCall(
+            operation = "POST ${wikiPagePath(wikiId, pageId)}/move",
+            successMessage = "✅ 위키 페이지 이동 성공"
+        ) { httpClient.post("${wikiPagePath(wikiId, pageId)}/move") { setBody(request) } }
+
+    override suspend fun updateWikiPageTitle(wikiId: String, pageId: String, request: UpdateWikiPageTitleRequest): LenientUnitResponse =
+        executeApiCall(
+            operation = "PUT ${wikiPagePath(wikiId, pageId)}/title",
+            successMessage = "✅ 위키 페이지 제목 수정 성공"
+        ) { httpClient.put("${wikiPagePath(wikiId, pageId)}/title") { setBody(request) } }
+
+    override suspend fun updateWikiPageContent(wikiId: String, pageId: String, request: UpdateWikiPageContentRequest): LenientUnitResponse =
+        executeApiCall(
+            operation = "PUT ${wikiPagePath(wikiId, pageId)}/content",
+            successMessage = "✅ 위키 페이지 본문 수정 성공"
+        ) { httpClient.put("${wikiPagePath(wikiId, pageId)}/content") { setBody(request) } }
+
+    override suspend fun updateWikiPageReferrers(wikiId: String, pageId: String, request: UpdateWikiPageReferrersRequest): LenientUnitResponse =
+        executeApiCall(
+            operation = "PUT ${wikiPagePath(wikiId, pageId)}/referrers",
+            successMessage = "✅ 위키 페이지 참조자 수정 성공"
+        ) { httpClient.put("${wikiPagePath(wikiId, pageId)}/referrers") { setBody(request) } }
+
+    override suspend fun createWikiComment(wikiId: String, pageId: String, request: WikiCommentRequest): LenientApiResponse<IdResult> =
+        executeApiCall(
+            operation = "POST ${wikiPagePath(wikiId, pageId)}/comments",
+            expectedStatusCode = HttpStatusCode.Created, // 문서상 200이지만 실제로는 201
+            successMessage = "✅ 위키 댓글 작성 성공"
+        ) { httpClient.post("${wikiPagePath(wikiId, pageId)}/comments") { setBody(request) } }
+
+    override suspend fun getWikiComments(wikiId: String, pageId: String, page: Int?, size: Int?): WikiCommentListResponse =
+        executeApiCall(
+            operation = "GET ${wikiPagePath(wikiId, pageId)}/comments",
+            successMessage = "✅ 위키 댓글 목록 조회 성공"
+        ) {
+            httpClient.get("${wikiPagePath(wikiId, pageId)}/comments") {
+                page?.let { parameter("page", it) }
+                size?.let { parameter("size", it) }
+            }
+        }
+
+    override suspend fun getWikiComment(wikiId: String, pageId: String, commentId: String): LenientApiResponse<WikiComment> =
+        executeApiCall(
+            operation = "GET ${wikiPagePath(wikiId, pageId)}/comments/$commentId",
+            successMessage = "✅ 위키 댓글 조회 성공"
+        ) { httpClient.get("${wikiPagePath(wikiId, pageId)}/comments/$commentId") }
+
+    override suspend fun updateWikiComment(wikiId: String, pageId: String, commentId: String, request: WikiCommentRequest): LenientUnitResponse =
+        executeApiCall(
+            operation = "PUT ${wikiPagePath(wikiId, pageId)}/comments/$commentId",
+            successMessage = "✅ 위키 댓글 수정 성공"
+        ) { httpClient.put("${wikiPagePath(wikiId, pageId)}/comments/$commentId") { setBody(request) } }
+
+    override suspend fun deleteWikiComment(wikiId: String, pageId: String, commentId: String): LenientUnitResponse =
+        executeApiCall(
+            operation = "DELETE ${wikiPagePath(wikiId, pageId)}/comments/$commentId",
+            successMessage = "✅ 위키 댓글 삭제 성공"
+        ) { httpClient.delete("${wikiPagePath(wikiId, pageId)}/comments/$commentId") }
+
+    override suspend fun downloadWikiPageFile(wikiId: String, pageId: String, fileId: String): MessengerFileDownload =
+        downloadWithRedirect("${wikiPagePath(wikiId, pageId)}/files/$fileId")
+
+    override suspend fun downloadWikiAttachFile(wikiId: String, attachFileId: String): MessengerFileDownload =
+        downloadWithRedirect("/wiki/v1/wikis/$wikiId/attachFiles/$attachFileId")
+
+    override suspend fun uploadWikiPageFile(
+        wikiId: String,
+        pageId: String,
+        type: String,
+        fileName: String,
+        fileContent: ByteArray,
+        mimeType: String?
+    ): LenientApiResponse<WikiUploadedFile> {
+        val path = "${wikiPagePath(wikiId, pageId)}/files"
+        // form-data 필드 순서가 중요: type을 반드시 file보다 먼저 보낸다
+        fun buildForm() = formData {
+            append("type", type)
+            append("file", fileContent, Headers.build {
+                append(HttpHeaders.ContentDisposition, ContentDisposition.File.withParameter(ContentDisposition.Parameters.FileName, fileName).toString())
+                mimeType?.let { append(HttpHeaders.ContentType, it) }
+            })
+        }
+
+        try {
+            log.info("🔗 위키 파일 업로드 요청: $path")
+            val initialResponse = noRedirectHttpClient.submitFormWithBinaryData(url = path, formData = buildForm())
+            log.info("📡 초기 응답: ${initialResponse.status}")
+
+            val response = when (initialResponse.status) {
+                HttpStatusCode.TemporaryRedirect, HttpStatusCode.PermanentRedirect -> {
+                    val locationUrl = initialResponse.headers["Location"]
+                        ?: throw CustomException("307 응답에 Location 헤더가 없습니다", 307)
+                    log.info("🔄 리다이렉트 - 실제 업로드 URL: $locationUrl")
+                    fileHttpClient.submitFormWithBinaryData(url = locationUrl, formData = buildForm())
+                }
+                else -> initialResponse
+            }
+
+            log.info("📡 위키 파일 업로드 응답: ${response.status}")
+            return when (response.status) {
+                HttpStatusCode.OK, HttpStatusCode.Created -> response.body<LenientApiResponse<WikiUploadedFile>>()
+                else -> handleErrorResponse(response)
+            }
+        } catch (e: CustomException) {
+            throw e
+        } catch (e: Exception) {
+            handleGenericException(e)
+        }
+    }
+
+    override suspend fun deleteWikiPageFile(wikiId: String, pageId: String, fileId: String): LenientUnitResponse =
+        executeApiCall(
+            operation = "DELETE ${wikiPagePath(wikiId, pageId)}/files/$fileId",
+            successMessage = "✅ 위키 페이지 파일 삭제 성공"
+        ) { httpClient.delete("${wikiPagePath(wikiId, pageId)}/files/$fileId") }
+
     // ============ 프로젝트 업무 관련 API 구현 ============
 
     override suspend fun createPost(
@@ -771,10 +898,16 @@ class DoorayHttpClient(private val baseUrl: String, private val doorayApiKey: St
         }
     }
 
-    override suspend fun downloadMessengerFile(channelId: String, fileId: String): MessengerFileDownload {
-        val path = "/messenger/v1/channels/$channelId/files/$fileId"
+    override suspend fun downloadMessengerFile(channelId: String, fileId: String): MessengerFileDownload =
+        downloadWithRedirect("/messenger/v1/channels/$channelId/files/$fileId")
+
+    /**
+     * 307 리다이렉트(file-api.dooray.com)를 거치는 파일 다운로드 공통 처리.
+     * 자동 리다이렉트는 Authorization을 버리므로 noRedirectHttpClient로 받고 fileHttpClient로 재요청합니다.
+     */
+    private suspend fun downloadWithRedirect(path: String): MessengerFileDownload {
         return try {
-            log.info("🔗 메신저 파일 다운로드 요청: $path")
+            log.info("🔗 파일 다운로드 요청: $path")
             val initialResponse = noRedirectHttpClient.get(path)
             log.info("📡 초기 응답: ${initialResponse.status}")
 
@@ -786,18 +919,18 @@ class DoorayHttpClient(private val baseUrl: String, private val doorayApiKey: St
                     log.info("🔄 리다이렉트 - 실제 다운로드 URL: $locationUrl")
                     fileHttpClient.get(locationUrl)
                 }
-                else -> throw CustomException("메신저 파일 다운로드 실패: ${initialResponse.status}", initialResponse.status.value)
+                else -> throw CustomException("파일 다운로드 실패: ${initialResponse.status}", initialResponse.status.value)
             }
 
             if (fileResponse.status != HttpStatusCode.OK) {
-                throw CustomException("메신저 파일 다운로드 실패: ${fileResponse.status}", fileResponse.status.value)
+                throw CustomException("파일 다운로드 실패: ${fileResponse.status}", fileResponse.status.value)
             }
 
             val fileName = fileResponse.headers[HttpHeaders.ContentDisposition]
                 ?.let { ContentDisposition.parse(it) }
                 ?.let { it.parameter("filename*")?.substringAfter("''")?.decodeURLQueryComponent() ?: it.parameter("filename") }
             val bytes = fileResponse.readRawBytes()
-            log.info("✅ 메신저 파일 다운로드 성공 (${bytes.size} bytes)")
+            log.info("✅ 파일 다운로드 성공 (${bytes.size} bytes)")
             MessengerFileDownload(
                 bytes = bytes,
                 fileName = fileName,
@@ -806,8 +939,8 @@ class DoorayHttpClient(private val baseUrl: String, private val doorayApiKey: St
         } catch (e: CustomException) {
             throw e
         } catch (e: Exception) {
-            log.error("❌ 메신저 파일 다운로드 중 오류 발생", e)
-            throw CustomException("메신저 파일 다운로드 중 오류 발생: ${e.message}", 500)
+            log.error("❌ 파일 다운로드 중 오류 발생", e)
+            throw CustomException("파일 다운로드 중 오류 발생: ${e.message}", 500)
         }
     }
 

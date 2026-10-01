@@ -55,7 +55,7 @@ export DOORAY_ENABLED_CATEGORIES="wiki,project"  # 有効にするカテゴリ�
 
 **利用可能なカテゴリ:**
 
-- `wiki` - Wiki関連ツール (5個)
+- `wiki` - Wiki関連ツール (18個)
 - `project` - プロジェクト・タスク・コメント関連ツール (11個)
 - `messenger` - メッセンジャー関連ツール (17個)
 - `calendar` - カレンダー関連ツール (5個)
@@ -320,9 +320,9 @@ export PATH=$JAVA_HOME/bin:$PATH
 4. 必要な権限を設定後、作成
 5. 生成されたAPI Keyを設定ファイルの`{Your Dooray API Key}`部分に入力
 
-## 使用可能なツール（合計58個）
+## 使用可能なツール（合計71個）
 
-### Wiki関連ツール（8個）
+### Wiki関連ツール（18個）
 
 #### 1. dooray_wiki_list_projects
 
@@ -334,7 +334,7 @@ Doorayでアクセス可能なWikiプロジェクト一覧を取得します。
 
 #### 3. dooray_wiki_get_page
 
-特定のDooray Wikiページの詳細情報を取得します。
+特定のDooray Wikiページの詳細情報を取得します。参照者（`referrers`）、添付ファイル（`files`）、本文の画像（`images`）も含まれます。
 
 #### 4. dooray_wiki_create_page
 
@@ -342,7 +342,7 @@ Doorayでアクセス可能なWikiプロジェクト一覧を取得します。
 
 #### 5. dooray_wiki_update_page
 
-既存のWikiページを編集します。
+既存のWikiページを編集します。指定しなかった項目は今の値のままです（参照者を指定しない場合も、今の参照者を保持します）。
 
 #### 6. dooray_wiki_update_page_title
 
@@ -354,17 +354,71 @@ Wikiページの内容のみを編集します。
 
 #### 8. dooray_wiki_update_page_referrers
 
-Wikiページの参照者を編集します。
+Wikiページの参照者を編集します。⚠️ 今の参照者はすべて消え、指定したリストで置き換わります（空の配列なら全員削除）。
+
+#### 9. dooray_wiki_move_page 🆕
+
+Wikiページの順番を変えたり、別の親ページや別のWikiの下に移動します。
+
+**パラメータ:**
+- `wiki_id`, `page_id`: 移動するページ（必須）
+- `target_parent_page_id`: 移動先の親ページID（必須）
+- `target_wiki_id`: 別のWikiに移す場合のWiki ID（オプション）
+- `with_children`: 下のページも一緒に移動するか（デフォルト: true）
+- `before_page_id`: このページのすぐ後ろに置く（オプション、`"0"` なら先頭）
+
+#### 10. dooray_wiki_delete_page 🆕
+
+Wikiページを1件削除します。⚠️ 元に戻せません。
+
+#### 11. dooray_wiki_create_comment 🆕
+
+Wikiページにコメントを書きます（Markdown）。
+
+#### 12. dooray_wiki_list_comments 🆕
+
+Wikiページのコメント一覧を取得します。新しい順で、書いた人の名前も含まれます（`page`、`size`: 最大100）。
+
+#### 13. dooray_wiki_get_comment 🆕
+
+コメントを1件取得します。
+
+#### 14. dooray_wiki_update_comment 🆕
+
+コメントの内容を編集します。
+
+#### 15. dooray_wiki_delete_comment 🆕
+
+コメントを削除します。
+
+#### 16. dooray_wiki_upload_file 🆕
+
+ローカルのファイルを1つ、既存のWikiページにアップロードします（最大100MB）。
+
+**パラメータ:**
+- `wiki_id`, `page_id`: アップロード先のページ（必須）
+- `file_path`: ローカルファイルの絶対パス（必須、Docker実行時は `/Users/{user}/Downloads` などを自動変換）
+- `type`: `general`（普通の添付、デフォルト）または `inline_image`（本文の画像）
+
+`inline_image` の場合、応答の `markdown` を `dooray_wiki_update_page_content` で本文に入れると画像が表示されます。
+
+#### 17. dooray_wiki_download_file 🆕
+
+Wikiページの添付ファイルや本文の画像をダウンロードしてローカルに保存します。`page_id` + `file_id`（`files[].id`）、または `attach_file_id`（`files[].attachFileId`）で指定します。テキストファイル（50KB以下）は内容も応答に含まれます。
+
+#### 18. dooray_wiki_delete_file 🆕
+
+Wikiページの添付ファイル（または本文の画像）を削除します。`file_id` は `files[].id` / `images[].id` です。
 
 ### プロジェクト関連ツール（1個）
 
-#### 9. dooray_project_list_projects
+#### 19. dooray_project_list_projects
 
 アクセス可能なプロジェクト一覧を取得します。
 
 ### タスク関連ツール（6個）
 
-#### 10. dooray_project_list_posts
+#### 20. dooray_project_list_posts
 
 プロジェクトのタスク一覧を取得します。
 
@@ -392,71 +446,71 @@ Wikiページの参照者を編集します。
 
 **💡 詳細情報が必要な場合は `dooray_project_get_post` を使用してください。**
 
-#### 11. dooray_project_get_post
+#### 21. dooray_project_get_post
 
 特定タスクの詳細情報を取得します。
 
-#### 12. dooray_project_create_post
+#### 22. dooray_project_create_post
 
 新しいタスクを作成します。
 
-#### 13. dooray_project_update_post
+#### 23. dooray_project_update_post
 
 既存のタスクを編集します。
 
-#### 14. dooray_project_set_post_workflow
+#### 24. dooray_project_set_post_workflow
 
 タスクのステータス（ワークフロー）を変更します。
 
-#### 15. dooray_project_set_post_done
+#### 25. dooray_project_set_post_done
 
 タスクを完了状態に変更します。
 
 ### タスクコメント関連ツール（4個）
 
-#### 16. dooray_project_create_post_comment
+#### 26. dooray_project_create_post_comment
 
 タスクにコメントを作成します。
 
-#### 17. dooray_project_get_post_comments
+#### 27. dooray_project_get_post_comments
 
 タスクのコメント一覧を取得します。
 
-#### 18. dooray_project_update_post_comment
+#### 28. dooray_project_update_post_comment
 
 タスクコメントを編集します。
 
-#### 19. dooray_project_delete_post_comment
+#### 29. dooray_project_delete_post_comment
 
 タスクコメントを削除します。
 
 ### メッセンジャー関連ツール（17個）
 
-#### 20. dooray_messenger_search_members
+#### 30. dooray_messenger_search_members
 
 Dooray組織のメンバーを検索します。名前、メール（カンマ区切りで最大10個）、ユーザーコード、IDプロバイダーのユーザーID（社員番号など、`id_provider_user_id`）で検索できます。
 
-#### 21. dooray_messenger_send_direct_message
+#### 31. dooray_messenger_send_direct_message
 
 特定メンバーに1対1ダイレクトメッセージを送信します。
 
-#### 22. dooray_messenger_get_member 🆕
+#### 32. dooray_messenger_get_member 🆕
 
 メンバーID（organizationMemberId）からメンバーの詳細情報（名前、英語名、ユーザーコード、メールなど）を取得します。メッセージの送信者が誰かを確認する時に使います。
 
-#### 23. dooray_messenger_get_channels
+#### 33. dooray_messenger_get_channels
 
 アクセス可能なメッセンジャーチャンネル一覧を取得します。最近N ヶ月以内に更新されたチャンネルのみフィルタリングして大容量結果を防ぐことができます。
 
-#### 24. dooray_messenger_get_simple_channels
+#### 34. dooray_messenger_get_simple_channels
 
 簡易チャンネル一覧を取得します。チャンネル検索用でID、タイトル、タイプ、ステータス、更新日時、参加者数のみ含み、すべてのチャンネルを安全に取得できます。
 
-#### 25. dooray_messenger_get_channel
+#### 35. dooray_messenger_get_channel
 
 特定チャンネルの詳細情報を取得します。チャンネルIDを通じて該当チャンネルのすべてのメンバー、設定などの詳細情報を確認できます。
 
-#### 26. dooray_messenger_get_channel_logs 🆕
+#### 36. dooray_messenger_get_channel_logs 🆕
 
 チャンネルの**メッセージを取得**します（最新から最大 `size` 件）。
 
@@ -476,11 +530,11 @@ Dooray組織のメンバーを検索します。名前、メール（カンマ�
 > - ページングに対応していないため、最新1000件より古いメッセージは取得できません
 > - スレッドはスレッドチャンネルIDを `channelId` に渡せば読めますが、親メッセージにスレッド情報が無いため、IDは `create_thread` 系ツールの応答からしか分かりません
 
-#### 27. dooray_messenger_create_channel
+#### 37. dooray_messenger_create_channel
 
 新しいメッセンジャーチャンネルを作成します。（privateまたはdirectタイプ対応）
 
-#### 28. dooray_messenger_send_channel_message
+#### 38. dooray_messenger_send_channel_message
 
 メッセンジャーチャンネルにメッセージを送信します。
 
@@ -512,7 +566,7 @@ Claudeが文章内に自然に配置したメンションは**元の位置に保
 
 > 💡 スレッドチャンネルID（`create_thread` の応答の `threadId`）を `channel_id` に指定すると、そのスレッドに続けて送信できます。
 
-#### 29. dooray_messenger_join_channel
+#### 39. dooray_messenger_join_channel
 
 メッセンジャーチャンネルに**メンバーを追加**します。既存のチャンネルに新しいメンバーを招待する際に使用します。複数のメンバーを一度に追加することが可能です。
 
@@ -520,7 +574,7 @@ Claudeが文章内に自然に配置したメンションは**元の位置に保
 - `channel_id`: メンバーを追加するチャンネルのID（必須）
 - `member_ids`: 追加するメンバーIDの配列（必須）
 
-#### 30. dooray_messenger_leave_channel
+#### 40. dooray_messenger_leave_channel
 
 メッセンジャーチャンネルから**メンバーを削除**します。チャンネルからメンバーを退出させる際に使用します。複数のメンバーを一度に削除することが可能です。
 
@@ -528,7 +582,7 @@ Claudeが文章内に自然に配置したメンションは**元の位置に保
 - `channel_id`: メンバーを削除するチャンネルのID（必須）
 - `member_ids`: 削除するメンバーIDの配列（必須）
 
-#### 31. dooray_messenger_create_thread
+#### 41. dooray_messenger_create_thread
 
 メッセンジャーチャンネルに**スレッドを作成し、最初のメッセージを送信**します。特定のメッセージに対する返信や関連する会話を整理する際に便利です。スレッド機能により、チャンネル内の会話を構造化して管理できます。
 
@@ -542,7 +596,7 @@ Claudeが文章内に自然に配置したメンションは**元の位置に保
 - `threadId`: スレッドチャンネルのID（`send_channel_message` / `get_channel_logs` に使えます）
 - `logId`: スレッド内に送信されたメッセージのログID
 
-#### 32. dooray_messenger_update_message
+#### 42. dooray_messenger_update_message
 
 既存のメッセンジャーメッセージを**編集**します。送信済みのメッセージの内容を修正する際に使用します。メッセージの履歴は保持され、編集されたことが記録されます。
 
@@ -552,7 +606,7 @@ Claudeが文章内に自然に配置したメンションは**元の位置に保
 - `text`: 新しいメッセージ内容（必須）
 - `message_type`: メッセージタイプ（オプション、デフォルト: "text"）
 
-#### 33. dooray_messenger_delete_message
+#### 43. dooray_messenger_delete_message
 
 メッセンジャーメッセージを**削除**します。不要なメッセージや誤って送信したメッセージを削除する際に使用します。削除されたメッセージは復元できません。
 
@@ -560,7 +614,7 @@ Claudeが文章内に自然に配置したメンションは**元の位置に保
 - `channel_id`: メッセージがあるチャンネルのID（必須）
 - `log_id`: 削除するメッセージのログID（必須）
 
-#### 34. dooray_messenger_reply_message 🆕
+#### 44. dooray_messenger_reply_message 🆕
 
 特定のメッセージ（`log_id`）に**返信**します。元のメッセージを引用した形で同じチャンネルに送信されます。
 
@@ -569,7 +623,7 @@ Claudeが文章内に自然に配置したメンションは**元の位置に保
 - `log_id`: 返信先メッセージのログID（必須）
 - `text`: 返信内容（必須）
 
-#### 35. dooray_messenger_create_thread_from_message 🆕
+#### 45. dooray_messenger_create_thread_from_message 🆕
 
 既存のメッセージ（`log_id`）に**スレッドを作成**してメッセージを送信します。新しいメッセージとスレッドを同時に作る場合は `create_thread` を使います。
 
@@ -580,7 +634,7 @@ Claudeが文章内に自然に配置したメンションは**元の位置に保
 
 **応答:** `sentChannelId` がスレッドチャンネルIDです。
 
-#### 36. dooray_messenger_download_file 🆕
+#### 46. dooray_messenger_download_file 🆕
 
 メッセージの**添付ファイルをダウンロード**してローカルに保存します。
 
@@ -595,15 +649,15 @@ Claudeが文章内に自然に配置したメンションは**元の位置に保
 
 ### 📅 カレンダー関連ツール（5個）
 
-#### 37. dooray_calendar_list
+#### 47. dooray_calendar_list
 
 Doorayでアクセス可能なカレンダー一覧を取得します。カレンダーIDを確認したり、使用可能なカレンダーを確認する際に使用します。
 
-#### 38. dooray_calendar_detail
+#### 48. dooray_calendar_detail
 
 特定のカレンダーの詳細情報を取得します。カレンダーメンバー一覧、権限情報（👑所有者、🤝委任者、✏️編集者など）、委任情報を確認できます。
 
-#### 39. dooray_calendar_events
+#### 49. dooray_calendar_events
 
 指定された期間のカレンダーイベント（予定）一覧を取得します。特定の日付や期間の予定を確認する際に使用します。timeMin、timeMaxパラメータでISO 8601形式の日時を指定し、特定のカレンダーのみをフィルタリングすることも可能です。
 
@@ -611,17 +665,17 @@ Doorayでアクセス可能なカレンダー一覧を取得します。カレ�
 - postType: `toMe`（自分宛て）、`toCcMe`（自分宛て+参照）、`fromToCcMe`（すべて関連）
 - category: `general`（一般予定）、`post`（タスク）、`milestone`（マイルストーン）
 
-#### 40. dooray_calendar_event_detail
+#### 50. dooray_calendar_event_detail
 
 特定のカレンダーイベント（予定）の詳細情報を取得します。👑主催者、✅参加者、📋参照者の詳細情報と参加状況（参加/不参加/未定/未確認）を確認できます。会議の参加者を詳しく確認する際に役立ちます。
 
-#### 41. dooray_calendar_create_event
+#### 51. dooray_calendar_create_event
 
 新しいカレンダーイベント（予定）を作成します。会議、約束などの予定を登録する際に使用します。タイトル、内容、開始時間、終了時間、場所、参加者、参照者などを設定でき、終日予定オプションにも対応しています。
 
 ### 💾 ドライブ関連ツール（20個）
 
-#### 42. dooray_drive_list
+#### 52. dooray_drive_list
 
 Doorayでアクセス可能なドライブ一覧を取得します。利用可能なドライブのIDと名前、権限情報を確認できます。
 
@@ -631,13 +685,13 @@ Doorayでアクセス可能なドライブ一覧を取得します。利用可�
 - `scope`: `own`（自分のドライブ）または `all`（すべてのドライブ）
 - `state`: `active`（アクティブ）または `inactive`（非アクティブ）
 
-#### 43. dooray_drive_get_detail
+#### 53. dooray_drive_get_detail
 
 特定のドライブの詳細情報を取得します。ドライブタイプ（個人/プロジェクト）、メンバー一覧、役割などを確認できます。
 
 **🆕 新機能（v0.2.22）:** ドライブメンバー管理と権限確認が可能になりました。
 
-#### 44. dooray_drive_list_files
+#### 54. dooray_drive_list_files
 
 特定のドライブの**ファイルとフォルダ一覧**を取得します。parent_idを指定してフォルダを階層別に探索することができます。各ファイルの詳細情報（サイズ、作成日時、更新日時、MIME タイプ、作成者など）を含んでいます。
 
@@ -647,7 +701,7 @@ Doorayでアクセス可能なドライブ一覧を取得します。利用可�
   - フォルダ: `root`, `trash`, `users`
   - ファイル: `etc`, `doc`, `photo`, `movie`, `music`, `zip`
 
-#### 45. dooray_drive_get_changes
+#### 55. dooray_drive_get_changes
 
 **ドライブ内の変更履歴を取得**します。ファイル/フォルダの作成、更新、削除の履歴を追跡できます。変更タイプ（updated/deleted）、リビジョン番号、ファイル情報を確認できます。
 
@@ -661,7 +715,7 @@ Doorayでアクセス可能なドライブ一覧を取得します。利用可�
 - 同期機能: 変更内容を追跡してファイル同期実装
 - 監査ログ: ドライブ内のすべての変更履歴を記録
 
-#### 46. dooray_drive_upload_file_from_path ⭐**優先使用**
+#### 56. dooray_drive_upload_file_from_path ⭐**優先使用**
 
 **ローカルファイルパスから直接ファイルをアップロード**します。すべてのファイルアップロードに推奨される方法です。
 
@@ -677,7 +731,7 @@ Doorayでアクセス可能なドライブ一覧を取得します。利用可�
 /Users/username/Downloads/report.xlsx をDoorayドライブにアップロードしてください
 ```
 
-#### 47. dooray_drive_upload_file 🔄**フォールバック**
+#### 57. dooray_drive_upload_file 🔄**フォールバック**
 
 Base64エンコードされたファイルをアップロードします。**`dooray_drive_upload_file_from_path`が失敗した場合のバックアップ方法です。**
 
@@ -690,15 +744,15 @@ Base64エンコードされたファイルをアップロードします。**`do
 - 既にBase64エンコード済みのデータがある場合
 - ファイルパスが利用できない特殊なケース
 
-#### 48. dooray_drive_download_file
+#### 58. dooray_drive_download_file
 
 ドライブから**ファイルをダウンロード**します。指定したファイルの内容をBase64でエンコードして返します。テキストファイル、画像、PDF等あらゆる形式のファイルをダウンロードできます。
 
-#### 49. dooray_drive_get_file_metadata
+#### 59. dooray_drive_get_file_metadata
 
 ドライブ **ファイルの詳細メタ情報**を取得します。ファイルのバージョン、リビジョン、作成者、最終更新者、注釈情報、親フォルダ経路、お気に入り状態などを確認できます。
 
-#### 50. dooray_drive_rename_file
+#### 60. dooray_drive_rename_file
 
 ドライブ内の**ファイルまたはフォルダの名前を変更**します。ファイルの拡張子変更やフォルダ名の修正が可能です。
 
@@ -708,33 +762,33 @@ Base64エンコードされたファイルをアップロードします。**`do
 - 拡張子変更: `image.png` → `image.jpg`
 - フォルダ名変更: `old_folder` → `new_folder`
 
-#### 51. dooray_drive_update_file
+#### 61. dooray_drive_update_file
 
 既存ドライブファイルを**新しいバージョンで更新**します。Base64でエンコードされた新しい内容で既存ファイルを上書きし、バージョン管理機能を利用できます。
 
-#### 52. dooray_drive_move_file_to_trash
+#### 62. dooray_drive_move_file_to_trash
 
 ドライブファイルを**ゴミ箱に移動**します。ゴミ箱に移動されたファイルは復元または永久削除が可能です。
 
-#### 53. dooray_drive_delete_file
+#### 63. dooray_drive_delete_file
 
 **ゴミ箱にあるファイルを永久削除**します。永久削除されたファイルは復元不可能です。
 
-#### 54. dooray_drive_create_folder
+#### 64. dooray_drive_create_folder
 
 **ドライブに新しいフォルダを作成**します。親フォルダID、フォルダ名を指定してフォルダを作成できます。
 
-#### 55. dooray_drive_copy_file
+#### 65. dooray_drive_copy_file
 
 **ドライブファイルを別の場所にコピー**します。同じドライブ内または別のドライブへのコピーをサポートします。
 
-#### 56. dooray_drive_move_file
+#### 66. dooray_drive_move_file
 
 **ドライブファイルを別のフォルダに移動**します。ファイルの場所を変更する際に使用します。
 
 ### 🔗 ドライブ共有リンク関連ツール（5個）
 
-#### 57. dooray_drive_create_shared_link
+#### 67. dooray_drive_create_shared_link
 
 **ファイルの共有リンクを作成**します。共有範囲（組織内/外部含む）と有効期限を指定できます。
 
@@ -745,19 +799,19 @@ Base64エンコードされたファイルをアップロードします。**`do
 
 📌 **権限**: プロジェクト管理者と作成者のみ作成可能
 
-#### 58. dooray_drive_get_shared_links
+#### 68. dooray_drive_get_shared_links
 
 **ファイルに作成されたすべての共有リンクを取得**します。管理者はすべてのリンクを、一般ユーザーは自分が作成したリンクのみ確認できます。有効なリンクまたは期限切れリンクをフィルタリングして取得可能です。
 
-#### 59. dooray_drive_get_shared_link_detail
+#### 69. dooray_drive_get_shared_link_detail
 
 **特定の共有リンクの詳細情報を取得**します。リンクID、作成日時、有効期限、作成者情報、実際の共有リンクURL、共有範囲を確認できます。
 
-#### 60. dooray_drive_update_shared_link
+#### 70. dooray_drive_update_shared_link
 
 **特定の共有リンクを更新**します。有効期限と共有範囲を変更できます。
 
-#### 61. dooray_drive_delete_shared_link
+#### 71. dooray_drive_delete_shared_link
 
 **特定の共有リンクを削除**します。削除されたリンクではファイルにアクセスできなくなり、削除操作は元に戻せません。
 

@@ -204,7 +204,7 @@ internal fun convertHostPathToContainerPath(hostPath: String): String {
 /**
  * ファイル拡張子からMIMEタイプを推測します
  */
-private fun detectMimeType(fileName: String): String {
+internal fun detectMimeType(fileName: String): String {
     val extension = fileName.substringAfterLast('.', "").lowercase()
     return when (extension) {
         "txt" -> "text/plain"
