@@ -204,7 +204,7 @@ Channels support user mentions and @channel:
 ### Messenger API Notes (verified 2026-10-01)
 
 - `GET /messenger/v1/channels/{id}/logs?size=N` is **not in the official docs** but works. Latest N only (max 1000, no pagination). Its `header.resultMessage` is `null` → use `LenientApiHeader`, not `DoorayApiHeader`.
-- Thread channel IDs cannot be discovered via API (no field on parent message, not in channel list). Only `create_thread*` responses return them.
+- Thread channel IDs **are** discoverable (corrected 2026-10-05, verified from DoorayX): a parent message in `GET .../logs` carries `thread: {channelId, totalCount (string), lastUpdatedAt (epoch ms)}`. Not in the channel list. Read replies with `GET /channels/{threadChannelId}/logs`; post more replies with ordinary `POST /channels/{threadChannelId}/logs` (`create-and-send` only for the first). Thread replies do not appear in the parent room's logs. The MCP server does not expose `thread` yet.
 - `type=me` (self chat room) is not returned by `GET /channels`; get its ID from a `direct-send` to yourself (`result.channelId`).
 - Messenger file download returns 307 to `file-api.dooray.com`. Ktor's default client follows it and drops `Authorization` → 401. Use the `followRedirects = false` client and re-request with `fileHttpClient`.
 
