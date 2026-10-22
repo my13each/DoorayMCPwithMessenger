@@ -227,6 +227,7 @@ fun getProjectPostsHandler(
                             workflow = post.workflow,
                             assignees = post.users.to.mapNotNull { it.member }, // Member (이름/ID)만 추출
                             priority = post.priority,
+                            startedAt = post.startedAt,
                             dueDate = post.dueDate,
                             createdAt = post.createdAt,
                             updatedAt = post.updatedAt

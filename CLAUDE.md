@@ -209,6 +209,11 @@ Channels support user mentions and @channel:
 - `type=me` (self chat room) is not returned by `GET /channels`; get its ID from a `direct-send` to yourself (`result.channelId`).
 - Messenger file download returns 307 to `file-api.dooray.com`. Ktor's default client follows it and drops `Authorization` → 401. Use the `followRedirects = false` client and re-request with `fileHttpClient`.
 
+### Project Post API Notes (verified 2026-10-22)
+
+- Task start date `startedAt` is **not in the official docs** but works: returned by `GET .../posts` and `GET .../posts/{id}` (UTC `Z`, e.g. KST 00:00 → `...T15:00:00Z` of the previous day), and accepted by `POST .../posts` and `PUT .../posts/{id}` as ISO8601 (e.g. `2026-10-23T00:00:00+09:00`).
+- `PUT /posts/{id}` is a full replace → `update_post` carries over the current `startedAt` when `started_at` is not given. (Whether omitting it actually clears the date was not tested.)
+
 ### Wiki API Notes (verified 2026-10-01)
 
 - `WikiReferrer.type` must be serialized: it has a default value and the HTTP client uses `encodeDefaults = false`, so it is marked `@EncodeDefault`. Without `type` the API returns 400.
@@ -228,6 +233,7 @@ File operations (Drive, Messenger, Wiki) answer with 307:
 ## Version History
 
 Check `git log` for detailed changelog. Recent versions focus on:
+- v0.2.33: Task start date (`startedAt`) on create/update/get/list posts
 - v0.2.32: Wiki comments CRUD, page delete/move/partial update, file upload/download/delete; referrer `type` serialization fix
 - v0.2.31: Messenger read/reply/thread-from-message/member detail/file download, create_thread fix
 - v0.2.29-30: 5 messenger tools (thread, edit/delete, join/leave), inline mention position

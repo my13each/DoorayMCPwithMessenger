@@ -13,7 +13,7 @@ import kotlinx.serialization.json.*
 fun updateProjectPostTool(): Tool {
     return Tool(
         name = "dooray_project_update_post",
-        description = "두레이 프로젝트의 기존 업무를 수정합니다. 제목, 내용, 담당자, 참조자, 우선순위, 마일스톤, 태그 등을 변경할 수 있습니다.",
+        description = "두레이 프로젝트의 기존 업무를 수정합니다. 제목, 내용, 담당자, 참조자, 우선순위, 마일스톤, 태그, 시작일, 만기일 등을 변경할 수 있습니다.",
         inputSchema =
             Tool.Input(
                 properties =
@@ -65,6 +65,13 @@ fun updateProjectPostTool(): Tool {
                             put("type", "array")
                             putJsonObject("items") { put("type", "string") }
                             put("description", "태그 ID 목록 (선택사항)")
+                        }
+                        putJsonObject("started_at") {
+                            put("type", "string")
+                            put(
+                                "description",
+                                "시작일 (ISO8601 형식, 예: 2024-12-01T00:00:00+09:00) (선택사항)"
+                            )
                         }
                         putJsonObject("due_date") {
                             put("type", "string")
@@ -152,6 +159,9 @@ fun updateProjectPostHandler(
             val milestoneId =
                 request.arguments["milestone_id"]?.jsonPrimitive?.content
                     ?: existingPost.milestone?.id
+            // 미지정 시 기존 시작일 유지 (PUT 전체 치환으로 지워지지 않도록)
+            val startedAt =
+                request.arguments["started_at"]?.jsonPrimitive?.content ?: existingPost.startedAt
             val dueDate =
                 request.arguments["due_date"]?.jsonPrimitive?.content ?: existingPost.dueDate
 
@@ -213,6 +223,7 @@ fun updateProjectPostHandler(
                     body = body,
                     priority = priority,
                     milestoneId = milestoneId,
+                    startedAt = startedAt,
                     dueDate = dueDate,
                     tagIds = tagIds
                 )

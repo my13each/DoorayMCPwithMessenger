@@ -47,6 +47,13 @@ fun createProjectPostTool(): Tool {
                             put("type", "string")
                             put("description", "상위 업무 ID - 하위 업무로 생성할 경우 (선택사항)")
                         }
+                        putJsonObject("started_at") {
+                            put("type", "string")
+                            put(
+                                "description",
+                                "시작일 (ISO8601 형식, 예: 2024-12-01T00:00:00+09:00) (선택사항)"
+                            )
+                        }
                         putJsonObject("due_date") {
                             put("type", "string")
                             put(
@@ -159,6 +166,7 @@ fun createProjectPostHandler(
                             ?: emptyList()
 
                     val parentPostId = request.arguments["parent_post_id"]?.jsonPrimitive?.content
+                    val startedAt = request.arguments["started_at"]?.jsonPrimitive?.content
                     val dueDate = request.arguments["due_date"]?.jsonPrimitive?.content
                     val milestoneId = request.arguments["milestone_id"]?.jsonPrimitive?.content
                     val tagIds =
@@ -192,6 +200,7 @@ fun createProjectPostHandler(
                             users = CreatePostUsers(to = toUsers, cc = ccUsers),
                             subject = subject,
                             body = PostBody(mimeType = "text/x-markdown", content = body),
+                            startedAt = startedAt,
                             dueDate = dueDate,
                             milestoneId = milestoneId,
                             tagIds = tagIds,

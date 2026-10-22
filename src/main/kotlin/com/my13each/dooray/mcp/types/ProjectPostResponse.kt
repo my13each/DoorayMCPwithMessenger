@@ -56,6 +56,7 @@ data class Post(
         val taskNumber: String,
         val closed: Boolean,
         val createdAt: String,
+        val startedAt: String? = null, // 시작일 (공식 문서 미기재, 실제 응답에 포함)
         val dueDate: String? = null,
         val dueDateFlag: Boolean? = null,
         val updatedAt: String,
@@ -80,6 +81,7 @@ data class PostSummary(
         val workflow: Workflow,
         val assignees: List<Member>, // Member (organizationMemberId, name)만 포함
         val priority: String,
+        val startedAt: String? = null,
         val dueDate: String? = null,
         val createdAt: String,
         val updatedAt: String
@@ -94,6 +96,7 @@ data class PostDetail(
         val taskNumber: String,
         val closed: Boolean,
         val createdAt: String,
+        val startedAt: String? = null, // 시작일 (공식 문서 미기재, 실제 응답에 포함)
         val dueDate: String? = null,
         val dueDateFlag: Boolean? = null,
         val updatedAt: String,
@@ -117,6 +120,7 @@ data class CreatePostRequest(
         val users: CreatePostUsers,
         val subject: String,
         val body: PostBody,
+        val startedAt: String? = null, // 공식 문서 미기재, 실제로 동작 확인됨 (2026-10-22)
         val dueDate: String? = null,
         val dueDateFlag: Boolean = true,
         val milestoneId: String? = null,
@@ -146,6 +150,7 @@ data class UpdatePostRequest(
         val subject: String,
         val body: PostBody,
         val version: Int? = null,
+        val startedAt: String? = null, // PUT은 전체 치환이므로 미지정 시 기존 값을 그대로 보내야 함
         val dueDate: String? = null,
         val dueDateFlag: Boolean = true,
         val milestoneId: String? = null,

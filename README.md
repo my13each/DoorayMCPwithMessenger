@@ -452,11 +452,14 @@ Wikiページの添付ファイル（または本文の画像）を削除しま�
 
 #### 22. dooray_project_create_post
 
-新しいタスクを作成します。
+新しいタスクを作成します。`started_at`（開始日）・`due_date`（期日）を ISO8601 で指定できます。
 
 #### 23. dooray_project_update_post
 
-既存のタスクを編集します。
+既存のタスクを編集します。`started_at`（開始日）・`due_date`（期日）も変更できます。
+
+> ⚠️ 開始日 `startedAt` は公式 API ドキュメントに記載がありませんが、実際の API で取得・更新できます（2026-10-22 確認）。
+> 更新 API（PUT）は全体置き換えのため、`started_at` を指定しない場合は既存の開始日をそのまま送り、消えないようにしています。
 
 #### 24. dooray_project_set_post_workflow
 
@@ -972,7 +975,9 @@ APIは1回あたり最大100件まで取得可能です。それ以上のデー�
     "subject": "新しいタスク",
     "body": "タスク内容",
     "to_member_ids": ["member_id_1", "member_id_2"],
-    "priority": "high"
+    "priority": "high",
+    "started_at": "2025-12-01T00:00:00+09:00",
+    "due_date": "2025-12-05T18:00:00+09:00"
   }
 }
 ```
